@@ -1,53 +1,62 @@
 <html>
- <head>
-     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-     <script src="js/jquery.knob-1.0.0.js"></script>
- </head>
- <body>
-     <div style="float:left;width:100%;font-family:Georgia;font-size:70px;font-weight:bold;color:#87CEEB;letter-spacing:-5px">
-          Knob demo
-     </div>
-     <div style="float:left;width:320px">
-<pre>
+    <head>
+        <title>jQuery Knob demo</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+        <script src="js/jquery.knob-1.0.0.js"></script>
+    </head>
+    <body>
+        <div style="float:left;width:100%;font-family:Georgia;font-size:70px;font-weight:bold;color:#87CEEB;letter-spacing:-5px">
+            Knob demo
+        </div>
+        <div style="float:left;width:320px">
+            <pre>
 data-width="100"
 data-displayInput=false
-</pre>
-        <input class="knob" data-width="100" data-displayInput=false value="35">
-     </div>
-     <div style="float:left;width:320px">
-<pre>
+            </pre>
+            <input class="knob" data-width="100" data-displayInput=false value="35">
+        </div>
+        <div style="float:left;width:320px">
+            <pre>
 data-cursor=true
-</pre>
-        <input class="knob" data-cursor=true value="35">
-     </div>
-     <div style="float:left;width:320px">
-<pre>
+            </pre>
+            <input class="knob" data-cursor=true value="35">
+        </div>
+        <div style="float:left;width:320px">
+            <pre>
 data-width="250"
 data-min="-100"
-</pre>
-        <input class="knob"data-width="250" data-min="-100" value="44">
-     </div>
-     <div style="float:left;width:320px">
-<pre>
+            </pre>
+            <input class="knob"data-width="250" data-min="-100" value="44">
+        </div>
+        <div style="float:left;width:320px">
+            <pre>
 data-thickness=".4"
 data-fgColor="chartreuse"
 data-readOnly=true
-</pre>
-        <input class="knob" data-fgColor="chartreuse" data-thickness=".4" data-readOnly=true value="22">
-     </div>
-     <div style="float:left;width:320px">
-<pre>
+            </pre>
+            <input class="knob" data-fgColor="chartreuse" data-thickness=".4" data-readOnly=true value="22">
+        </div>
+        <div style="float:left;width:320px">
+            <pre>
 data-width="300"
 data-cursor=true
-</pre>
-        <input class="knob" data-width="300" data-cursor=true value="29">
-     </div>
-     <div style="float:left;width:320px">
-<pre>
+            </pre>
+            <input class="knob" data-width="300" data-cursor=true value="29">
+        </div>
+        <div style="float:left;width:320px">
+            <pre>
 data-width="200"
-</pre>
-        <input type="button" onclick="$('.knob-dyn').knob();" value="knobify!">
-        <input type="text" class="knob-dyn" data-width="200" value="56">
-     </div>
- </body>
+            </pre>
+            <input type="button" onclick="$('.knob-dyn').knob();" value="knobify!">
+            <input type="text" class="knob-dyn" data-width="200" value="56">
+        </div>
+        <div style="float:left;width:320px">
+            <pre>
+data-width="50"
+            </pre>
+            <input type="button" onclick="$('.knob-dyn2').knob();" value="knobify!">
+            <input type="text" class="knob-dyn2" data-width="50" value="56">
+        </div>
+        <div style="border: 0 none; position: absolute; right: 0; top: 0;"><a href="https://github.com/aterrien" target="_blank"><img src="../i/github-ribbon.png" style="border: 0 none;"></a></div>
+    </body>
 </html>
