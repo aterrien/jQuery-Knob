@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2011 - 2013 Anthony Terrien
 
- * Version: 1.0.0 (21/11/2011)
+ * Version: 1.0.0 (23/11/2011)
  * Requires: jQuery v1.7+
  *
  * Under MIT and GPL licenses:
