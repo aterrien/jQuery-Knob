@@ -124,7 +124,7 @@ $(function() {
                                                     opt.change(v);
                                                  };
                         k.onRelease = opt.release;
-                        k.set( parseInt($this.val()) || 0 );
+                        k.val( parseInt($this.val()) || 0 );
 
                         if( !opt.readOnly ){
                             c.bind(
@@ -155,16 +155,19 @@ $(function() {
         this.onChange = function() {}
         this.onRelease = function() {}
             
-        this.set = function(_v) {
-            a = (_v-opt.min)*PI2/(opt.max-opt.min);
-            opt.draw( a, _v, opt, ctx );
-        }
-
-        this.get = function() {
-            var b = a = Math.atan2( mx-x, -(my-y-opt.width/2) );
-            (a<0) && (b=a+PI2);
-            v = Math.round( b*(opt.max-opt.min)/PI2 ) + opt.min;
-            return v = ( v>opt.max ) ? opt.max : v;
+        this.val = function(_v) {
+            if(null!=_v){
+                if( v==_v ) return;
+                v=_v;
+                this.onChange(_v);
+                a = (_v-opt.min)*PI2/(opt.max-opt.min);
+                opt.draw( a, _v, opt, ctx );
+            }else{
+                var b = a = Math.atan2( mx-x, -(my-y-opt.width/2) );
+                (a<0) && (b=a+PI2);
+                 _v = Math.round( b*(opt.max-opt.min)/PI2 ) + opt.min;
+                return ( _v>opt.max ) ? opt.max : _v;
+            }
         }
 
         this.capture = function(e) {
@@ -180,9 +183,7 @@ $(function() {
                     my = e.originalEvent.touches[0].pageY;
                     break;
             }
-
-            this.onChange( _v = this.get() );
-            this.set( _v );
+            this.val( this.val() );
         }
 
         this.startDrag = function(e) {
