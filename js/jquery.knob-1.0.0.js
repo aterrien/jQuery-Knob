@@ -16,7 +16,7 @@ $(function() {
     $.fn.knob = function( gopt ) {
 
         return this.each(
-        
+
                     function() {
 
                         var $this = $(this);
@@ -151,10 +151,10 @@ $(function() {
             ,PI2 = 2*Math.PI
             ,mx ,my ,x ,y
             ,_self = this;
-            
+
         this.onChange = function() {}
         this.onRelease = function() {}
-            
+
         this.val = function(_v) {
             if(null!=_v){
                 if( v==_v ) return;
@@ -189,12 +189,14 @@ $(function() {
         this.startDrag = function(e) {
 
             var p = c.position();
-            
+
             x = p.left+(opt.width/2);
             y = p.top;
 
             this.capture(e);
-            
+
+            //c.css('cursor','none');
+
             $(document).bind(
                             "mousemove.knob touchmove.knob"
                             ,function(e) {
