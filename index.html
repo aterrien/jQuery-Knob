@@ -6,11 +6,16 @@
         <script src="js/jquery.knob-1.0.1.js"></script>
         <script>
             $(function() {
-                $(".knob").knob(
+                $(".knob").knob();
+                /*$(".knob").knob(
                                 {
-                                'change':function(e){console.log(e);}
+                                'change':function(e){
+                                        console.log(e);
+                                    }
                                 }
-                            );
+                            )
+                           .val(79)
+                           ;*/
             });
         </script>
     </head>
@@ -18,27 +23,54 @@
         <div style="float:left;width:100%;font-family:Georgia;font-size:70px;font-weight:bold;color:#87CEEB;letter-spacing:-5px">
             Knob demo
         </div>
-        <div style="float:left;width:320px">
+        <div style="float:left;width:320px;height:300px;background-color:#222;color:#FFF;padding:20px">
+            <pre>
+data-width="75"
+data-fgColor="#fff"
+data-skin="tron"
+            </pre>
+            <input class="knob" data-width="75" data-fgColor="#ffec03" data-skin="tron" data-cursor=true value="75">
+        </div>
+        <div style="float:left;width:320px;height:300px;background-color:#222;color:#FFF;padding:20px">
+            <pre>
+data-width="150"
+data-fgColor="#fff"
+data-skin="tron"
+data-thickness=".2"
+            </pre>
+            <input class="knob" data-width="150" data-fgColor="#ffec03" data-skin="tron" data-thickness=".2" value="75">
+        </div>
+        <div style="float:left;width:320px;height:300px;background-color:#222;color:#FFF;padding:20px">
+            <pre>
+data-width="150"
+data-fgColor="#fff"
+data-skin="tron"
+data-thickness=".1"
+            </pre>
+            <input class="knob" data-width="150" data-fgColor="#C0ffff" data-skin="tron" data-thickness=".1" value="35">
+        </div>
+        <div style="float:left;width:320px;height:300px;padding:20px">
             <pre>
 data-width="100"
 data-displayInput=false
             </pre>
             <input class="knob" data-width="100" data-displayInput=false value="35">
         </div>
-        <div style="float:left;width:320px">
+        <div style="float:left;width:320px;height:300px;padding:20px">
             <pre>
 data-cursor=true
+data-skin="tron"
             </pre>
-            <input class="knob" data-cursor=true value="35">
+            <input class="knob" data-cursor=true data-skin="tron" value="35">
         </div>
-        <div style="float:left;width:320px">
+        <div style="float:left;width:320px;height:300px;padding:20px">
             <pre>
 data-width="250"
 data-min="-100"
             </pre>
             <input class="knob"data-width="250" data-min="-100" value="44">
         </div>
-        <div style="float:left;width:320px">
+        <div style="float:left;width:320px;height:300px;padding:20px">
             <pre>
 data-thickness=".4"
 data-fgColor="chartreuse"
@@ -46,27 +78,41 @@ data-readOnly=true
             </pre>
             <input class="knob" data-fgColor="chartreuse" data-thickness=".4" data-readOnly=true value="22">
         </div>
-        <div style="float:left;width:320px">
+        <div style="float:left;width:320px;height:300px;padding:20px">
             <pre>
 data-width="300"
 data-cursor=true
             </pre>
             <input class="knob" data-width="300" data-cursor=true value="29">
         </div>
-        <div style="float:left;width:320px">
+        <div style="float:left;width:320px;height:300px;padding:20px">
             <pre>
 data-width="200"
             </pre>
             <input type="button" onclick="$('.knob-dyn').knob();" value="knobify!">
             <input type="text" class="knob-dyn" data-width="200" value="56">
         </div>
-        <div style="float:left;width:320px">
+        <div style="float:left;width:320px;height:300px;padding:20px">
             <pre>
 data-width="50"
             </pre>
             <input type="button" onclick="$('.knob-dyn2').knob();" value="knobify!">
             <input type="text" class="knob-dyn2" data-width="50" value="56">
         </div>
-        <div style="border: 0 none; position: absolute; right: 0; top: 0;"><a href="https://github.com/aterrien" target="_blank"><img src="../i/github-ribbon.png" style="border: 0 none;"></a></div>
+        <div style="border: 0 none; position: absolute; right: 0; top: 0;"><a href="https://github.com/aterrien" target="_blank"><img src="http://anthonyterrien.com/i/github-ribbon.png" style="border: 0 none;"></a></div>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-3008949-6']);
+            _gaq.push(['_trackPageview']);
+        </script>
+        <script type="text/javascript">
+            (function() {
+                    var ga = document.createElement('script');
+                    ga.type = 'text/javascript';
+                    ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+            })();
+        </script>
     </body>
 </html>

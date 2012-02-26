@@ -35,6 +35,7 @@ $(function() {
                                             ,'fgColor' : $this.data('fgcolor') || '#87CEEB' //#222222'
                                             ,'bgColor' : $this.data('bgcolor') || '#EEEEEE'
                                             ,'readOnly' : $this.data('readonly')
+                                            ,'skin' : $this.data('skin') || 'default'
                                             ,'draw' :
                                                     /**
                                                      * @param int a angle
@@ -60,16 +61,29 @@ $(function() {
                                                             ctx.arc( r, r, r-lw, sa, ea, false);
                                                             ctx.stroke();
 
-                                                            ctx.beginPath();
-                                                            ctx.strokeStyle = opt.bgColor;
-                                                            ctx.arc(
-                                                                        r, r, r-lw ,sa
-                                                                        ,(v==opt.min && !opt.cursor)
-                                                                            ? sa+0.0001
-                                                                            : ea
-                                                                        , true
-                                                                    );
-                                                            ctx.stroke();
+                                                            switch(opt.skin){
+                                                                
+                                                                case 'default' :
+                                                                    ctx.beginPath();
+                                                                    ctx.strokeStyle = opt.bgColor;
+                                                                    ctx.arc(
+                                                                                r, r, r-lw ,sa
+                                                                                ,(v==opt.min && !opt.cursor)
+                                                                                    ? sa+0.0001
+                                                                                    : ea
+                                                                                , true
+                                                                            );
+                                                                    ctx.stroke();
+                                                                    break;
+
+                                                                case 'tron' :
+                                                                    ctx.lineWidth = 2;
+                                                                    ctx.beginPath();
+                                                                    ctx.strokeStyle = opt.fgColor;
+                                                                    ctx.arc( r, r, r-lw+1+lw*2/3, 0, 2*Math.PI, false);
+                                                                    ctx.stroke();
+                                                                    break;
+                                                            }
                                                         }
                                             ,'change' :
                                                     /**
@@ -79,8 +93,9 @@ $(function() {
                                             ,'release' :
                                                     /**
                                                      * @param int v Current value
+                                                     * @param jQuery ipt Input
                                                      */
-                                                    function(v) {}
+                                                    function(v,ipt) {}
                                         }
                                         ,gopt
                                     );
@@ -104,7 +119,7 @@ $(function() {
                                     ,'font-family' : 'Arial'
                                     ,'font-weight' : 'bold'
                                     ,'text-align' : 'center'
-                                    ,'color' : 'lightgrey'
+                                    ,'color' : opt.fgColor
                                     ,'padding' : '0px'
                                     ,'-webkit-appearance': 'none'
                                     }
@@ -117,12 +132,22 @@ $(function() {
                                 );
 
                         k = new Knob( c, opt );
-                        k.onRelease = opt.release;
+                        k.onRelease = function(v) {
+                                                    opt.release(v,$this);
+                                                };
                         k.val( parseInt($this.val()) || 0 );
                         k.onChange = function(v) {
                                                     $this.val(v);
                                                     opt.change(v);
                                                  };
+
+                        // bind change on input
+                        $this.bind(
+                                'change'
+                                ,function( e ) {
+                                    k.val( $this.val() );
+                                }
+                            );
 
                         if( !opt.readOnly ){
                             c.bind(
