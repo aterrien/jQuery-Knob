@@ -35,6 +35,8 @@ $(function() {
                                             ,'fgColor' : $this.data('fgcolor') || '#87CEEB' //#222222'
                                             ,'bgColor' : $this.data('bgcolor') || '#EEEEEE'
                                             ,'readOnly' : $this.data('readonly')
+                                            ,'stopAtExtents' : $this.data('stopatextents') || false
+                                            ,'extentsThreshold' : $this.data('extentsthreshold') || 0.10
                                             ,'draw' :
                                                     /**
                                                      * @param int a angle
@@ -154,7 +156,16 @@ $(function() {
         this.val = function(_v) {
             if(null!=_v){
                 if( v==_v ) return;
-                v=_v;
+                var dec = (opt.max - opt.min) * opt.extentsThreshold;
+                if(opt.stopAtExtents){
+                    if( v <= opt.min + dec && _v >= opt.max - dec){
+                        _v = opt.min;
+                    }
+                    else if(v >= opt.max - dec && _v <= opt.min + dec){
+                        _v = opt.max;
+                    }
+                }
+                v = _v;
                 this.onChange(_v);
                 a = (_v-opt.min)*PI2/(opt.max-opt.min);
                 opt.draw( a, _v, opt, ctx );
