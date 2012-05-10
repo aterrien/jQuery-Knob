@@ -32,8 +32,15 @@ $(function() {
                                             ,'thickness' : $this.data('thickness') || .3
                                             ,'width' : $this.data('width') || 200
                                             ,'displayInput' : $this.data('displayinput')==null || $this.data('displayinput')
-                                            ,'fgColor' : $this.data('fgcolor') || '#87CEEB' //#222222'
+                                            ,'fgColor' : $this.data('fgcolor') || '#FF0000' //#222222'
                                             ,'bgColor' : $this.data('bgcolor') || '#EEEEEE'
+                                            ,'tickColor' : $this.data('tickColor') || '#EEEEEE'
+                                            ,'ticks' : $this.data('ticks') || 20
+                                            ,'tickLength' : $this.data('tickLength') || 2
+                                            ,'tickWidth' : $this.data('tickWidth') || 0.04
+                                            ,'tickColorizeValues' : $this.data('tickColorizeValues') || true
+
+
                                             ,'readOnly' : $this.data('readonly')
                                             ,'skin' : $this.data('skin') || 'default'
                                             ,'draw' :
@@ -44,10 +51,10 @@ $(function() {
                                                      * @param context ctx Canvas context 2d
                                                      */
                                                     function( a, v, opt, ctx ) {
-                                                            var sa = 1.5*Math.PI
-                                                                ,ea = sa+a
-                                                                ,r = opt.width/2
-                                                                ,lw = r*opt.thickness;
+                                                            var sa = 1.5*Math.PI  // Start angle
+                                                                ,ea = sa+a        // End angle
+                                                                ,r = opt.width/2  // Radius
+                                                                ,lw = r*opt.thickness;  // Line width
 
                                                             ctx.clearRect(0, 0, opt.width, opt.width);
                                                             ctx.lineWidth = lw;
@@ -55,6 +62,27 @@ $(function() {
                                                             opt.cursor
                                                                 && ( sa = ea-0.3 )
                                                                 && ( ea = ea+0.3 );
+
+                                                            var ticks = opt.ticks;
+                                                            var tl = opt.tickLength;
+                                                            var tw = opt.tickWidth;
+
+                                                            for(tick = 0; tick < ticks; tick++) {
+
+                                                              ctx.beginPath();
+
+                                                              if(a > (((2 * Math.PI) / ticks) * tick) && opt.tickColorizeValues) {
+                                                                ctx.strokeStyle = opt.fgColor;
+                                                              }
+                                                              else {
+                                                                ctx.strokeStyle = opt.tickColor;
+                                                              }
+
+                                                              var tick_sa = (((2 * Math.PI) / ticks) * tick) - (0.5 * Math.PI);
+
+                                                              ctx.arc( r, r, r-lw-tl, tick_sa, tick_sa + tw , false);
+                                                              ctx.stroke();
+                                                            }
 
                                                             ctx.beginPath();
                                                             ctx.strokeStyle = opt.fgColor;
