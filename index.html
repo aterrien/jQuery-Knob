@@ -3,11 +3,12 @@
     <head>
         <title>jQuery Knob demo</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-        <script src="js/jquery.knob-1.0.1.js"></script>
+        <script src="js/jquery.knob-1.1.0.js"></script>
         <script>
             $(function() {
-                $(".knob").knob();
-                /*$(".knob").knob(
+                $(".knob").dial();
+
+                /*$(".knob").dial(
                                 {
                                 'change':function(e){
                                         console.log(e);
@@ -60,8 +61,9 @@ data-displayInput=false
             <pre>
 data-cursor=true
 data-skin="tron"
+data-ticks="8"
             </pre>
-            <input class="knob" data-cursor=true data-skin="tron" value="35">
+            <input class="knob" data-cursor=true data-skin="tron" data-ticks="8" value="35">
         </div>
         <div style="float:left;width:320px;height:300px;padding:20px">
             <pre>
@@ -99,7 +101,7 @@ data-width="50"
             <input type="button" onclick="$('.knob-dyn2').knob();" value="knobify!">
             <input type="text" class="knob-dyn2" data-width="50" value="56">
         </div>
-        <div style="border: 0 none; position: absolute; right: 0; top: 0;"><a href="https://github.com/aterrien" target="_blank"><img src="http://anthonyterrien.com/i/github-ribbon.png" style="border: 0 none;"></a></div>
+        <div style="border: 0 none; position: absolute; right: 0; top: 0;"><a href="https://github.com/aterrien" target="_blank"><img src="../i/github-ribbon.png" style="border: 0 none;"></a></div>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-3008949-6']);
