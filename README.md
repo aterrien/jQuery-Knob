@@ -1,10 +1,9 @@
-jQuery Dial Control 
+jQuery Knob
 =============
-(was "jQuery Knob")
 
 - canvas based ; no png or jpg sprites
 - touch events implemented
-- downward compatible ; overloads an <input> element
+- downward compatible ; overloads an input element
 
 
 Options
