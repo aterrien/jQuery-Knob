@@ -146,8 +146,23 @@ $(function() {
 
                         $this.bind('mousewheel DOMMouseScroll', function(event){
                             var originalEvent = event.originalEvent;
-                            var deltaX = originalEvent.detail || originalEvent.wheelDeltaX;
-                            var deltaY = originalEvent.detail || originalEvent.wheelDeltaY;
+                            var deltaY, deltaX;
+
+                            if ( originalEvent.wheelDelta ) { delta = originalEvent.wheelDelta }
+                            if ( originalEvent.detail     ) { delta = -originalEvent.detail }
+                            
+                            // New school multidimensional scroll (touchpads) deltas
+                            deltaY = delta;
+                            
+                            // Gecko
+                            if ( originalEvent.axis !== undefined && originalEvent.axis === originalEvent.HORIZONTAL_AXIS ) {
+                                deltaY = 0;
+                                deltaX = -1*delta;
+                            }
+                            
+                            // Webkit
+                            if (originalEvent.wheelDeltaY !== undefined ) { deltaY = originalEvent.wheelDeltaY; }
+                            if (originalEvent.wheelDeltaX !== undefined ) { deltaX = -1*originalEvent.wheelDeltaX; }
                             setVal( deltaX > 0 ||  deltaY > 0 ? 1 : deltaX < 0 ||  deltaY < 0 ? -1 : 0);
                             event.preventDefault();
                         });
