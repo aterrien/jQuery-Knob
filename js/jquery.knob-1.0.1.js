@@ -116,6 +116,7 @@ $(function() {
                                     }
                                 );
 
+
                         k = new Knob( c, opt );
                         k.onRelease = opt.release;
                         k.val( parseInt($this.val()) || 0 );
@@ -134,6 +135,25 @@ $(function() {
                             );
                         }else{
                             $this.attr('readonly','readonly');
+                        }
+
+                        var keys={37: -1, 38:1, 39:1, 40: -1}
+
+                        $this.keydown(function(event){
+                            setVal( keys[event.keyCode])
+                        });
+
+                        $this.bind('mousewheel DOMMouseScroll', function(event){
+                            var deltaX = event.originalEvent.wheelDeltaX;
+                            var deltaY = event.originalEvent.wheelDeltaY;
+                            event.preventDefault();
+                            setVal( deltaX > 0 ||  deltaY > 0 ? 1 : deltaX < 0 ||  deltaY < 0 ? -1 : 0)
+                        });
+
+                        function setVal(dir){
+                            if(dir){
+                                k.val( parseInt($this.val()) + dir )
+                            }
                         }
                     }
                 ).parent();
