@@ -162,9 +162,10 @@ $(function() {
                                                 };
                         k.val( parseInt($this.val()) || 0 );
                         k.onChange = function(v) {
-                                                    $this.val(v);
-                                                    opt.change(v);
-                                                 };
+                            var limitedValue = limitValue(v);
+                            $this.val(limitedValue);
+                            opt.change(limitedValue);
+                        };
 
                         // bind change on input
                         $this.bind(
@@ -202,8 +203,12 @@ $(function() {
 
                         function setVal(dir){
                             if(dir){
-                                k.val( parseInt($this.val()) + dir );
+                                k.val( (limitValue(parseInt($this.val()) + dir) ));
                             }
+                        }
+
+                        function limitValue(v){
+                            return limitedValue = Math.max(Math.min(v, opt.max), opt.min);                                                 
                         }
                     }
                 ).parent();
