@@ -1,19 +1,20 @@
 /**
  * Knob - jQuery Plugin
- * Nice, configurable, backward compatible knob UI component
+ * Backward compatible, touchable dial
  *
- * Copyright (c) 2011 - 2013 Anthony Terrien
-
- * Version: 1.0.0 (23/11/2011)
+ * Version: 1.1.0 (10/05/2012)
  * Requires: jQuery v1.7+
  *
+ * Copyright (c) 2011 Anthony Terrien
  * Under MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
+ *  http://www.opensource.org/licenses/mit-license.php
+ *  http://www.gnu.org/licenses/gpl.html
+ *
+ * Thanks to eskimoblood and spiffistan
  */
 $(function() {
 
-    $.fn.knob = function( gopt ) {
+    $.fn.knob = $.fn.dial = function( gopt ) {
 
         return this.each(
 
@@ -21,8 +22,8 @@ $(function() {
 
                         var $this = $(this);
 
-                        if( $this.data('knobed') ) return $this;
-                        $this.data('knobed',true);
+                        if( $this.data('dialed') ) return $this;
+                        $this.data('dialed',true);
 
                         var opt = $.extend(
                                         {
@@ -34,6 +35,11 @@ $(function() {
                                             ,'displayInput' : $this.data('displayinput')==null || $this.data('displayinput')
                                             ,'fgColor' : $this.data('fgcolor') || '#87CEEB' //#222222'
                                             ,'bgColor' : $this.data('bgcolor') || '#EEEEEE'
+                                            ,'tickColor' : $this.data('tickColor') || $this.data('fgcolor') || '#DDDDDD'
+                                            ,'ticks' : $this.data('ticks') || 0
+                                            ,'tickLength' : $this.data('tickLength') || 0
+                                            ,'tickWidth' : $this.data('tickWidth') || 0.02
+                                            ,'tickColorizeValues' : $this.data('tickColorizeValues') || true
                                             ,'readOnly' : $this.data('readonly')
                                             ,'skin' : $this.data('skin') || 'default'
                                             ,'draw' :
@@ -44,10 +50,10 @@ $(function() {
                                                      * @param context ctx Canvas context 2d
                                                      */
                                                     function( a, v, opt, ctx ) {
-                                                            var sa = 1.5*Math.PI
-                                                                ,ea = sa+a
-                                                                ,r = opt.width/2
-                                                                ,lw = r*opt.thickness;
+                                                            var sa = 1.5*Math.PI        // Start angle
+                                                                ,ea = sa+a              // End angle
+                                                                ,r = opt.width/2        // Radius
+                                                                ,lw = r*opt.thickness;  // Line width
 
                                                             ctx.clearRect(0, 0, opt.width, opt.width);
                                                             ctx.lineWidth = lw;
@@ -56,13 +62,32 @@ $(function() {
                                                                 && ( sa = ea-0.3 )
                                                                 && ( ea = ea+0.3 );
 
+                                                            var ticks = opt.ticks;
+                                                            var tl = opt.tickLength;
+                                                            var tw = opt.tickWidth;
+
+                                                            for(tick = 0; tick < ticks; tick++) {
+
+                                                                ctx.beginPath();
+
+                                                                if(a > (((2 * Math.PI) / ticks) * tick) && opt.tickColorizeValues) {
+                                                                    ctx.strokeStyle = opt.fgColor;
+                                                                }else{
+                                                                    ctx.strokeStyle = opt.tickColor;
+                                                                }
+
+                                                                var tick_sa = (((2 * Math.PI) / ticks) * tick) - (0.5 * Math.PI);
+                                                                ctx.arc( r, r, r-lw-tl, tick_sa, tick_sa + tw , false);
+                                                                ctx.stroke();
+                                                            }
+
                                                             ctx.beginPath();
                                                             ctx.strokeStyle = opt.fgColor;
                                                             ctx.arc( r, r, r-lw, sa, ea, false);
                                                             ctx.stroke();
 
                                                             switch(opt.skin){
-                                                                
+
                                                                 case 'default' :
                                                                     ctx.beginPath();
                                                                     ctx.strokeStyle = opt.bgColor;
@@ -131,18 +156,15 @@ $(function() {
                                     }
                                 );
 
-
                         k = new Knob( c, opt );
                         k.onRelease = function(v) {
                                                     opt.release(v,$this);
                                                 };
                         k.val( parseInt($this.val()) || 0 );
-
-                        k.onChange = function(v){
-                            var limitedValue = limitValue(v);
-                            $this.val(limitedValue);
-                            opt.change(limitedValue);
-                        }
+                        k.onChange = function(v) {
+                                                    $this.val(v);
+                                                    opt.change(v);
+                                                 };
 
                         // bind change on input
                         $this.bind(
@@ -165,7 +187,6 @@ $(function() {
                         }
 
                         var keys={37: -1, 38:1, 39:1, 40: -1}
-
                         $this.keydown(function(event){
                             setVal( keys[event.keyCode]);
                             event.preventDefault();
@@ -173,35 +194,16 @@ $(function() {
 
                         $this.bind('mousewheel DOMMouseScroll', function(event){
                             var originalEvent = event.originalEvent;
-                            var deltaY, deltaX;
-
-                            if ( originalEvent.wheelDelta ) { delta = originalEvent.wheelDelta }
-                            if ( originalEvent.detail     ) { delta = -originalEvent.detail }
-                            
-                            // New school multidimensional scroll (touchpads) deltas
-                            deltaY = delta;
-                            
-                            // Gecko
-                            if ( originalEvent.axis !== undefined && originalEvent.axis === originalEvent.HORIZONTAL_AXIS ) {
-                                deltaY = 0;
-                                deltaX = -1*delta;
-                            }
-                            
-                            // Webkit
-                            if (originalEvent.wheelDeltaY !== undefined ) { deltaY = originalEvent.wheelDeltaY; }
-                            if (originalEvent.wheelDeltaX !== undefined ) { deltaX = -1*originalEvent.wheelDeltaX; }
+                            var deltaX = originalEvent.detail || originalEvent.wheelDeltaX;
+                            var deltaY = originalEvent.detail || originalEvent.wheelDeltaY;
                             setVal( deltaX > 0 ||  deltaY > 0 ? 1 : deltaX < 0 ||  deltaY < 0 ? -1 : 0);
                             event.preventDefault();
                         });
 
                         function setVal(dir){
                             if(dir){
-                                k.val( (limitValue(parseInt($this.val()) + dir) ));
+                                k.val( parseInt($this.val()) + dir );
                             }
-                        }
-
-                        function limitValue(v){
-                            return limitedValue = Math.max(Math.min(v, opt.max), opt.min);                                                 
                         }
                     }
                 ).parent();
@@ -259,15 +261,15 @@ $(function() {
             this.capture(e);
 
             $(document).bind(
-                            "mousemove.knob touchmove.knob"
+                            "mousemove.dial touchmove.dial"
                             ,function(e) {
                                 _self.capture(e);
                             }
                         )
                         .bind(
-                            "mouseup.knob touchend.knob"
+                            "mouseup.dial touchend.dial"
                             ,function() {
-                                $(document).unbind('mousemove.knob touchmove.knob mouseup.knob touchend.knob');
+                                $(document).unbind('mousemove.dial touchmove.dial mouseup.dial touchend.dial');
                                 _self.onRelease(v);
                             }
                         );
