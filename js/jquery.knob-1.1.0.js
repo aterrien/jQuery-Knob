@@ -202,7 +202,10 @@ $(function() {
 
                         function setVal(dir){
                             if(dir){
-                                k.val( parseInt($this.val()) + dir );
+                                var nextVal = parseInt($this.val()) + dir;
+                                if ( nextVal > opt.max ) { nextVal = opt.min; }
+                                if ( nextVal < opt.min ) { nextVal = opt.max; }
+                                k.val( nextVal );
                             }
                         }
                     }
