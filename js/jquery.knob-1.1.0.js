@@ -182,23 +182,23 @@ $(function() {
                                     k.startDrag( e );
                                 }
                             );
+                            
+                            var keys={37: -1, 38:1, 39:1, 40: -1}
+                            $this.keydown(function(event){
+                                setVal( keys[event.keyCode]);
+                                event.preventDefault();
+                            });
+                            
+                            $this.bind('mousewheel DOMMouseScroll', function(event){
+                                var originalEvent = event.originalEvent;
+                                var deltaX = originalEvent.detail || originalEvent.wheelDeltaX;
+                                var deltaY = originalEvent.detail || originalEvent.wheelDeltaY;
+                                setVal( deltaX > 0 ||  deltaY > 0 ? 1 : deltaX < 0 ||  deltaY < 0 ? -1 : 0);
+                                event.preventDefault();
+                            });
                         }else{
                             $this.attr('readonly','readonly');
                         }
-
-                        var keys={37: -1, 38:1, 39:1, 40: -1}
-                        $this.keydown(function(event){
-                            setVal( keys[event.keyCode]);
-                            event.preventDefault();
-                        });
-
-                        $this.bind('mousewheel DOMMouseScroll', function(event){
-                            var originalEvent = event.originalEvent;
-                            var deltaX = originalEvent.detail || originalEvent.wheelDeltaX;
-                            var deltaY = originalEvent.detail || originalEvent.wheelDeltaY;
-                            setVal( deltaX > 0 ||  deltaY > 0 ? 1 : deltaX < 0 ||  deltaY < 0 ? -1 : 0);
-                            event.preventDefault();
-                        });
 
                         function setVal(dir){
                             if(dir){
