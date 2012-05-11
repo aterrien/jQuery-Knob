@@ -2,9 +2,8 @@ jQuery Knob
 =============
 
 - canvas based ; no png or jpg sprites
-- touch events implemented
+- touch, mousewheel, keyboard events implemented
 - downward compatible ; overloads an input element
-
 
 Options
 -------
@@ -27,8 +26,15 @@ The following options (data-*=attributes) are supported :
 * readOnly : disable input and events
 * skin : default | "tron"
 
+Hooks
+-------
 
-Example :
+* draw : when drawing the canvas
+* change : at each change of value
+* release : on release
+
+Example
+-------
 
     <input type="text" value="75" class="dial">
 
@@ -37,3 +43,17 @@ Example :
         $(".dial").knob();
     }
     </script>
+
+
+Tested on Chrome, Safari, Firefox.
+Not tested on MSIE.
+
+
+1.1.1
+-------
+- keyboard control refactoring / acceleration
+- mousewheel refactoring
+- bugfix no keyboard or mousewheel when readonly
+- bugfix min/max can be exceeded
+- hooks on keyboard events
+
