@@ -120,10 +120,12 @@ $(function() {
                         k = new Knob( c, opt );
                         k.onRelease = opt.release;
                         k.val( parseInt($this.val()) || 0 );
-                        k.onChange = function(v) {
-                                                    $this.val(v);
-                                                    opt.change(v);
-                                                 };
+
+                        k.onChange = function(v){
+                            var limitedValue = limitValue(v);
+                            $this.val(limitedValue);
+                            opt.change(limitedValue);
+                        }
 
                         if( !opt.readOnly ){
                             c.bind(
@@ -169,8 +171,12 @@ $(function() {
 
                         function setVal(dir){
                             if(dir){
-                                k.val( parseInt($this.val()) + dir );
+                                k.val( (limitValue(parseInt($this.val()) + dir) ));
                             }
+                        }
+
+                        function limitValue(v){
+                            return limitedValue = Math.max(Math.min(v, opt.max), opt.min);                                                 
                         }
                     }
                 ).parent();
