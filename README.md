@@ -51,9 +51,8 @@ Not tested on MSIE.
 
 1.1.1
 -------
-- keyboard control refactoring / acceleration
-- mousewheel refactoring
+- keyboard/mousewheel control refactoring / acceleration
 - bugfix no keyboard or mousewheel when readonly
 - bugfix min/max can be exceeded
-- hooks on keyboard events
+- hooks / keyboard events
 
