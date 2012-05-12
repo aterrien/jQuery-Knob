@@ -8,7 +8,11 @@ jQuery Knob
 Options
 -------
 
-The following options (data-*=attributes) are supported :
+Options are provided as attributes 'data-option':
+
+    <input type="text" class="dial" data-min="-50" data-max="50">
+
+The following options are supported :
 
 * min : min value
 * max : max value
@@ -29,9 +33,24 @@ The following options (data-*=attributes) are supported :
 Hooks
 -------
 
-* draw : when drawing the canvas
-* change : at each change of value
-* release : on release
+    <script>
+    $(".dial").knob({
+                        'release':function(e) { /*make something*/ }
+                    });
+    </script>
+
+* 'release' : executed on release.
+
+            Parameters :
+            - value : int, current value
+            - input : jQuery element, input element
+
+* 'change' : executed at each change of the value
+
+            Parameters :
+            - value : int, current value
+
+* 'draw' : when drawing the canvas
 
 Example 1
 -------
@@ -66,7 +85,7 @@ Tested on Chrome, Safari, Firefox.
 Not tested on MSIE.
 
 
-1.1.1
+Revision 1.1.1
 -------
 - keyboard/mousewheel control refactoring / acceleration
 - bugfix no keyboard or mousewheel when readonly
