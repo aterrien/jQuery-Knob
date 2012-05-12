@@ -33,7 +33,7 @@ Hooks
 * change : at each change of value
 * release : on release
 
-Example
+Example 1
 -------
 
     <input type="text" value="75" class="dial">
@@ -42,6 +42,23 @@ Example
     $(function() {
         $(".dial").knob();
     }
+    </script>
+
+
+Example 2
+-------
+
+    <input type="text" value="75" class="dial">
+
+    <script>
+    $(".dial").knob(
+                        {
+                        'change':function(e){
+                                console.log(e);
+                            }
+                        }
+                    )
+              .val(79);
     </script>
 
 
