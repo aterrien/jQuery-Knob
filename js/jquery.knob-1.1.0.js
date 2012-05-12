@@ -162,9 +162,10 @@ $(function() {
                                                 };
                         k.val( parseInt($this.val()) || 0 );
                         k.onChange = function(v) {
-                                                    $this.val(v);
-                                                    opt.change(v);
-                                                 };
+                            var limitedValue = limitValue(v);
+                            $this.val(limitedValue);
+                            opt.change(limitedValue);
+                        };
 
                         // bind change on input
                         $this.bind(
@@ -188,8 +189,18 @@ $(function() {
 
                         var keys={37: -1, 38:1, 39:1, 40: -1}
                         $this.keydown(function(event){
-                            setVal( keys[event.keyCode]);
-                            event.preventDefault();
+                            var direction  = keys[event.keyCode];
+                            if(direction){
+                                setVal(direction);
+                                event.preventDefault();
+                            } 
+                        });
+
+                        $this.keyup(function(event){
+                            var direction  = keys[event.keyCode];
+                            if(!direction) {
+                                setVal();
+                            }
                         });
 
                         $this.bind('mousewheel DOMMouseScroll', function(event){
@@ -201,9 +212,15 @@ $(function() {
                         });
 
                         function setVal(dir){
-                            if(dir){
-                                k.val( parseInt($this.val()) + dir );
+                            if(!opt.readOnly) {
+                                var value = limitValue(parseInt($this.val(), 10) + (dir ? dir: 0));
+                                $this.val(value)
+                                k.val( parseInt(value, 10) || 0);
                             }
+                        }
+
+                        function limitValue(v){
+                            return limitedValue = Math.max(Math.min(v, opt.max), opt.min);                                                 
                         }
                     }
                 ).parent();
