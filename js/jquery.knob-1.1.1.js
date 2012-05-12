@@ -1,6 +1,6 @@
 /**
  * Knob - jQuery Plugin
- * Backward compatible, touchable dial
+ * Downward compatible, touchable dial
  *
  * Version: 1.1.0 (10/05/2012)
  * Requires: jQuery v1.7+
@@ -193,7 +193,6 @@ $(function() {
                                                     ,deltaX = ori.detail || ori.wheelDeltaX
                                                     ,deltaY = ori.detail || ori.wheelDeltaY
                                                     ,val = parseInt($this.val()) + (deltaX>0 || deltaY>0 ? 1 : deltaX<0 || deltaY<0 ? -1 : 0);
-                                                (val>opt.max && (val=opt.max)) || (val<opt.min && (val=opt.min));
                                                 k.val(val);
                                             }
                                 );
@@ -215,17 +214,7 @@ $(function() {
 
                                                     // arrows
                                                     if($.inArray(kc,[37,38,39,40])>-1){
-                                                        val=parseInt($this.val())+kv[kc]*m;
-
-                                                        //if(to){ // long time keydown = limited min or max
-                                                            (val<opt.min && kv[kc]<0 && (val=opt.min))
-                                                            || (val>opt.max && kv[kc]>0 && (val=opt.max));
-                                                        //}else{
-                                                        //    // allow infinite loop
-                                                        //    (val<opt.min && (val=opt.max))
-                                                        //    || (val>opt.max && (val=opt.min));
-                                                        //}
-                                                        k.val(val);
+                                                        k.val(parseInt($this.val())+kv[kc]*m);
 
                                                         // long time keydown speed-up
                                                         tocb = function(){m<20 && m++;};
@@ -285,6 +274,7 @@ $(function() {
 
         this.val = function(_v) {
             if(null!=_v){
+                _v=Math.max(Math.min(_v, opt.max), opt.min); // limiter
                 if( v==_v ) return;
                 v=_v;
                 this.onChange(_v);
