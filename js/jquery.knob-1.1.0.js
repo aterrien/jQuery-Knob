@@ -34,7 +34,9 @@ $(function() {
                                             ,'width' : $this.data('width') || 200
                                             ,'displayInput' : $this.data('displayinput')==null || $this.data('displayinput')
                                             ,'fgColor' : $this.data('fgcolor') || '#87CEEB' //#222222'
-                                            ,'bgColor' : $this.data('bgcolor') || '#EEEEEE'
+                                            ,'bgColor' : $this.data('bgcolor') || '#EEEEEE' 
+                                            ,'fgColorStops' : $this.data('fgcolorstops') && $this.data('fgcolorstops').split(',')
+                                            ,'bgColorStops' : $this.data('bgcolorstops') && $this.data('bgcolorstops').split(',')
                                             ,'tickColor' : $this.data('tickColor') || $this.data('fgcolor') || '#DDDDDD'
                                             ,'ticks' : $this.data('ticks') || 0
                                             ,'tickLength' : $this.data('tickLength') || 0
@@ -65,24 +67,46 @@ $(function() {
                                                             var ticks = opt.ticks;
                                                             var tl = opt.tickLength;
                                                             var tw = opt.tickWidth;
+                                                            var twoPi = 2 * Math.PI;
+                                                            var halfPi = .5 * Math.PI;
+                                                            var step = 2 * twoPi / ticks;
 
                                                             for(tick = 0; tick < ticks; tick++) {
 
                                                                 ctx.beginPath();
 
-                                                                if(a > (((2 * Math.PI) / ticks) * tick) && opt.tickColorizeValues) {
+                                                                if(a > (step * tick) && opt.tickColorizeValues) {
                                                                     ctx.strokeStyle = opt.fgColor;
                                                                 }else{
                                                                     ctx.strokeStyle = opt.tickColor;
                                                                 }
 
-                                                                var tick_sa = (((2 * Math.PI) / ticks) * tick) - (0.5 * Math.PI);
+                                                                var tick_sa = step * tick - halfPi;
                                                                 ctx.arc( r, r, r-lw-tl, tick_sa, tick_sa + tw , false);
                                                                 ctx.stroke();
                                                             }
 
+                                                            if (opt.bgColorStops) {
+                                                                ctx.beginPath();
+                                                                var grd = ctx.createRadialGradient(r, r, 0, r, r, lw);
+                                                                for (var i = 0, l = opt.bgColorStops.length -1; i < l; i+=2) {
+                                                                    grd.addColorStop(opt.bgColorStops[i], opt.bgColorStops[i+1]);
+                                                                }
+                                                                ctx.strokeStyle = grd;
+                                                                ctx.arc( r, r, r-lw, 0, twoPi, true);
+                                                                ctx.stroke();
+                                                            }
+                                                            
                                                             ctx.beginPath();
-                                                            ctx.strokeStyle = opt.fgColor;
+                                                            if (opt.fgColorStops) {
+                                                                var grd = ctx.createRadialGradient(r, r, 0, r, r, lw);
+                                                                for (var i = 0, l = opt.fgColorStops.length -1; i < l; i+=2) {
+                                                                    grd.addColorStop(opt.fgColorStops[i], opt.fgColorStops[i+1]);
+                                                                }
+                                                                ctx.strokeStyle = grd;
+                                                            } else {
+                                                                ctx.strokeStyle = opt.fgColor;
+                                                            }
                                                             ctx.arc( r, r, r-lw, sa, ea, false);
                                                             ctx.stroke();
 
@@ -90,24 +114,29 @@ $(function() {
 
                                                                 case 'default' :
                                                                     ctx.beginPath();
-                                                                    ctx.strokeStyle = opt.bgColor;
-                                                                    ctx.arc(
+                                                                    if (!opt.bgColorStops){
+                                                                        ctx.strokeStyle = opt.bgColor;
+                                                                    
+                                                                        ctx.arc(
                                                                                 r, r, r-lw ,sa
-                                                                                ,(v==opt.min && !opt.cursor)
-                                                                                    ? sa+0.0001
+                                                                                ,(v == opt.min && !opt.cursor)
+                                                                                    ? sa + 0.0001
                                                                                     : ea
                                                                                 , true
                                                                             );
                                                                     ctx.stroke();
+                                                                    }
                                                                     break;
 
                                                                 case 'tron' :
                                                                     ctx.lineWidth = 2;
                                                                     ctx.beginPath();
                                                                     ctx.strokeStyle = opt.fgColor;
-                                                                    ctx.arc( r, r, r-lw+1+lw*2/3, 0, 2*Math.PI, false);
+                                                                    ctx.arc( r, r, r - lw + 1 + lw * 2 / 3, 0, twoPi, false);
                                                                     ctx.stroke();
                                                                     break;
+                                                                
+
                                                             }
                                                         }
                                             ,'change' :
