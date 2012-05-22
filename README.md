@@ -58,28 +58,28 @@ Hooks
 
     <script>
     $(".dial").knob({
-                        'release':function(e) { /*make something*/ }
+                        'release':function(v,ipt) { /*make something*/ }
                     });
     </script>
 
 * 'release' : executed on release
 
     Parameters :
-        value : int, current value
-        input : jQuery element, input element
+    + value : int, current value
+    + input : jQuery element, input element
 
 * 'change' : executed at each change of the value
 
     Parameters :
-        value : int, current value
+    + value : int, current value
 
 * 'draw' : when drawing the canvas
 
     Parameters :
-        angle : computed angle
-        value : current value
-        opt : plugin options
-        context : Canvas context 2d
+    + angle : computed angle
+    + value : current value
+    + opt : plugin options
+    + context : Canvas context 2d
 
 Example
 -------
