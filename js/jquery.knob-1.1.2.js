@@ -2,7 +2,7 @@
  * Knob - jQuery Plugin
  * Downward compatible, touchable dial
  *
- * Version: 1.1.2 (10/05/2012)
+ * Version: 1.1.2 (22/05/2012)
  * Requires: jQuery v1.7+
  *
  * Copyright (c) 2011 Anthony Terrien
