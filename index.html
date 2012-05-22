@@ -3,7 +3,7 @@
     <head>
         <title>jQuery Knob demo</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-        <script src="js/jquery.knob-1.1.1.js"></script>
+        <script src="js/jquery.knob-1.1.2.js"></script>
         <script>
             $(function() {
                 $(".knob").knob();
@@ -16,7 +16,10 @@
                     ,decr = function() { i--; $idir.show().html("-").fadeOut(); $ival.html(i); };
                 $("input.infinite").knob(
                                     {
-                                    'change':function(v){
+                                    'min':0
+                                    ,'max':20
+                                    ,'stopper':false
+                                    ,'change':function(v){
                                                 if(val>v){
                                                     if(up){
                                                         decr();
@@ -34,6 +37,27 @@
                                     }
                                     );
 
+
+                // Automatic mode
+                /*var autoVal = 0
+                    ,timer = setInterval(function() {
+                        $(".knob").each(
+                                function(){
+                                    $(this)
+                                        .val(Math.round(Math.sin(autoVal)*100))
+                                        .trigger('change');
+                                }
+                            );
+                        autoVal++;
+                    }, 100);*/
+
+                 // Configure
+                 /*$(".knob").val(25).trigger(
+                            "configure",
+                            {"min":10, "max":40, "fgColor":"#FF0000", "skin":"tron", "cursor":true}
+                            );*/
+
+                 // Change example
                  /*$(".knob").knob(
                                 {
                                 'change':function(e){
@@ -46,21 +70,22 @@
             });
         </script>
         <style>
-            h2{color:#87CEEB;font-family:Georgia;}
+            h2{color:#87CEEB;font-family:'Georgia';}
         </style>
     </head>
     <body>
-        <div style="float:left;width:100%;font-family:Georgia;font-size:70px;font-weight:bold;color:#87CEEB;letter-spacing:-5px">
+        <div style="float:left;width:100%;font-family:'Georgia';font-size:70px;font-weight:bold;color:#87CEEB;letter-spacing:-5px">
             Knob demo <a href="http://flattr.com/thing/674900/jQuery-Knob" target="_blank">
-<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
+            <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
         </div>
         <div style="float:left;width:300px;height:300px;background-color:#222;color:#FFF;padding:20px">
             <pre>
 data-width="75"
 data-fgColor="#fff"
 data-skin="tron"
+data-displayPrevious=true
             </pre>
-            <input class="knob" data-width="75" data-fgColor="#ffec03" data-skin="tron" data-cursor=true value="75">
+            <input class="knob" data-width="75" data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" data-cursor=true value="75">
         </div>
         <div style="float:left;width:300px;height:300px;background-color:#222;color:#FFF;padding:20px">
             <pre>
@@ -68,8 +93,9 @@ data-width="150"
 data-fgColor="#fff"
 data-skin="tron"
 data-thickness=".2"
+data-displayPrevious=true
             </pre>
-            <input class="knob" data-width="150" data-fgColor="#ffec03" data-skin="tron" data-thickness=".2" value="75">
+            <input class="knob" data-width="150" data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" data-thickness=".2" value="75">
         </div>
         <div style="float:left;width:300px;height:300px;background-color:#222;color:#FFF;padding:20px">
             <pre>
@@ -80,26 +106,29 @@ data-thickness=".1"
             </pre>
             <input class="knob" data-width="150" data-fgColor="#C0ffff" data-skin="tron" data-thickness=".1" value="35">
         </div>
-        <div style="float:left;width:250px;height:350px;padding:20px">
+        <div style="clear:both"></div>
+        <div style="float:left;width:300px;height:300px;padding:20px">
             <pre>
 data-width="100"
 data-displayInput=false
             </pre>
             <input class="knob" data-width="100" data-displayInput=false value="35">
         </div>
-        <div style="float:left;width:350px;height:350px;padding:20px">
+        <div style="float:left;width:300px;height:300px;padding:20px">
             <pre>
-data-width="300"
+data-width="200"
 data-cursor=true
             </pre>
-            <input class="knob" data-width="300" data-cursor=true value="29">
+            <input class="knob" data-width="200" data-cursor=true value="29">
         </div>
-        <div style="float:left;width:300px;height:350px;padding:20px">
+        <div style="float:left;width:300px;height:300px;padding:20px">
             <pre>
-data-width="250"
+data-width="200"
 data-min="-100"
+data-cgColor="#A9EFFD"
+data-displayPrevious=true
             </pre>
-            <input class="knob"data-width="250" data-min="-100" value="44">
+            <input class="knob"data-width="200" data-min="-100" data-displayPrevious=true value="44">
         </div>
         <div style="clear:both"></div>
         <div style="float:left;width:300px;height:320px;padding:20px">
@@ -137,17 +166,17 @@ data-cursor=true
         <div style="clear:both"></div>
         <div style="float:left;height:440px;width:420px;padding:20px">
             <h2>Infinite / iPod click wheel</h2>
-            <div style="float:left;width:200px;height:350px;padding:20px;background-color:#EEEEEE;">
+            <div style="float:left;width:200px;height:300px;padding:20px;background-color:#EEEEEE;text-align:center;">
                 <pre>
-data-width="200"
+data-width="150"
 data-cursor=true
-data-thickness=".4"
+data-thickness=".5"
 data-fgColor="#AAAAAA"
 data-bgColor="#FFFFFF"
 data-displayInput="false"
 + some code
                 </pre>
-                <input class="infinite" data-width="200" data-thickness=".4" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF" data-displayInput="false" data-cursor=true>
+                <input class="infinite" data-width="150" data-thickness=".5" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF" data-displayInput="false" data-cursor=true>
             </div>
             <div style="float:left;margin-top:200px;">
                 <div class="ival" style="width:100px;text-align:center;font-size:50px;color:#AAA">0</div>
