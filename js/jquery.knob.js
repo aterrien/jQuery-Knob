@@ -54,13 +54,13 @@ $(function () {
 
         this.draw = function (nv) {
 
-            var a = this.angle(nv)
-                ,sa = 1.5 * Math.PI     // Start angle
-                ,sat = sa
-                ,ea = sa + this.angle(v)      // End angle
-                ,eat = sat + a
-                ,r = opt.width / 2            // Radius
-                ,lw = r * opt.thickness       // Line width
+            var a = this.angle(nv)          // Angle
+                ,sa = 1.5 * Math.PI         // Previous start angle
+                ,sat = sa                   // Start angle
+                ,ea = sa + this.angle(v)    // Previous end angle
+                ,eat = sat + a              // End angle
+                ,r = opt.width / 2          // Radius
+                ,lw = r * opt.thickness     // Line width
                 ,cgcolor = Dial.getCgColor(opt.cgColor)
                 ,tick
                 ;
@@ -69,7 +69,6 @@ $(function () {
             ctx.lineWidth = lw;
 
             // Hook draw
-            //{"startAngle":sa,"endAngle":ea,"radius":r,"lineWidth":lw}
             if (opt.draw(a, v, opt, ctx)) { return; }
 
             for (tick = 0; tick < opt.ticks; tick++) {
