@@ -37,6 +37,7 @@ Behaviors :
 * max : max value || default=100.
 * stopper : stop at 0 & 100 on keydown/mousewheel || default=true.
 * readOnly : disable input and events.
+* angleOffset: change the 0 position of the knob (in degree), || default=0.
 
 UI :
 * cursor : display mode "cursor" | default=gauge.
