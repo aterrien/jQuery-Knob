@@ -162,7 +162,7 @@ $(function () {
 
         this.startDrag = function (e) {
 
-            var p = c.position()
+            var p = c.offset()
                 ,$doc = $(document);
 
             x = p.left + (opt.width / 2);
@@ -360,6 +360,7 @@ $(function () {
                                     "keydown"
                                     ,function (e) {
                                         var kc = e.keyCode;
+                                        if (kc >= 96 && kc <= 105) kc -= 48; //numpad
                                         kval = parseInt(String.fromCharCode(kc));
 
                                         if (isNaN(kval)) {
