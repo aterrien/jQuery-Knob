@@ -19,7 +19,7 @@ $(function () {
 
         var v = null
             ,ctx = c[0].getContext("2d")
-            ,PI2 = 2*Math.PI
+            ,PI2 = 2 * Math.PI
             ,mx ,my ,x ,y
             ,self = this;
 
@@ -55,7 +55,7 @@ $(function () {
         this.draw = function (nv) {
 
             var a = this.angle(nv)          // Angle
-                ,sa = 1.5 * Math.PI         // Previous start angle
+                ,sa = 1.5 * Math.PI + opt.angleOffset       // Previous start angle
                 ,sat = sa                   // Start angle
                 ,ea = sa + this.angle(v)    // Previous end angle
                 ,eat = sat + a              // End angle
@@ -242,6 +242,7 @@ $(function () {
                         ,'tickWidth' : $this.data('tickWidth') || 0.02
                         ,'tickColorizeValues' : $this.data('tickColorizeValues') || true
                         ,'skin' : $this.data('skin') || 'default'
+	                    ,'angleOffset': degreeToRadians($this.data('angleoffset'))
 
                         // Hooks
                         ,'draw' :
@@ -418,4 +419,8 @@ $(function () {
             }
         ).parent();
     };
+
+	function degreeToRadians (angle) {
+		return $.isNumeric(angle) ? angle * Math.PI / 180 : 0;
+	}
 });
