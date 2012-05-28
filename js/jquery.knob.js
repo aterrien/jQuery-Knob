@@ -35,7 +35,7 @@ $(function () {
                 this.draw(nv);
             } else {
                 var b, a;
-                b = a = Math.atan2(mx - x, -(my - y - opt.width / 2));
+                b = a = Math.atan2(mx - x, -(my - y - opt.width / 2)) - opt.angleOffset;
                 (a < 0) && (b = a + PI2);
                 nv = Math.round(b * (opt.max - opt.min) / PI2) + opt.min;
                 return (nv > opt.max) ? opt.max : nv;
@@ -54,13 +54,13 @@ $(function () {
 
         this.draw = function (nv) {
 
-            var a = this.angle(nv)          // Angle
-                ,sa = 1.5 * Math.PI + opt.angleOffset       // Previous start angle
-                ,sat = sa                   // Start angle
-                ,ea = sa + this.angle(v)    // Previous end angle
-                ,eat = sat + a              // End angle
-                ,r = opt.width / 2          // Radius
-                ,lw = r * opt.thickness     // Line width
+            var a = this.angle(nv)                      // Angle
+                ,sa = 1.5 * Math.PI + opt.angleOffset   // Previous start angle
+                ,sat = sa                               // Start angle
+                ,ea = sa + this.angle(v)                // Previous end angle
+                ,eat = sat + a                          // End angle
+                ,r = opt.width / 2                      // Radius
+                ,lw = r * opt.thickness                 // Line width
                 ,cgcolor = Dial.getCgColor(opt.cgColor)
                 ,tick
                 ;
@@ -242,7 +242,7 @@ $(function () {
                         ,'tickWidth' : $this.data('tickWidth') || 0.02
                         ,'tickColorizeValues' : $this.data('tickColorizeValues') || true
                         ,'skin' : $this.data('skin') || 'default'
-	                    ,'angleOffset': degreeToRadians($this.data('angleoffset'))
+	                ,'angleOffset': degreeToRadians($this.data('angleoffset'))
 
                         // Hooks
                         ,'draw' :
@@ -420,7 +420,7 @@ $(function () {
         ).parent();
     };
 
-	function degreeToRadians (angle) {
-		return $.isNumeric(angle) ? angle * Math.PI / 180 : 0;
-	}
+    function degreeToRadians (angle) {
+            return $.isNumeric(angle) ? angle * Math.PI / 180 : 0;
+    }
 });
