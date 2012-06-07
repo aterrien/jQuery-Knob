@@ -37,7 +37,7 @@ $(function () {
                 var b, a;
                 b = a = Math.atan2(mx - x, -(my - y - opt.width / 2)) - opt.angleOffset;
                 (a < 0) && (b = a + PI2);
-                nv = Math.round(b * (opt.max - opt.min) / PI2) + opt.min;
+                nv = roundTo(b * (opt.max - opt.min) / PI2, 0.1) + opt.min;
                 return (nv > opt.max) ? opt.max : nv;
             }
         };
@@ -224,6 +224,7 @@ $(function () {
                         // Config
                         'min' : $this.data('min') || 0
                         ,'max' : $this.data('max') || 100
+                        ,'step' : $this.data('step') || $this.attr("step") || 1
                         ,'stopper' : true
                         ,'readOnly' : $this.data('readonly')
 
@@ -330,7 +331,7 @@ $(function () {
                         var ori = e.originalEvent
                         ,deltaX = ori.detail || ori.wheelDeltaX
                         ,deltaY = ori.detail || ori.wheelDeltaY
-                        ,val = parseInt($this.val()) + (deltaX>0 || deltaY>0 ? 1 : deltaX<0 || deltaY<0 ? -1 : 0);
+                        ,val = parseFloat($this.val()) + (deltaX>0 || deltaY>0 ? opt.step : deltaX<0 || deltaY<0 ? -opt.step : 0);
                         k.val(val);
                     };
 
@@ -348,7 +349,7 @@ $(function () {
                         );
 
                     // input
-                    var kval, val, to, m = 1, kv = {37:-1, 38:1, 39:1, 40:-1};
+                    var kval, val, to, m = 1, kv = {37:opt.step, 38:opt.step, 39:-opt.step, 40:-opt.step};
                     $this
                         .bind(
                                     "configure"
@@ -376,7 +377,7 @@ $(function () {
 
                                             // arrows
                                             if ($.inArray(kc,[37,38,39,40]) > -1) {
-                                                k.change(parseInt($this.val()) + kv[kc] * m);
+                                                k.change(parseFloat($this.val()) + kv[kc] * m);
 
                                                 // long time keydown speed-up
                                                 to = window.setTimeout(
