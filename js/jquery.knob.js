@@ -426,4 +426,14 @@ $(function () {
     function degreeToRadians (angle) {
             return $.isNumeric(angle) ? angle * Math.PI / 180 : 0;
     }
+
+    function roundTo (num, to) {
+
+        if (num < to / 2) return 0;
+
+        var amount = to * Math.round(num / to);
+        if (amount === 0) amount = to;
+        return amount;
+    };
+
 });
