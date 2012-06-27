@@ -36,8 +36,10 @@ $(function () {
             } else {
                 var b, a;
                 b = a = Math.atan2(mx - x, -(my - y - opt.width / 2)) - opt.angleOffset;
-                (a < 0) && (b = a + PI2);
-                nv = Math.round(b * (opt.max - opt.min) / PI2) + opt.min;
+//                (a < 0) && (b = a + PI2);
+                (a < 0) && (b = a + opt.angleArc);
+//                nv = Math.round(b * (opt.max - opt.min) / PI2) + opt.min;
+                nv = Math.round(b * (opt.max - opt.min) / opt.angleArc) + opt.min;
                 return (nv > opt.max) ? opt.max : nv;
             }
         };
@@ -49,7 +51,7 @@ $(function () {
         };
 
         this.angle = function (nv) {
-            return (nv - opt.min) * PI2 / (opt.max - opt.min);
+            return (nv - opt.min) * opt.angleArc / (opt.max - opt.min);
         };
 
         this.draw = function (nv) {
@@ -63,6 +65,8 @@ $(function () {
                 ,lw = r * opt.thickness                 // Line width
                 ,cgcolor = Dial.getCgColor(opt.cgColor)
                 ,tick
+                ,bsa = sa
+                ,bea = bsa + (opt.angleBgCircle ? (2 * Math.PI) : opt.angleArc)
                 ;
 
             ctx.clearRect(0, 0, opt.width, opt.width);
@@ -98,7 +102,7 @@ $(function () {
 
                     ctx.beginPath();
                     ctx.strokeStyle = opt.bgColor;
-                    ctx.arc(r, r, r - lw / 2, 0, PI2, true);
+                    ctx.arc(r, r, r - lw / 2, bea, bsa, true);
                     ctx.stroke();
 
                     if (opt.displayPrevious) {
@@ -242,7 +246,10 @@ $(function () {
                         ,'tickWidth' : $this.data('tickWidth') || 0.02
                         ,'tickColorizeValues' : $this.data('tickColorizeValues') || true
                         ,'skin' : $this.data('skin') || 'default'
-	                ,'angleOffset': degreeToRadians($this.data('angleoffset'))
+	                	,'angleOffset': degreeToRadians($this.data('angleoffset'))
+	                	,'angleArc': degreeToRadians($this.data('anglearc')) || 2 * Math.PI
+	                	,'angleBgCircle': $this.data('anglebgcircle') || false
+
 
                         // Hooks
                         ,'draw' :
