@@ -49,7 +49,7 @@ $(function () {
         };
 
         this.angle = function (nv) {
-            return (nv - opt.min) * PI2 / (opt.max - opt.min);
+            return (nv - opt.min) * opt.angleArc / (opt.max - opt.min);
         };
 
         this.draw = function (nv) {
@@ -242,7 +242,8 @@ $(function () {
                         ,'tickWidth' : $this.data('tickWidth') || 0.02
                         ,'tickColorizeValues' : $this.data('tickColorizeValues') || true
                         ,'skin' : $this.data('skin') || 'default'
-	                ,'angleOffset': degreeToRadians($this.data('angleoffset'))
+	                	,'angleOffset': degreeToRadians($this.data('angleoffset'))
+	                	,'angleArc': degreeToRadians($this.data('anglearc')) || 2 * Math.PI
 
                         // Hooks
                         ,'draw' :
