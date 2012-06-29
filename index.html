@@ -77,7 +77,7 @@
             Knob demo <a href="http://flattr.com/thing/674900/jQuery-Knob" target="_blank">
             <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
         </div>
-        <div style="float:left;width:200px;height:300px;background-color:#222;color:#FFF;padding:20px">
+        <div style="float:left;width:300px;height:300px;background-color:#222;color:#FFF;padding:20px">
             <pre>
 data-width="75"
 data-fgColor="#fff"
@@ -86,7 +86,7 @@ data-displayPrevious=true
             </pre>
             <input class="knob" data-width="75" data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" data-cursor=true value="75">
         </div>
-        <div style="float:left;width:200px;height:300px;background-color:#222;color:#FFF;padding:20px">
+        <div style="float:left;width:300px;height:300px;background-color:#222;color:#FFF;padding:20px">
             <pre>
 data-width="150"
 data-fgColor="#fff"
@@ -96,7 +96,7 @@ data-displayPrevious=true
             </pre>
             <input class="knob" data-width="150" data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" data-thickness=".2" value="75">
         </div>
-        <div style="float:left;width:200px;height:300px;background-color:#222;color:#FFF;padding:20px">
+        <div style="float:left;width:300px;height:300px;background-color:#222;color:#FFF;padding:20px">
             <pre>
 data-width="150"
 data-fgColor="#fff"
@@ -104,17 +104,6 @@ data-skin="tron"
 data-thickness=".1"
             </pre>
             <input class="knob" data-width="150" data-fgColor="#C0ffff" data-skin="tron" data-thickness=".1" value="35">
-        </div>
-        <div style="float:left;width:200px;height:300px;background-color:#222;color:#FFF;padding:20px">
-            <pre>
-data-min="0"
-data-width="100"
-data-dynamicDraw=true
-data-displayPrevious=true
-data-fgColor="#ffec03"
-data-skin="tron"
-            </pre>
-            <input class="knob" data-min="0" data-width="100" data-dynamicDraw=true data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" value="87">
         </div>
         <div style="clear:both"></div>
         <div style="float:left;width:300px;height:300px;padding:20px">
@@ -175,9 +164,9 @@ data-cursor=true
             <input type="text" class="knob-dyn2" data-width="50" data-thickness=".4" value="56">
         </div>
         <div style="clear:both"></div>
-        <div style="float:left;height:440px;width:420px;padding:20px">
+        <div style="float:left;height:440px;width:300px;padding:20px">
             <h2>Infinite / iPod click wheel</h2>
-            <div style="float:left;width:200px;height:300px;padding:20px;background-color:#EEEEEE;text-align:center;">
+            <div style="float:left;width:180px;height:400px;padding:20px;background-color:#EEEEEE;text-align:center;">
                 <pre>
 data-width="150"
 data-cursor=true
@@ -190,10 +179,27 @@ data-displayInput="false"
                 <input class="infinite" data-width="150" data-thickness=".5" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF" data-displayInput="false" data-cursor=true>
             </div>
             <div style="float:left;margin-top:200px;">
-                <div class="ival" style="width:100px;text-align:center;font-size:50px;color:#AAA">0</div>
-                <div class="idir" style="width:100px;text-align:center;font-size:50px;"></div>
+                <div class="ival" style="width:80px;text-align:center;font-size:50px;color:#AAA">0</div>
+                <div class="idir" style="width:80px;text-align:center;font-size:50px;"></div>
             </div>
         </div>
+        <div style="float:left;height:440px;width:300px;padding:20px">
+            <h2>Dynamic drawing</h2>
+            <div style="float:left;width:200px;height:300px;padding:20px;background-color:#222;color:#FFF;text-align:center;">
+                <pre>
+data-min="0"
+data-width="100"
+data-dynamicDraw=true
+data-displayPrevious=true
+data-fgColor="#ffec03"
+data-skin="tron"
+                </pre>
+                <input type="button" onclick="$('.knob-dynamicDraw').knob();" value="knobify!">
+                <input class="knob-dynamicDraw" data-min="0" data-width="100" data-dynamicDraw=true data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" value="87">
+            </div>
+        </div>
+
+
         <div style="border: 0 none; position: absolute; right: 0; top: 0;"><a href="https://github.com/aterrien" target="_blank"><img src="../i/github-ribbon.png" style="border: 0 none;"></a></div>
         <script type="text/javascript">
             var _gaq = _gaq || [];
