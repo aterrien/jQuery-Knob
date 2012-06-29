@@ -32,7 +32,8 @@ $(function () {
                 opt.stopper && (nv = Math.max(Math.min(nv, opt.max), opt.min));
                 v = nv;
                 this.onChange(nv);
-                this.draw(nv);
+                if(opt.dynamicDraw) this.dynamicDraw(nv);
+                else this.draw(nv);
             } else {
                 var b, a;
                 b = a = Math.atan2(mx - x, -(my - y - opt.width / 2)) - opt.angleOffset;
@@ -138,6 +139,27 @@ $(function () {
                     break;
             }
         };
+        
+        var dynamicDrawIndex;
+        var dynamicDrawInterval;
+        this.dynamicDraw = function (nv) {
+        	var instanceOfThis = this;
+        	dynamicDrawIndex = opt.min;
+        	dynamicDrawInterval = setInterval(function() {
+        		instanceOfThis.animateDraw(nv);
+            }, 20);
+        };
+        
+        this.animateDraw = function () {
+        	if(dynamicDrawIndex > v) {
+        		clearInterval(dynamicDrawInterval);
+        		v = dynamicDrawIndex;
+        	} else {
+        		this.draw(dynamicDrawIndex);
+        		this.change(dynamicDrawIndex);
+        		dynamicDrawIndex++;
+        	}
+        };
 
         this.capture = function (e) {
             switch (e.type) {
@@ -242,7 +264,8 @@ $(function () {
                         ,'tickWidth' : $this.data('tickWidth') || 0.02
                         ,'tickColorizeValues' : $this.data('tickColorizeValues') || true
                         ,'skin' : $this.data('skin') || 'default'
-	                ,'angleOffset': degreeToRadians($this.data('angleoffset'))
+                        ,'angleOffset': degreeToRadians($this.data('angleoffset'))
+                        ,'dynamicDraw': $this.data('dynamicdraw') || false
 
                         // Hooks
                         ,'draw' :
