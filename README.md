@@ -2,7 +2,7 @@ jQuery Knob
 =============
 
 - canvas based ; no png or jpg sprites.
-- touch, mousewheel, keyboard events implemented.
+- touch, mouse and mousewheel, keyboard events implemented.
 - downward compatible ; overloads an input element.
 
 Example
@@ -33,11 +33,12 @@ Options are provided as attributes 'data-option':
 The following options are supported :
 
 Behaviors :
-* min : min value || default=0.
-* max : max value || default=100.
-* stopper : stop at 0 & 100 on keydown/mousewheel || default=true.
-* readOnly : disable input and events.
-* angleOffset: change the 0 position of the knob (in degree), || default=0.
+* min : min value | default=0.
+* max : max value | default=100.
+* angleOffset : starting angle in degrees | default=0.
+* angleArc : arc size in degrees | default=360.
+* stopper : stop at min & max on keydown/mousewheel | default=true.
+* readOnly : disable input and events | default=false.
 
 UI :
 * cursor : display mode "cursor" | default=gauge.
@@ -47,19 +48,13 @@ UI :
 * displayPrevious : default=false | true=displays the previous value with transparency.
 * fgColor : foreground color.
 * bgColor : background color.
-* ticks : number of ticks | 0=disable.
-* tickColor.
-* tickLength.
-* tickWidth.
-* tickColorizeValues : colorize ticks.
-* skin : default | "tron".
 
 Hooks
 -------
 
     <script>
     $(".dial").knob({
-                        'release':function(v,ipt) { /*make something*/ }
+                        'release' : function (v) { /*make something*/ }
                     });
     </script>
 
@@ -67,7 +62,6 @@ Hooks
 
     Parameters :
     + value : int, current value
-    + input : jQuery element, input element
 
 * 'change' : executed at each change of the value
 
@@ -76,11 +70,16 @@ Hooks
 
 * 'draw' : when drawing the canvas
 
-    Parameters :
-    + angle : computed angle
-    + value : current value
-    + opt : plugin options
-    + context : Canvas context 2d
+    Context :
+    - this.g : canvas context 2D (see Canvas documentation)
+    - this.$ : jQuery wrapped element
+    - this.o : options
+    - this.i : input
+    - ... console.log(this);
+
+* 'cancel' : triggered on [esc] keydown
+
+The scope (this) of each hook function is the current Knob instance (refer to the demo code).
 
 Example
 -------
@@ -88,13 +87,9 @@ Example
     <input type="text" value="75" class="dial">
 
     <script>
-    $(".dial").knob(
-                        {
-                        'change':function(e){
-                                console.log(e);
-                            }
-                        }
-                    );
+    $(".dial").knob({
+                     'change' : function (v) { console.log(v); }
+                    });
     </script>
 
 
@@ -102,31 +97,29 @@ Dynamically configure
 -------
 
     <script>
-    $('.dial').trigger('configure',{"min":10, "max":40, "fgColor":"#FF0000", "skin":"tron", "cursor":true})
+    $('.dial')
+        .trigger(
+            'configure',
+            {
+            "min":10,
+            "max":40,
+            "fgColor":"#FF0000",
+            "skin":"tron",
+            "cursor":true
+            }
+        );
+    </script>
+
+Set the value
+-------
+
+    <script>
+    $('.dial')
+        .val(27)
+        .trigger('change');
     </script>
 
 Supported browser
 -------
 
 Tested on Chrome, Safari, Firefox, IE 9.0.
-
-Revision 1.1.2
--------
-- removed padding around the wheel in default skin / default thickness = 0.35.
-- 'configure' event.
-- added 'displayPrevious' option.
-- change color cgColor / 'displayPrevious' must be true.
-- escape keycode supported while changing = restore the current value.
-- tab keycode supported.
-- added 'stopper'.
-- bugfix init when 'value' attribute is not defined.
-- JSLint qa.
-- infinite mode demo.
-
-Revision 1.1.1
--------
-- keyboard/mousewheel control refactoring / acceleration.
-- bugfix no keyboard or mousewheel when readonly.
-- bugfix min/max can be exceeded.
-- hooks / keyboard events.
-
