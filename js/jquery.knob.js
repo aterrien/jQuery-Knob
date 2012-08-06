@@ -468,6 +468,12 @@ $(function () {
                     "keydown"
                     ,function (e) {
                         var kc = e.keyCode;
+
+                        // numpad support
+                        if(kc >= 96 && kc <= 105) {
+                            kc = e.keyCode = kc - 48;
+                        }
+
                         kval = parseInt(String.fromCharCode(kc));
 
                         if (isNaN(kval)) {
