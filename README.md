@@ -13,7 +13,7 @@ Example
     <script>
     $(function() {
         $(".dial").knob();
-    }
+    } );
     </script>
 
 Options
