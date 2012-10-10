@@ -86,6 +86,7 @@
                     max : this.$.data('max') || 100,
                     stopper : true,
                     readOnly : this.$.data('readonly'),
+                    validationDelay: this.$.data('validationDelay') || 0,
 
                     // UI
                     cursor : (this.$.data('cursor') === true && 30)
@@ -516,9 +517,10 @@
                                 s.val(s.$.val());
                             }
                         } else {
-                            // kval postcond
-                            (s.$.val() > s.o.max && s.$.val(s.o.max))
-                            || (s.$.val() < s.o.min && s.$.val(s.o.min));
+                          // kval postcond
+                          setTimeout(function(){
+                            (s.$.val() > s.o.max && s.$.val(s.o.max)) || (s.$.val() < s.o.min && s.$.val(s.o.min));
+                          }, s.o.validationDelay);
                         }
 
                     }
