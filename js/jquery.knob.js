@@ -25,7 +25,7 @@
     var k = {}, // kontrol
         max = Math.max,
         min = Math.min;
-
+ 
     k.c = {};
     k.c.d = $(document);
     k.c.t = function (e) {
@@ -106,6 +106,10 @@
                     release : null // function (value) {}
                 }, this.o
             );
+
+            if (Math.abs(this.o.max - this.o.min) <= 1) {
+                this.o.allowFractions = true;
+            }
 
             // routing value
             if(this.$.is('fieldset')) {
@@ -434,8 +438,11 @@
                 a += this.PI2;
             }
 
-            ret = ~~ (0.5 + (a * (this.o.max - this.o.min) / this.angleArc))
-                    + this.o.min;
+            ret = (a * (this.o.max - this.o.min) / this.angleArc);
+            if (!this.o.allowFractions) {
+                ret = ~~(0.5 + ret);
+            }
+            ret += this.o.min;  
 
             this.o.stopper
             && (ret = max(min(ret, this.o.max), this.o.min));
@@ -642,8 +649,13 @@
         return this.each(
             function () {
                 var d = new k.Dial();
-                d.o = o;
                 d.$ = $(this);
+
+                // use actual valid HTML defaults if there.
+                if (typeof o.max == 'undefined') o.max = d.$.attr('max');
+                if (typeof o.max == 'undefined') o.min = d.$.attr('min');
+
+                d.o = o;
                 d.run();
             }
         ).parent();

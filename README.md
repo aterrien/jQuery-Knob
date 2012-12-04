@@ -39,6 +39,7 @@ Behaviors :
 * angleArc : arc size in degrees | default=360.
 * stopper : stop at min & max on keydown/mousewheel | default=true.
 * readOnly : disable input and events | default=false.
+* allowFractions : do not round the output to the nearest integer. | default=false
 
 UI :
 * cursor : display mode "cursor" | default=gauge.
