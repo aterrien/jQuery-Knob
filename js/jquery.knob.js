@@ -64,7 +64,7 @@
         this.eH = null; // cancel hook
         this.rH = null; // release hook
 
-        this.run = function () {
+        this.run = function (o) {
             var cf = function (e, conf) {
                 var k;
                 for (k in conf) {
@@ -82,8 +82,8 @@
             this.o = $.extend(
                 {
                     // Config
-                    min : this.$.data('min') || 0,
-                    max : this.$.data('max') || 100,
+                    min : this.$.data('min') || this.$.attr('min') || 0,
+                    max : this.$.data('max') || this.$.attr('max') || 100,
                     stopper : true,
                     readOnly : this.$.data('readonly'),
 
@@ -104,7 +104,7 @@
                     change : null, // function (value) {}
                     cancel : null, // function () {}
                     release : null // function (value) {}
-                }, this.o
+                }, o
             );
 
             if (Math.abs(this.o.max - this.o.min) <= 1) {
@@ -651,12 +651,7 @@
                 var d = new k.Dial();
                 d.$ = $(this);
 
-                // use actual valid HTML defaults if there.
-                if (typeof o.max == 'undefined') o.max = d.$.attr('max');
-                if (typeof o.max == 'undefined') o.min = d.$.attr('min');
-
-                d.o = o;
-                d.run();
+                d.run(o);
             }
         ).parent();
     };
