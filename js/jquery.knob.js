@@ -107,6 +107,10 @@
                 }, o
             );
 
+            // extirpate the source of all frustration
+            this.o.max = parseFloat(this.o.max);
+            this.o.min = parseFloat(this.o.min);
+
             if (Math.abs(this.o.max - this.o.min) <= 1) {
                 this.o.allowFractions = true;
             }
