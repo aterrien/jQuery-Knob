@@ -47,6 +47,7 @@ UI :
 * displayInput : default=true | false=hide input.
 * displayPrevious : default=false | true=displays the previous value with transparency.
 * fgColor : foreground color.
+* inputColor : input value (number) color.
 * bgColor : background color.
 
 Hooks
