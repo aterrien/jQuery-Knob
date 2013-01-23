@@ -43,7 +43,7 @@ Behaviors :
 UI :
 * cursor : display mode "cursor" | default=gauge.
 * thickness : gauge thickness.
-* lineCap : gauge stroke endings.
+* lineCap : gauge stroke endings. | default=butt, round=rounded line endings
 * width : dial width.
 * displayInput : default=true | false=hide input.
 * displayPrevious : default=false | true=displays the previous value with transparency.
