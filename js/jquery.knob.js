@@ -97,6 +97,7 @@
                     displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
+                    inputColor: this.$.data('inputcolor') || this.$.data('fgcolor') || '#87CEEB',
                     inline : false,
 
                     // Hooks
@@ -574,7 +575,7 @@
                         ,'background' : 'none'
                         ,'font' : 'bold ' + ((this.o.width / s) >> 0) + 'px Arial'
                         ,'text-align' : 'center'
-                        ,'color' : this.o.fgColor
+                        ,'color' : this.o.inputColor || this.o.fgColor
                         ,'padding' : '0px'
                         ,'-webkit-appearance': 'none'
                         })
