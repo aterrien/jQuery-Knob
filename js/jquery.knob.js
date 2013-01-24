@@ -92,11 +92,13 @@
                                 || this.$.data('cursor')
                                 || 0,
                     thickness : this.$.data('thickness') || 0.35,
+                    lineCap : this.$.data('linecap') || 'butt',
                     width : this.$.data('width') || 200,
                     height : this.$.data('height') || 200,
                     displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
+                    inputColor: this.$.data('inputcolor') || this.$.data('fgcolor') || '#87CEEB',
                     inline : false,
 
                     // Hooks
@@ -540,6 +542,7 @@
             this.cursorExt = this.o.cursor / 100;
             this.xy = this.w2;
             this.lineWidth = this.xy * this.o.thickness;
+            this.lineCap = this.o.lineCap;
             this.radius = this.xy - this.lineWidth / 2;
 
             this.o.angleOffset
@@ -574,7 +577,7 @@
                         ,'background' : 'none'
                         ,'font' : 'bold ' + ((this.o.width / s) >> 0) + 'px Arial'
                         ,'text-align' : 'center'
-                        ,'color' : this.o.fgColor
+                        ,'color' : this.o.inputColor || this.o.fgColor
                         ,'padding' : '0px'
                         ,'-webkit-appearance': 'none'
                         })
@@ -603,6 +606,8 @@
                 , r = 1;
 
             c.lineWidth = this.lineWidth;
+
+            c.lineCap = this.lineCap;
 
             this.o.cursor
                 && (sat = eat - this.cursorExt)
