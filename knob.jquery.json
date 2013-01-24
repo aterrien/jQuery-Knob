@@ -5,7 +5,9 @@
     "keywords": [
         "dial",
         "button",
-        "knob"
+        "knob",
+        "ui",
+        "input"
     ],
     "version": "1.2.0",
     "author": {
