@@ -8,15 +8,16 @@
             $(function() {
 
                 $(".knob").knob({
-                    /*change : function (value) {
+                    change : function (value) {
                         //console.log("change : " + value);
                     },
                     release : function (value) {
+                        //console.log(this.$.attr('value'));
                         console.log("release : " + value);
                     },
                     cancel : function () {
-                        console.log("cancel : " + this.value);
-                    },*/
+                        console.log("cancel : ", this);
+                    },
                     draw : function () {
 
                         // "tron" case
@@ -255,20 +256,5 @@ data-width="700"
         <div style="padding:30px; margin-top:30px;">
             <p style="font-size:20px;">jQuery Knob is &copy; 2012 Anthony Terrien and dual licensed under the MIT or GPL licenses.</p>
         </div>
-        <div style="border: 0 none; position: absolute; right: 0; top: 0;"><a href="https://github.com/aterrien" target="_blank"><img src="../i/github-ribbon.png" style="border: 0 none;"></a></div>
-        <script type="text/javascript">
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-3008949-6']);
-            _gaq.push(['_trackPageview']);
-        </script>
-        <script type="text/javascript">
-            (function() {
-                    var ga = document.createElement('script');
-                    ga.type = 'text/javascript';
-                    ga.async = true;
-                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
-            })();
-        </script>
     </body>
 </html>
