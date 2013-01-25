@@ -13,7 +13,7 @@ Example
     <script>
     $(function() {
         $(".dial").knob();
-    }
+    });
     </script>
 
 Options
@@ -28,7 +28,7 @@ Options are provided as attributes 'data-option':
     $(".dial").knob({
                     'min':-50
                     ,'max':50
-                    })
+                    });
 
 The following options are supported :
 
