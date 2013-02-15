@@ -35,6 +35,7 @@ The following options are supported :
 Behaviors :
 * min : min value | default=0.
 * max : max value | default=100.
+* step : step size | defaul=1.
 * angleOffset : starting angle in degrees | default=0.
 * angleArc : arc size in degrees | default=360.
 * stopper : stop at min & max on keydown/mousewheel | default=true.
