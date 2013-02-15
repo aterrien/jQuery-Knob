@@ -86,6 +86,8 @@
                     max : this.$.data('max') || 100,
                     stopper : true,
                     readOnly : this.$.data('readonly'),
+                    validationDelay: this.$.data('validationDelay') || 0,
+                    step: this.$.data('step') || 1,
 
                     // UI
                     cursor : (this.$.data('cursor') === true && 30)
@@ -297,7 +299,7 @@
                             && (s.rH(s.cv) === false)
                         ) return;
 
-                        s.val(s.cv);
+                        s.change(s.cv);
                     }
                 );
 
@@ -449,12 +451,12 @@
             // bind MouseWheel
             var s = this,
                 mw = function (e) {
-                            e.preventDefault();
+                  e.preventDefault();
 
                             var ori = e.originalEvent
                                 ,deltaX = ori.detail || ori.wheelDeltaX
                                 ,deltaY = ori.detail || ori.wheelDeltaY
-                                ,v = parseInt(s.$.val()) + (deltaX>0 || deltaY>0 ? 1 : deltaX<0 || deltaY<0 ? -1 : 0);
+                                ,v = parseInt(s.$.val()) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
 
                             if (
                                 s.cH
@@ -463,7 +465,7 @@
 
                             s.val(v);
                         }
-                , kval, to, m = 1, kv = {37:-1, 38:1, 39:1, 40:-1};
+                , kval, to, m = 1, kv = {37:-s.o.step, 38:s.o.step, 39:s.o.step, 40:-s.o.step};
 
             this.$
                 .bind(
@@ -518,13 +520,23 @@
                                 s.val(s.$.val());
                             }
                         } else {
-                            // kval postcond
-                            (s.$.val() > s.o.max && s.$.val(s.o.max))
-                            || (s.$.val() < s.o.min && s.$.val(s.o.min));
+                          // kval postcond
+                          setTimeout(s.validateInput.bind(s), s.o.validationDelay);
                         }
 
                     }
                 );
+
+            this.validateInput = function(){
+              var s = this;
+              var val = parseInt(s.$.val());
+              var diff = val % s.o.step;
+              var inc = diff >= (s.o.step / 2) ? (s.o.step - diff) : (diff * -1);
+              val = val + inc;
+              if (val > s.o.max) { val = s.o.max };
+              if (val < s.o.min) { val = s.o.min };
+              s.$.val(val);
+            };
 
             this.$c.bind("mousewheel DOMMouseScroll", mw);
             this.$.bind("mousewheel DOMMouseScroll", mw)
@@ -590,6 +602,7 @@
         this.change = function (v) {
             this.cv = v;
             this.$.val(v);
+            this.validateInput();
         };
 
         this.angle = function (v) {

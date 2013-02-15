@@ -39,6 +39,8 @@ Behaviors :
 * angleArc : arc size in degrees | default=360.
 * stopper : stop at min & max on keydown/mousewheel | default=true.
 * readOnly : disable input and events | default=false.
+* step : amount to increment by when scrolling, dragging or arrowing | default=1
+* validationDelay : milliseconds to delay adjusting the value after typing | default=0
 
 UI :
 * cursor : display mode "cursor" | default=gauge.
