@@ -87,8 +87,8 @@
             this.o = $.extend(
                 {
                     // Config
-                    min : this.$.data('min') || 0,
-                    max : this.$.data('max') || 100,
+                    min : this.$.data('min') !== undefined ? this.$.data('min') : 0,
+                    max : this.$.data('max') !== undefined ? this.$.data('max') : 100,
                     stopper : true,
                     readOnly : this.$.data('readonly') || (this.$.attr('readonly') === 'readonly'),
 
