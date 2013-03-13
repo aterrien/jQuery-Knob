@@ -25,7 +25,7 @@
     var k = {}, // kontrol
         max = Math.max,
         min = Math.min;
-
+ 
     k.c = {};
     k.c.d = $(document);
     k.c.t = function (e) {
@@ -64,7 +64,11 @@
         this.eH = null; // cancel hook
         this.rH = null; // release hook
 
-        this.run = function () {
+        this.run = function (o) {
+
+            if (!o) // for backwards compatibility, although if you don't pass o you can run into problems
+                o = this.o;
+
             var cf = function (e, conf) {
                 var k;
                 for (k in conf) {
@@ -82,8 +86,8 @@
             this.o = $.extend(
                 {
                     // Config
-                    min : this.$.data('min') || 0,
-                    max : this.$.data('max') || 100,
+                    min : this.$.data('min') || this.$.attr('min') || 0,
+                    max : this.$.data('max') || this.$.attr('max') || 100,
                     stopper : true,
                     readOnly : this.$.data('readonly'),
 
@@ -107,8 +111,16 @@
                     change : null, // function (value) {}
                     cancel : null, // function () {}
                     release : null // function (value) {}
-                }, this.o
+                }, o
             );
+
+            // extirpate the source of all frustration
+            this.o.max = parseFloat(this.o.max);
+            this.o.min = parseFloat(this.o.min);
+
+            if (Math.abs(this.o.max - this.o.min) <= 1) {
+                this.o.allowFractions = true;
+            }
 
             // routing value
             if(this.$.is('fieldset')) {
@@ -154,7 +166,7 @@
             this.c = this.$c[0].getContext("2d");
 
             this.$
-                .wrap($('<div style="' + (this.o.inline ? 'display:inline;' : '') +
+                .wrap($('<div class="jKnob" style="' + (this.o.inline ? 'display:inline;' : '') +
                         'width:' + this.o.width + 'px;height:' +
                         this.o.height + 'px;"></div>'))
                 .before(this.$c);
@@ -441,8 +453,11 @@
                 a += this.PI2;
             }
 
-            ret = ~~ (0.5 + (a * (this.o.max - this.o.min) / this.angleArc))
-                    + this.o.min;
+            ret = (a * (this.o.max - this.o.min) / this.angleArc);
+            if (!this.o.allowFractions) {
+                ret = ~~(0.5 + ret);
+            }
+            ret += this.o.min;  
 
             this.o.stopper
             && (ret = max(min(ret, this.o.max), this.o.min));
@@ -550,10 +565,10 @@
             this.radius = this.xy - this.lineWidth / 2;
 
             this.o.angleOffset
-            && (this.o.angleOffset = isNaN(this.o.angleOffset) ? 0 : this.o.angleOffset);
+            || (this.o.angleOffset = isNaN(this.o.angleOffset) ? 0 : this.o.angleOffset);
 
             this.o.angleArc
-            && (this.o.angleArc = isNaN(this.o.angleArc) ? this.PI2 : this.o.angleArc);
+            || (this.o.angleArc = isNaN(this.o.angleArc) ? 360 : this.o.angleArc);
 
             // deg to rad
             this.angleOffset = this.o.angleOffset * Math.PI / 180;
@@ -651,9 +666,9 @@
         return this.each(
             function () {
                 var d = new k.Dial();
-                d.o = o;
                 d.$ = $(this);
-                d.run();
+
+                d.run(o);
             }
         ).parent();
     };
