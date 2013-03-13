@@ -65,6 +65,10 @@
         this.rH = null; // release hook
 
         this.run = function (o) {
+
+            if (!o) // for backwards compatibility, although if you don't pass o you can run into problems
+                o = this.o;
+
             var cf = function (e, conf) {
                 var k;
                 for (k in conf) {
@@ -554,10 +558,10 @@
             this.radius = this.xy - this.lineWidth / 2;
 
             this.o.angleOffset
-            && (this.o.angleOffset = isNaN(this.o.angleOffset) ? 0 : this.o.angleOffset);
+            || (this.o.angleOffset = isNaN(this.o.angleOffset) ? 0 : this.o.angleOffset);
 
             this.o.angleArc
-            && (this.o.angleArc = isNaN(this.o.angleArc) ? this.PI2 : this.o.angleArc);
+            || (this.o.angleArc = isNaN(this.o.angleArc) ? 360 : this.o.angleArc);
 
             // deg to rad
             this.angleOffset = this.o.angleOffset * Math.PI / 180;
