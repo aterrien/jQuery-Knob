@@ -82,6 +82,8 @@ Hooks
 
 * 'cancel' : triggered on [esc] keydown
 
+* 'error' : called if the browser doesn't support canvases and the plugin didn't initialize as a result
+
 The scope (this) of each hook function is the current Knob instance (refer to the demo code).
 
 Example
