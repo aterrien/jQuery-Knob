@@ -106,7 +106,8 @@
                     draw : null, // function () {}
                     change : null, // function (value) {}
                     cancel : null, // function () {}
-                    release : null // function (value) {}
+                    release : null, // function (value) {}
+                    error : null // function () {}
                 }, this.o
             );
 
@@ -151,7 +152,13 @@
             this.$c = $('<canvas width="' +
                             this.o.width + 'px" height="' +
                             this.o.height + 'px"></canvas>');
-            this.c = this.$c[0].getContext("2d");
+            
+            this.c = this.$c[0].getContext? this.$c[0].getContext('2d') : null;
+			
+            if (!this.c) {
+                this.o.error && this.o.error();
+                return;
+            }
 
             this.$
                 .wrap($('<div style="' + (this.o.inline ? 'display:inline;' : '') +
