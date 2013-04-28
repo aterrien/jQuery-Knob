@@ -51,6 +51,7 @@ UI :
 * fgColor : foreground color.
 * inputColor : input value (number) color.
 * bgColor : background color.
+* label : A label to use for the dial in place of the value
 
 Hooks
 -------
@@ -119,6 +120,24 @@ Set the value
     <script>
     $('.dial')
         .val(27)
+        .trigger('change');
+    </script>
+
+Set a global label:
+-------
+    <script>
+    $('.dial').knob({
+        label: '5%'
+    });
+    </script>
+    
+Set a per-knob label
+-------
+    <input type="text" value="5" class="dial" data-label="5%">
+    
+    <script>
+    $('.dial')
+        .attr('data-label','5%')
         .trigger('change');
     </script>
 
