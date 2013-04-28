@@ -101,6 +101,7 @@
                     inputColor: this.$.data('inputcolor') || this.$.data('fgcolor') || '#87CEEB',
                     inline : false,
                     step : this.$.data('step') || 1,
+		    label: '',
 
                     // Hooks
                     draw : null, // function () {}
@@ -589,6 +590,14 @@
                         'width' : '0px'
                         ,'visibility' : 'hidden'
                         });
+
+		if($(this.i).attr('data-label')) {
+                    this.o.label = $(this.i).attr('data-label');
+                }
+                
+                if('' !== this.o.label) {
+                    this.i.val(this.o.label);
+                }
         };
 
         this.change = function (v) {
