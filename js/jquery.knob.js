@@ -20,6 +20,13 @@
     "use strict";
 
     /**
+     * Check canvas support
+     */
+    var elem = document.createElement('canvas');
+    if(!elem.getContext || !elem.getContext('2d'))
+       return $.fn.knob = $.noop;
+
+    /**
      * Definition of globals and core
      */
     var k = {}, // kontrol
