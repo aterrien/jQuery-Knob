@@ -99,6 +99,8 @@
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
                     inputColor: this.$.data('inputcolor') || this.$.data('fgcolor') || '#87CEEB',
+                    font: this.$.data('font') || 'Arial',
+                    fontWeight: this.$.data('font-weight') || 'bold',
                     inline : false,
                     step : this.$.data('step') || 1,
 
@@ -152,9 +154,9 @@
             this.$c = $('<canvas width="' +
                             this.o.width + 'px" height="' +
                             this.o.height + 'px"></canvas>');
-            
+
             this.c = this.$c[0].getContext? this.$c[0].getContext('2d') : null;
-			
+
             if (!this.c) {
                 this.o.error && this.o.error();
                 return;
@@ -586,7 +588,7 @@
                         ,'margin-left' : '-' + ((this.o.width * 3 / 4 + 2) >> 0) + 'px'
                         ,'border' : 0
                         ,'background' : 'none'
-                        ,'font' : 'bold ' + ((this.o.width / s) >> 0) + 'px Arial'
+                        ,'font' : this.o.fontWeight + ' ' + ((this.o.width / s) >> 0) + 'px ' + this.o.font
                         ,'text-align' : 'center'
                         ,'color' : this.o.inputColor || this.o.fgColor
                         ,'padding' : '0px'
