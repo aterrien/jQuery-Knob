@@ -42,7 +42,7 @@ Behaviors :
 * readOnly : disable input and events | default=false.
 
 UI :
-* cursor : display mode "cursor" | default=gauge.
+* cursor : display mode "cursor", cursor size could be changed passing a numeric value to the option, default width is used when passing boolean value "true" | default=gauge.
 * thickness : gauge thickness.
 * lineCap : gauge stroke endings. | default=butt, round=rounded line endings
 * width : dial width.
