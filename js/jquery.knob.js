@@ -143,6 +143,7 @@
                     'change'
                     , function () {
                         s.val(s._validate(s.$.val()));
+                        s.cH(s.$.val());
                     }
                 );
             }
