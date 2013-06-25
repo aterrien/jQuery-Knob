@@ -508,6 +508,7 @@
                                 && (v = max(min(v, s.o.max), s.o.min));
 
                                 s.change(v);
+                                s.cH(v);
                                 s._draw();
 
                                 // long time keydown speed-up
