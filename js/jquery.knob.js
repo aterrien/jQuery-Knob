@@ -150,11 +150,11 @@
             (!this.o.displayInput) && this.$.hide();
 
             this.$c = $('<canvas width="' +
-                            this.o.width + 'px" height="' +
-                            this.o.height + 'px"></canvas>');
-            
+                            this.o.width * window.devicePixelRatio + 'px" height="' +
+                            this.o.height * window.devicePixelRatio + 'px"></canvas>').css({width: this.o.width, height: this.o.height});
+
             this.c = this.$c[0].getContext? this.$c[0].getContext('2d') : null;
-			
+
             if (!this.c) {
                 this.o.error && this.o.error();
                 return;
@@ -196,8 +196,8 @@
             var d = true,
                 c = document.createElement('canvas');
 
-            c.width = s.o.width;
-            c.height = s.o.height;
+            c.width = s.o.width * window.devicePixelRatio;
+            c.height = s.o.height * window.devicePixelRatio;
             s.g = c.getContext('2d');
 
             s.clear();
