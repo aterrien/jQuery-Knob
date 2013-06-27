@@ -95,6 +95,7 @@
                     lineCap : this.$.data('linecap') || 'butt',
                     width : this.$.data('width') || 200,
                     height : this.$.data('height') || 200,
+                    scaleFactor: 1,
                     displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
@@ -166,6 +167,22 @@
                         this.o.height + 'px;"></div>'))
                 .before(this.$c);
 
+            var devicePixelRatio = window.devicePixelRatio || 1;
+            var backingStorePixelRatio = this.c.webkitBackingStorePixelRatio ||
+                                            this.c.mozBackingStorePixelRatio ||
+                                            this.c.msBackingStorePixelRatio ||
+                                            this.c.oBackingStorePixelRatio ||
+                                            this.c.backingStorePixelRatio || 1;
+
+            this.o.scaleFactor = devicePixelRatio / backingStorePixelRatio;
+
+            if (this.o.scaleFactor != 1) {
+                this.$c[0].width = this.$c[0].width * this.o.scaleFactor;
+                this.$c[0].height = this.$c[0].height * this.o.scaleFactor;
+                this.$c.width(this.o.width);
+                this.$c.height(this.o.height);
+            }
+
             if (this.v instanceof Object) {
                 this.cv = {};
                 this.copy(this.v, this.cv);
@@ -196,8 +213,8 @@
             var d = true,
                 c = document.createElement('canvas');
 
-            c.width = s.o.width;
-            c.height = s.o.height;
+            c.width = s.o.width * s.o.scaleFactor;
+            c.height = s.o.height * s.o.scaleFactor;
             s.g = c.getContext('2d');
 
             s.clear();
@@ -551,7 +568,7 @@
             this.$.val(this.v);
             this.w2 = this.o.width / 2;
             this.cursorExt = this.o.cursor / 100;
-            this.xy = this.w2;
+            this.xy = this.w2 * this.o.scaleFactor;
             this.lineWidth = this.xy * this.o.thickness;
             this.lineCap = this.o.lineCap;
             this.radius = this.xy - this.lineWidth / 2;
