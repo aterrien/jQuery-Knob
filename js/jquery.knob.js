@@ -63,6 +63,7 @@
         this.cH = null; // change hook
         this.eH = null; // cancel hook
         this.rH = null; // release hook
+        this.scale = 1; // scale factor
 
         this.run = function () {
             var cf = function (e, conf) {
@@ -166,6 +167,21 @@
                         this.o.height + 'px;"></div>'))
                 .before(this.$c);
 
+            this.scale = (window.devicePixelRatio || 1) /
+                        (
+                            this.c.webkitBackingStorePixelRatio ||
+                            this.c.mozBackingStorePixelRatio ||
+                            this.c.msBackingStorePixelRatio ||
+                            this.c.oBackingStorePixelRatio ||
+                            this.c.backingStorePixelRatio || 1
+                        );
+            if (this.scale !== 1) {
+                this.$c[0].width = this.$c[0].width * this.scale;
+                this.$c[0].height = this.$c[0].height * this.scale;
+                this.$c.width(this.o.width);
+                this.$c.height(this.o.height);
+            }
+
             if (this.v instanceof Object) {
                 this.cv = {};
                 this.copy(this.v, this.cv);
@@ -196,8 +212,9 @@
             var d = true,
                 c = document.createElement('canvas');
 
-            c.width = s.o.width;
-            c.height = s.o.height;
+            c.width = s.o.width * s.scale;
+            c.height = s.o.height * s.scale;
+
             s.g = c.getContext('2d');
 
             s.clear();
@@ -551,7 +568,7 @@
             this.$.val(this.v);
             this.w2 = this.o.width / 2;
             this.cursorExt = this.o.cursor / 100;
-            this.xy = this.w2;
+            this.xy = this.w2 * this.scale;
             this.lineWidth = this.xy * this.o.thickness;
             this.lineCap = this.o.lineCap;
             this.radius = this.xy - this.lineWidth / 2;
