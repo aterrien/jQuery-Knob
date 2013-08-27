@@ -150,10 +150,15 @@
 
             (!this.o.displayInput) && this.$.hide();
 
-            this.$c = $('<canvas width="' +
-                            this.o.width + 'px" height="' +
-                            this.o.height + 'px"></canvas>');
+            this.$c = $(document.createElement('canvas')).attr({
+              width: this.o.width,
+              height: this.o.height
+            });
             
+            if (typeof G_vmlCanvasManager !== 'undefined') {
+              G_vmlCanvasManager.initElement(this.$c[0]);
+            }
+
             this.c = this.$c[0].getContext? this.$c[0].getContext('2d') : null;
 			
             if (!this.c) {
@@ -209,13 +214,9 @@
         this._draw = function () {
 
             // canvas pre-rendering
-            var d = true,
-                c = document.createElement('canvas');
+            var d = true;
 
-            c.width = s.o.width * s.scale;
-            c.height = s.o.height * s.scale;
-
-            s.g = c.getContext('2d');
+            s.g = s.c;
 
             s.clear();
 
@@ -224,8 +225,6 @@
 
             (d !== false) && s.draw();
 
-            s.c.drawImage(c, 0, 0);
-            c = null;
         };
 
         this._touch = function (e) {
