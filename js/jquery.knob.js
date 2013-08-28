@@ -160,7 +160,7 @@
             }
 
             this.c = this.$c[0].getContext? this.$c[0].getContext('2d') : null;
-			
+      
             if (!this.c) {
                 this.o.error && this.o.error();
                 return;
@@ -481,7 +481,7 @@
                             var ori = e.originalEvent
                                 ,deltaX = ori.detail || ori.wheelDeltaX
                                 ,deltaY = ori.detail || ori.wheelDeltaY
-                                ,v = parseInt(s.$.val()) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
+                                ,v = parseInt(s.$.val().replace(/\D/g,'')) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
 
                             if (
                                 s.cH
@@ -517,7 +517,7 @@
                             if ($.inArray(kc,[37,38,39,40]) > -1) {
                                 e.preventDefault();
 
-                                var v = parseInt(s.$.val()) + kv[kc] * m;
+                                var v = parseInt(s.$.val().replace(/\D/g,'')) + kv[kc] * m;
 
                                 s.o.stopper
                                 && (v = max(min(v, s.o.max), s.o.min));
@@ -542,7 +542,7 @@
                                 window.clearTimeout(to);
                                 to = null;
                                 m = 1;
-                                s.val(s.$.val());
+                                s.val(s.$.val().replace(/\D/g,''));
                             }
                         } else {
                             // kval postcond
