@@ -160,7 +160,7 @@
             }
 
             this.c = this.$c[0].getContext? this.$c[0].getContext('2d') : null;
-			
+      
             if (!this.c) {
                 this.o.error && this.o.error();
                 return;
@@ -542,7 +542,7 @@
                                 window.clearTimeout(to);
                                 to = null;
                                 m = 1;
-                                s.val(s.$.val());
+                                s.val(s.$.val().replace(/\D/g,''));
                             }
                         } else {
                             // kval postcond
