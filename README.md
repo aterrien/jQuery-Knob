@@ -50,6 +50,8 @@ UI :
 * displayPrevious : default=false | true=displays the previous value with transparency.
 * fgColor : foreground color.
 * inputColor : input value (number) color.
+* font : font family.
+* fontWeight : font weight.
 * bgColor : background color.
 
 Hooks
