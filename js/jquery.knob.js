@@ -48,7 +48,7 @@
         this.o = null; // array of options
         this.$ = null; // jQuery wrapped element
         this.i = null; // mixed HTMLInputElement or array of HTMLInputElement
-        this.g = null; // 2D graphics context for 'pre-rendering'
+        this.g = null; // deprecated 2D graphics context for 'pre-rendering'
         this.v = null; // value ; mixed array or integer
         this.cv = null; // change value ; not commited value
         this.x = 0; // canvas x position
@@ -100,6 +100,8 @@
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
                     inputColor: this.$.data('inputcolor') || this.$.data('fgcolor') || '#87CEEB',
+                    font: this.$.data('font') || 'Arial',
+                    fontWeight: this.$.data('font-weight') || 'bold',
                     inline : false,
                     step : this.$.data('step') || 1,
 
@@ -154,13 +156,13 @@
               width: this.o.width,
               height: this.o.height
             });
-            
+
             if (typeof G_vmlCanvasManager !== 'undefined') {
               G_vmlCanvasManager.initElement(this.$c[0]);
             }
 
             this.c = this.$c[0].getContext? this.$c[0].getContext('2d') : null;
-			
+
             if (!this.c) {
                 this.o.error && this.o.error();
                 return;
@@ -602,7 +604,7 @@
                         ,'margin-left' : '-' + ((this.o.width * 3 / 4 + 2) >> 0) + 'px'
                         ,'border' : 0
                         ,'background' : 'none'
-                        ,'font' : 'bold ' + ((this.o.width / s) >> 0) + 'px Arial'
+                        ,'font' : this.o.fontWeight + ' ' + ((this.o.width / s) >> 0) + 'px ' + this.o.font
                         ,'text-align' : 'center'
                         ,'color' : this.o.inputColor || this.o.fgColor
                         ,'padding' : '0px'
