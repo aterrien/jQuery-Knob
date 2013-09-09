@@ -639,8 +639,8 @@
             if(this.o.innerColor != 'transparent'){
                 c.beginPath();
                 c.fillStyle = this.o.innerColor;
-                c.arc(this.xy,this.xy,this.radius,0,Math.PI*2,true);
-                c.closePath();
+                c.arc(this.xy,this.xy,this.radius,(this.o.angleArc==360) ? this.endAngle : this.endAngle - 0.0075,this.startAngle,true);
+                c.lineTo(this.xy,this.xy)
                 c.fill();
             }
 
