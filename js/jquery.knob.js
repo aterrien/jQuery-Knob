@@ -104,6 +104,7 @@
                     fontWeight: this.$.data('font-weight') || 'bold',
                     inline : false,
                     step : this.$.data('step') || 1,
+                    showPercent: false,
 
                     // Hooks
                     draw : null, // function () {}
@@ -123,13 +124,13 @@
                 this.i.each(function(k) {
                     var $this = $(this);
                     s.i[k] = $this;
-                    s.v[k] = $this.val();
+                    s.v[k] = parseInt($this.val());
 
                     $this.bind(
                         'change'
                         , function () {
                             var val = {};
-                            val[k] = $this.val();
+                            val[k] = parseInt($this.val());
                             s.val(val);
                         }
                     );
@@ -139,13 +140,13 @@
             } else {
                 // input = integer
                 this.i = this.$;
-                this.v = this.$.val();
+                this.v = parseInt(this.$.val());
                 (this.v == '') && (this.v = this.o.min);
 
                 this.$.bind(
                     'change'
                     , function () {
-                        s.val(s._validate(s.$.val()));
+                        s.val(s._validate(parseInt(s.$.val())));
                     }
                 );
             }
@@ -566,7 +567,7 @@
                 || this.v > this.o.max
             ) this.v = this.o.min;
 
-            this.$.val(this.v);
+            this.$.val(this.v + ((this.o.showPercent) ? '%' : ''));
             this.w2 = this.o.width / 2;
             this.cursorExt = this.o.cursor / 100;
             this.xy = this.w2 * this.scale;
@@ -618,7 +619,7 @@
 
         this.change = function (v) {
             this.cv = v;
-            this.$.val(v);
+            this.$.val(v + ((this.o.showPercent) ? '%' : ''));
         };
 
         this.angle = function (v) {
@@ -668,7 +669,7 @@
         };
 
         this.cancel = function () {
-            this.val(this.v);
+            this.val(this.v + ((this.o.showPercent) ? '%' : ''));
         };
     };
 
