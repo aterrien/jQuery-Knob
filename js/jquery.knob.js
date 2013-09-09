@@ -99,6 +99,7 @@
                     displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
+                    innerColor: this.$.data('innercolor') || 'transparent',
                     inputColor: this.$.data('inputcolor') || this.$.data('fgcolor') || '#87CEEB',
                     font: this.$.data('font') || 'Arial',
                     fontWeight: this.$.data('font-weight') || 'bold',
@@ -634,6 +635,14 @@
                 , eat = sat + a             // End angle
                 , sa, ea                    // Previous angles
                 , r = 1;
+
+            if(this.o.innerColor != 'transparent'){
+                c.beginPath();
+                c.fillStyle = this.o.innerColor;
+                c.arc(this.xy,this.xy,this.radius,0,Math.PI*2,true);
+                c.closePath();
+                c.fill();
+            }
 
             c.lineWidth = this.lineWidth;
 
