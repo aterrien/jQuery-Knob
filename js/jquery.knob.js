@@ -53,6 +53,8 @@
         this.cv = null; // change value ; not commited value
         this.x = 0; // canvas x position
         this.y = 0; // canvas y position
+        this.w = 0; // canvas width
+        this.h = 0; // canvas height
         this.$c = null; // jQuery canvas element
         this.c = null; // rendered canvas context
         this.t = 0; // touches index
@@ -64,6 +66,8 @@
         this.eH = null; // cancel hook
         this.rH = null; // release hook
         this.scale = 1; // scale factor
+        this.relative = false;
+        this.$div = null; // component div
 
         this.run = function () {
             var cf = function (e, conf) {
@@ -137,6 +141,7 @@
                 this.$.find('legend').remove();
 
             } else {
+
                 // input = integer
                 this.i = this.$;
                 this.v = this.$.val();
@@ -148,32 +153,23 @@
                         s.val(s._validate(s.$.val()));
                     }
                 );
+
             }
 
             (!this.o.displayInput) && this.$.hide();
 
-            this.$c = $(document.createElement('canvas')).attr({
-              width: this.o.width,
-              height: this.o.height
-            });
-
+            // adds needed DOM elements (canvas, div)
+            this.$c = $(document.createElement('canvas'));
             if (typeof G_vmlCanvasManager !== 'undefined') {
               G_vmlCanvasManager.initElement(this.$c[0]);
             }
-
-            this.c = this.$c[0].getContext? this.$c[0].getContext('2d') : null;
-
+            this.c = this.$c[0].getContext ? this.$c[0].getContext('2d') : null;
             if (!this.c) {
                 this.o.error && this.o.error();
                 return;
             }
 
-            this.$
-                .wrap($('<div style="' + (this.o.inline ? 'display:inline;' : '') +
-                        'width:' + this.o.width + 'px;height:' +
-                        this.o.height + 'px;"></div>'))
-                .before(this.$c);
-
+            // hdpi support
             this.scale = (window.devicePixelRatio || 1) /
                         (
                             this.c.webkitBackingStorePixelRatio ||
@@ -182,13 +178,24 @@
                             this.c.oBackingStorePixelRatio ||
                             this.c.backingStorePixelRatio || 1
                         );
-            if (this.scale !== 1) {
-                this.$c[0].width = this.$c[0].width * this.scale;
-                this.$c[0].height = this.$c[0].height * this.scale;
-                this.$c.width(this.o.width);
-                this.$c.height(this.o.height);
-            }
 
+            // detects relative width
+            this.relative =
+                    ((this.o.width % 1 !== 0)
+                    && this.o.width.indexOf('%'));
+
+            // wraps all elements in a div
+            this.$div = $('<div style="'
+                        + (this.o.inline ? 'display:inline;' : '')
+                        + '"></div>');
+
+            this.$.wrap(this.$div).before(this.$c);
+            this.$div = this.$.parent();
+
+            // computes size and carves the component
+            this._carve();
+
+            // prepares props for transaction
             if (this.v instanceof Object) {
                 this.cv = {};
                 this.copy(this.v, this.cv);
@@ -196,11 +203,13 @@
                 this.cv = this.v;
             }
 
+            // binds configure event
             this.$
                 .bind("configure", cf)
                 .parent()
                 .bind("configure", cf);
 
+            // finalize init
             this._listen()
                 ._configure()
                 ._xy()
@@ -208,10 +217,46 @@
 
             this.isInit = true;
 
+            // the most important !
             this._draw();
 
             return this;
         };
+
+        this._carve = function() {
+            if(
+                this.relative
+            ) {
+                // apply relative
+                this.w = this.$div.parent().width() * parseInt(this.o.width) / 100;
+                this.h = this.w;
+            } else {
+                this.w = this.o.width;
+                this.h = this.o.height;
+            }
+
+            // finalize div
+            this.$div.css({
+                'width': this.w + 'px',
+                'height': this.h + 'px'
+            });
+
+            // finalize canvas with computed width
+            this.$c.attr({
+                width: this.w,
+                height: this.h
+            });
+
+            // scaling
+            if (this.scale !== 1) {
+                this.$c[0].width = this.$c[0].width * this.scale;
+                this.$c[0].height = this.$c[0].height * this.scale;
+                this.$c.width(this.w);
+                this.$c.height(this.h);
+            }
+
+            return this;
+        }
 
         this._draw = function () {
 
@@ -355,6 +400,15 @@
                             s._xy()._touch(e);
                          }
                     );
+
+                if(this.relative) {
+                    $(window).resize(function() {
+                        s._carve()
+                         .init();
+                        s._draw();
+                    });
+                }
+
                 this.listen();
             } else {
                 this.$.attr('readonly', 'readonly');
@@ -567,7 +621,7 @@
             ) this.v = this.o.min;
 
             this.$.val(this.v);
-            this.w2 = this.o.width / 2;
+            this.w2 = this.w / 2;
             this.cursorExt = this.o.cursor / 100;
             this.xy = this.w2 * this.scale;
             this.lineWidth = this.xy * this.o.thickness;
@@ -596,15 +650,15 @@
 
             this.o.displayInput
                 && this.i.css({
-                        'width' : ((this.o.width / 2 + 4) >> 0) + 'px'
-                        ,'height' : ((this.o.width / 3) >> 0) + 'px'
+                        'width' : ((this.w / 2 + 4) >> 0) + 'px'
+                        ,'height' : ((this.w / 3) >> 0) + 'px'
                         ,'position' : 'absolute'
                         ,'vertical-align' : 'middle'
-                        ,'margin-top' : ((this.o.width / 3) >> 0) + 'px'
-                        ,'margin-left' : '-' + ((this.o.width * 3 / 4 + 2) >> 0) + 'px'
+                        ,'margin-top' : ((this.w / 3) >> 0) + 'px'
+                        ,'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px'
                         ,'border' : 0
                         ,'background' : 'none'
-                        ,'font' : this.o.fontWeight + ' ' + ((this.o.width / s) >> 0) + 'px ' + this.o.font
+                        ,'font' : this.o.fontWeight + ' ' + ((this.w / s) >> 0) + 'px ' + this.o.font
                         ,'text-align' : 'center'
                         ,'color' : this.o.inputColor || this.o.fgColor
                         ,'padding' : '0px'

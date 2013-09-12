@@ -205,6 +205,24 @@ data-displayPrevious=true
             </div>
         </div>
         <div style="clear:both"></div>
+        <div class="demo" style="width:100%">
+            <p>&#215; Responsive</p>
+            <pre>
+data-width="80%"
+            </pre>
+            <div style="width: 30%; border: 3px dashed; margin-bottom: 20px">
+                <i>
+                    Current div width is 30% of window width.<br>
+                    Knob width is 80% of current div.<br>
+                    Knob width is 80% of 30% of window width.<br>
+                    Test resizing window.
+                </i>
+                <br>
+                <br>
+                <input class="knob" data-width="80%" value="35">
+            </div>
+        </div>
+        <div style="clear:both"></div>
         <script>
         function clock() {
             var $s = $(".second"),
