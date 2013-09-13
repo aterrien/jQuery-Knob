@@ -67,6 +67,8 @@
         this.rH = null; // release hook
         this.scale = 1; // scale factor
         this.relative = false;
+        this.relativeWidth = false;
+        this.relativeHeight = false;
         this.$div = null; // component div
 
         this.run = function () {
@@ -179,10 +181,13 @@
                             this.c.backingStorePixelRatio || 1
                         );
 
-            // detects relative width
-            this.relative =
-                    ((this.o.width % 1 !== 0)
-                    && this.o.width.indexOf('%'));
+            // detects relative width / height
+            this.relativeWidth = ((this.o.width % 1 !== 0)
+                                    && this.o.width.indexOf('%'));
+            this.relativeHeight = ((this.o.height % 1 !== 0)
+                                    && this.o.height.indexOf('%'));
+
+            this.relative = (this.relativeWidth || this.relativeHeight);
 
             // wraps all elements in a div
             this.$div = $('<div style="'
@@ -224,12 +229,18 @@
         };
 
         this._carve = function() {
-            if(
-                this.relative
-            ) {
+            if(this.relative) {
+                var w = this.relativeWidth
+                            ? this.$div.parent().width()
+                                * parseInt(this.o.width) / 100
+                            : this.$div.parent().width(),
+                    h = this.relativeHeight
+                            ? this.$div.parent().height()
+                                * parseInt(this.o.height) / 100
+                            : this.$div.parent().height();
+
                 // apply relative
-                this.w = this.$div.parent().width() * parseInt(this.o.width) / 100;
-                this.h = this.w;
+                this.w = this.h = Math.min(w, h);
             } else {
                 this.w = this.o.width;
                 this.h = this.o.height;
