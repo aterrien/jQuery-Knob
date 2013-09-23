@@ -92,7 +92,7 @@
                     min : this.$.data('min') || 0,
                     max : this.$.data('max') || 100,
                     stopper : true,
-                    readOnly : this.$.data('readonly'),
+                    readOnly : this.$.data('readonly') || (this.$.attr('readonly') == 'readonly'),
 
                     // UI
                     cursor : (this.$.data('cursor') === true && 30)
