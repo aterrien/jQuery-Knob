@@ -105,7 +105,7 @@
                     displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
-                    inputColor: this.$.data('inputcolor') || this.$.data('fgcolor') || '#87CEEB',
+                    inputColor: this.$.data('inputcolor'),
                     font: this.$.data('font') || 'Arial',
                     fontWeight: this.$.data('font-weight') || 'bold',
                     inline : false,
@@ -119,6 +119,11 @@
                     error : null // function () {}
                 }, this.o
             );
+
+            // finalize options
+            if(!this.o.inputColor) {
+                this.o.inputColor = this.o.fgColor;
+            }
 
             // routing value
             if(this.$.is('fieldset')) {
