@@ -98,7 +98,11 @@
                     cursor : (this.$.data('cursor') === true && 30)
                                 || this.$.data('cursor')
                                 || 0,
-                    thickness : this.$.data('thickness') || 0.35,
+                    thickness : (
+                                this.$.data('thickness')
+                                && Math.max(Math.min(this.$.data('thickness'), 1), 0.01)
+                                )
+                                || 0.35,
                     lineCap : this.$.data('linecap') || 'butt',
                     width : this.$.data('width') || 200,
                     height : this.$.data('height') || 200,
