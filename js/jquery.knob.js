@@ -93,6 +93,7 @@
                     max : this.$.data('max') || 100,
                     stopper : true,
                     readOnly : this.$.data('readonly') || (this.$.attr('readonly') == 'readonly'),
+                    
 
                     // UI
                     cursor : (this.$.data('cursor') === true && 30)
@@ -114,6 +115,9 @@
                     fontWeight: this.$.data('font-weight') || 'bold',
                     inline : false,
                     step : this.$.data('step') || 1,
+                    glow: this.$.data('glow') || 0,
+                    glow_text : this.$.data('glow_text') || 0,
+                    glowcolor: this.$.data('glow') || '#87CEEB' ,
 
                     // Hooks
                     draw : null, // function () {}
@@ -683,6 +687,7 @@
                         ,'color' : this.o.inputColor || this.o.fgColor
                         ,'padding' : '0px'
                         ,'-webkit-appearance': 'none'
+                        ,'text-shadow':'0px 0px '+ this.o.glow_text + 'px ' + this.o.glowcolor
                         })
                 || this.i.css({
                         'width' : '0px'
@@ -718,7 +723,7 @@
 
             c.beginPath();
                 c.strokeStyle = this.o.bgColor;
-                c.arc(this.xy, this.xy, this.radius, this.endAngle, this.startAngle, true);
+                c.arc(this.xy, this.xy, this.radius-this.o.glow, this.endAngle, this.startAngle, true);
             c.stroke();
 
             if (this.o.displayPrevious) {
@@ -730,15 +735,20 @@
 
                 c.beginPath();
                     c.strokeStyle = this.pColor;
-                    c.arc(this.xy, this.xy, this.radius, sa, ea, false);
+                    c.arc(this.xy, this.xy, this.radius-this.o.glow, sa, ea, false);
                 c.stroke();
                 r = (this.cv == this.v);
             }
+            
 
             c.beginPath();
                 c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
-                c.arc(this.xy, this.xy, this.radius, sat, eat, false);
+                c.arc(this.xy, this.xy, this.radius-this.o.glow, sat, eat, false);
+                c.shadowColor = this.o.glowcolor;
+                c.shadowBlur = this.o.glow;
             c.stroke();
+
+            
         };
 
         this.cancel = function () {
