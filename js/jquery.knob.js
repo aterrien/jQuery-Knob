@@ -89,8 +89,9 @@
             this.o = $.extend(
                 {
                     // Config
-                    min : min : this.$.data('min') !== undefined ? this.$.data('min') : 0, 
-                    max : max : this.$.data('max') !== undefined ? this.$.data('max') : 100, 
+                    min : this.$.data('min') !== undefined ? this.$.data('min') : 0, 
+                    max : this.$.data('max') !== undefined ? this.$.data('max') : 100,
+                    dezimal: this.$.data('max') || 0,
                     stopper : true,
                     readOnly : this.$.data('readonly') || (this.$.attr('readonly') == 'readonly'),
                     
@@ -113,6 +114,7 @@
                     inputColor: this.$.data('inputcolor'),
                     font: this.$.data('font') || 'Arial',
                     fontWeight: this.$.data('font-weight') || 'bold',
+                    font_size: this.$.data('font_size') || '100%',
                     inline : false,
                     step : this.$.data('step') || 1,
                     glow: this.$.data('glow') || 0,
@@ -464,7 +466,7 @@
         };
 
         this._validate = function(v) {
-            return Math.round(Math.floor(((v < 0) ? -0.5 : 0.5) + (v/this.o.step)) * this.o.step * 100 ) / 100;
+            return (Math.round(Math.floor(((v < 0) ? -0.5 : 0.5) + (v/this.o.step)) * this.o.step * 100 ) / 100).toFixed(this.o.dezimal);
         };
 
         // Abstract methods
@@ -521,7 +523,7 @@
         this.val = function (v) {
             if (null != v) {
                 this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
-                this.v = this.cv;
+                this.v = (this.cv).toFixed(this.o.dezimal);
                 this.$.val(this.v);
                 this._draw();
             } else {
@@ -566,7 +568,9 @@
                             var ori = e.originalEvent
                                 ,deltaX = ori.detail || ori.wheelDeltaX
                                 ,deltaY = ori.detail || ori.wheelDeltaY
-                                ,v = (Math.round(parseFloat(s.$.val()) * 100) / 100) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
+                                ,v = ((Math.round(parseFloat(s.$.val()) * 100) / 100) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0)).toFixed(s.o.dezimal);
+
+
 
                             if (
                                 s.cH
@@ -602,11 +606,7 @@
                             if ($.inArray(kc,[37,38,39,40]) > -1) {
                                 e.preventDefault();
 
-                                if(s.o.step > 1 && Math.round(s.o.step) == s.o.step) {
-                                     var v = parseInt(s.$.val()) + kv[kc] * m;
-                                 } else {
-                                     var v = parseFloat(s.$.val()) + kv[kc] * m;
-                                 } 
+                                var v = parseFloat(s.$.val()) + kv[kc] * m;                                 
 
                                 s.o.stopper
                                 && (v = max(min(v, s.o.max), s.o.min));
@@ -692,6 +692,7 @@
                         ,'border' : 0
                         ,'background' : 'none'
                         ,'font' : this.o.fontWeight + ' ' + ((this.w / s) >> 0) + 'px ' + this.o.font
+                        ,'font-size': this.o.font_size 
                         ,'text-align' : 'center'
                         ,'color' : this.o.inputColor || this.o.fgColor
                         ,'padding' : '0px'
