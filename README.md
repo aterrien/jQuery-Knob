@@ -40,6 +40,7 @@ Behaviors :
 * angleArc : arc size in degrees | default=360.
 * stopper : stop at min & max on keydown/mousewheel | default=true.
 * readOnly : disable input and events | default=false.
+* showPercent : display value as a percentage | default=false.
 
 UI :
 * cursor : display mode "cursor", cursor size could be changed passing a numeric value to the option, default width is used when passing boolean value "true" | default=gauge.
@@ -53,6 +54,7 @@ UI :
 * font : font family.
 * fontWeight : font weight.
 * bgColor : background color.
+* innerColor: color inside the dial.
 
 Hooks
 -------
