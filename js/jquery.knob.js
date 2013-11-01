@@ -632,7 +632,7 @@
 
             if (s.o.scroll) {
               this.$c.bind("mousewheel DOMMouseScroll", mw);
-              this.$.bind("mousewheel DOMMouseScroll", mw)
+              this.$.bind("mousewheel DOMMouseScroll", mw);
             }
         };
 
