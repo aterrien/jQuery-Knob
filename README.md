@@ -68,6 +68,10 @@ Hooks
     Parameters :
     + value : int, current value
 
+* 'parse' and 'format' : 'parse' is used to convert the value in the text input into an integer.
+  'format' is used to convert your integer back into a text string for display.  Handy when you
+  want to strip and add a "$" from the front of the value, or a "%" from the end.
+
 * 'change' : executed at each change of the value
 
     Parameters :
