@@ -65,6 +65,8 @@
         this.cH = null; // change hook
         this.eH = null; // cancel hook
         this.rH = null; // release hook
+        this.pH = null; // parse hook
+        this.fH = null; // format hook
         this.scale = 1; // scale factor
         this.relative = false;
         this.relativeWidth = false;
@@ -155,13 +157,13 @@
 
                 // input = integer
                 this.i = this.$;
-                this.v = this.$.val();
+                this.v = this.rawVal();
                 (this.v == '') && (this.v = this.o.min);
 
                 this.$.bind(
                     'change'
                     , function () {
-                        s.val(s._validate(s.$.val()));
+                        s.val(s._validate(s.rawVal()));
                     }
                 );
 
@@ -434,6 +436,7 @@
                 });
             }
 
+
             return this;
         };
 
@@ -444,6 +447,8 @@
             if (this.o.change) this.cH = this.o.change;
             if (this.o.cancel) this.eH = this.o.cancel;
             if (this.o.release) this.rH = this.o.release;
+            if (this.o.parse) this.pH = this.o.parse;
+            if (this.o.format) this.fH = this.o.format;
 
             if (this.o.displayPrevious) {
                 this.pColor = this.h2rgba(this.o.fgColor, "0.4");
@@ -518,12 +523,21 @@
             if (null != v) {
                 this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
                 this.v = this.cv;
-                this.$.val(this.v);
+                this.rawVal(this.v);
                 this._draw();
             } else {
                 return this.v;
             }
         };
+
+        this.rawVal = function (v) {
+            if(null != v) {
+                this.$.val(this.fH ? this.fH(v) : v);
+            } else {
+                v = this.$.val()
+                return this.pH ? this.pH(v) : v;
+            }
+        }
 
         this.xy2val = function (x, y) {
             var a, ret;
@@ -557,7 +571,7 @@
                             var ori = e.originalEvent
                                 ,deltaX = ori.detail || ori.wheelDeltaX
                                 ,deltaY = ori.detail || ori.wheelDeltaY
-                                ,v = parseInt(s.$.val()) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
+                                ,v = parseInt(s.rawVal()) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
 
                             if (
                                 s.cH
@@ -593,7 +607,7 @@
                             if ($.inArray(kc,[37,38,39,40]) > -1) {
                                 e.preventDefault();
 
-                                var v = parseInt(s.$.val()) + kv[kc] * m;
+                                var v = parseInt(s.rawVal()) + kv[kc] * m;
 
                                 s.o.stopper
                                 && (v = max(min(v, s.o.max), s.o.min));
@@ -618,12 +632,12 @@
                                 window.clearTimeout(to);
                                 to = null;
                                 m = 1;
-                                s.val(s.$.val());
+                                s.val(s.rawVal());
                             }
                         } else {
                             // kval postcond
-                            (s.$.val() > s.o.max && s.$.val(s.o.max))
-                            || (s.$.val() < s.o.min && s.$.val(s.o.min));
+                            (s.rawVal() > s.o.max && s.rawVal(s.o.max))
+                            || (s.rawVal() < s.o.min && s.rawVal(s.o.min));
                         }
 
                     }
@@ -640,7 +654,7 @@
                 || this.v > this.o.max
             ) this.v = this.o.min;
 
-            this.$.val(this.v);
+            this.rawVal(this.v);
             this.w2 = this.w / 2;
             this.cursorExt = this.o.cursor / 100;
             this.xy = this.w2 * this.scale;
@@ -692,7 +706,7 @@
 
         this.change = function (v) {
             this.cv = v;
-            this.$.val(v);
+            this.rawVal(v);
         };
 
         this.angle = function (v) {
