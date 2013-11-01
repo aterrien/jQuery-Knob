@@ -421,17 +421,17 @@
                          }
                     );
 
-                if(this.relative) {
-                    $(window).resize(function() {
-                        s._carve()
-                         .init();
-                        s._draw();
-                    });
-                }
-
                 this.listen();
             } else {
                 this.$.attr('readonly', 'readonly');
+            }
+
+            if(this.relative) {
+                $(window).resize(function() {
+                    s._carve()
+                     .init();
+                    s._draw();
+                });
             }
 
             return this;
