@@ -138,7 +138,7 @@
                 this.i.each(function(k) {
                     var $this = $(this);
                     s.i[k] = $this;
-                    s.v[k] = $this.val();
+                    s.v[k] = $this.data('value') || $this.val();
 
                     $this.bind(
                         'change'
@@ -155,7 +155,7 @@
 
                 // input = integer
                 this.i = this.$;
-                this.v = this.$.val();
+                this.v = this.$.data('value') || this.$.val();
                 (this.v == '') && (this.v = this.o.min);
 
                 this.$.bind(
