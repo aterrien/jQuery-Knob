@@ -784,7 +784,7 @@
 
             c.beginPath();
                 c.strokeStyle = this.o.bgColor;
-                c.arc(this.xy, this.xy, this.radius - (this.o.glow / 2), this.endAngle, this.startAngle, true);
+                c.arc(this.xy, this.xy, this.radius - this.o.glow, this.endAngle, this.startAngle, true);
             c.stroke();
 
             if (this.o.displayPrevious) {
@@ -796,15 +796,16 @@
 
                 c.beginPath();
                     c.strokeStyle = this.pColor;
-                    c.arc(this.xy, this.xy, this.radius - (this.o.glow / 2), sa, ea, false);
+                    c.arc(this.xy, this.xy, this.radius - this.o.glow, sa, ea, false);
                 c.stroke();
                 r = (this.cv == this.v);
             }
 
             c.beginPath();
                 c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
-                c.arc(this.xy, this.xy, this.radius - (this.o.glow / 2), sat, eat, false);
-                c.shadowColor = this.o.fgColor; c.shadowBlur = this.o.glow;
+                c.arc(this.xy, this.xy, this.radius - this.o.glow, sat, eat, false);
+                c.shadowColor = this.o.fgColor;
+                c.shadowBlur = this.o.glow;
             c.stroke();
         };
 
