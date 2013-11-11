@@ -23,11 +23,11 @@
                         // "tron" case
                         if(this.$.data('skin') == 'tron') {
 
-                            var a = this.angle(this.cv)  // Angle
-                                , sa = this.startAngle          // Previous start angle
-                                , sat = this.startAngle         // Start angle
-                                , ea                            // Previous end angle
-                                , eat = sat + a                 // End angle
+                            var a = this.angle(this.cv)     // Angle
+                                , sa = this.startAngle      // Previous start angle
+                                , sat = this.startAngle     // Start angle
+                                , ea                        // Previous end angle
+                                , eat = sat + a             // End angle
                                 , r = 1;
 
                             this.g.lineWidth = this.lineWidth;
@@ -133,12 +133,13 @@ data-fgColor="#222222"
             <input class="knob" data-width="150" data-cursor=true data-fgColor="#222222" data-thickness=.3 value="29">
         </div>
         <div class="demo" >
-            <p>&#215; Display previous value</p>
+            <p>&#215; Display previous value / unit</p>
             <pre>
 data-displayPrevious=true
 data-min="-100"
+data-unit="%"
             </pre>
-            <input class="knob" data-width="200" data-min="-100" data-displayPrevious=true value="44">
+            <input class="knob" data-unit="%" data-width="200" data-min="-100" data-displayPrevious=true value="44">
         </div>
         <div style="clear:both"></div>
         <div class="demo">
@@ -167,6 +168,39 @@ data-max="15000"
 data-displayPrevious=true
             </pre>
             <input class="knob" data-min="-15000" data-displayPrevious=true data-max="15000" data-step="1000" value="-11000">
+        </div>
+        <div style="clear:both"></div>
+        <div style="text-align: center">
+            <p style="font-size: 20px">&#215; Glow effect</p>
+        </div>
+        <div style="background-color: #222; height: 340px">
+            <div class="demo" style="background-color:#222; color:#FFF;">
+                <pre>
+data-glow = 20
+data-displayPrevious=true
+data-linecap="round"
+data-thickness=".1"
+                </pre>
+                <input class="knob" data-glow = 20 data-displayPrevious=true data-linecap="round" data-width="150" data-angleOffset="180" data-bgColor="#333333" data-fgColor="#ffec03" data-thickness=".1" value="9">
+            </div>
+            <div class="demo" style="background-color:#222; color:#FFF;">
+                <pre>
+data-glow = 20
+data-linecap="round"
+data-thickness=".05"
+
+                </pre>
+                <input class="knob" data-glow = 20 data-linecap="round" data-width="150" data-angleOffset="180" data-bgColor="#333333" data-fgColor="#C0ffff" data-thickness=".05" value="70">
+            </div>
+            <div class="demo" style="background-color:#222; color:#FFF;">
+                <pre>
+data-glow = 20
+data-linecap="round"
+data-fgColor="chartreuse"
+data-thickness=".1"
+                </pre>
+                <input class="knob" data-glow = 20 data-linecap="round" data-width="150" data-angleOffset="180" data-bgColor="#333333" data-fgColor="chartreuse" data-thickness=".1" value="35">
+            </div>
         </div>
         <div style="clear:both"></div>
         <div style="text-align: center">

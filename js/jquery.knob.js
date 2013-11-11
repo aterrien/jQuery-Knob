@@ -70,6 +70,7 @@
         this.relativeWidth = false;
         this.relativeHeight = false;
         this.$div = null; // component div
+        this.$inputDiv = null; // component div
 
         this.run = function () {
             var cf = function (e, conf) {
@@ -89,38 +90,42 @@
             this.o = $.extend(
                 {
                     // Config
-                    min : this.$.data('min') || 0,
-                    max : this.$.data('max') || 100,
-                    stopper : true,
-                    readOnly : this.$.data('readonly') || (this.$.attr('readonly') == 'readonly'),
+                    min: this.$.data('min') || 0,
+                    max: this.$.data('max') || 100,
+                    stopper: true,
+                    readOnly: this.$.data('readonly') || (this.$.attr('readonly') == 'readonly'),
 
                     // UI
-                    cursor : (this.$.data('cursor') === true && 30)
+                    cursor: (this.$.data('cursor') === true && 30)
                                 || this.$.data('cursor')
                                 || 0,
-                    thickness : (
+                    thickness: (
                                 this.$.data('thickness')
                                 && Math.max(Math.min(this.$.data('thickness'), 1), 0.01)
                                 )
                                 || 0.35,
-                    lineCap : this.$.data('linecap') || 'butt',
-                    width : this.$.data('width') || 200,
-                    height : this.$.data('height') || 200,
-                    displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
-                    displayPrevious : this.$.data('displayprevious'),
-                    fgColor : this.$.data('fgcolor') || '#87CEEB',
+                    lineCap: this.$.data('linecap') || 'butt',
+                    width: this.$.data('width') || 200,
+                    height: this.$.data('height') || 200,
+                    displayInput: this.$.data('displayinput') == null || this.$.data('displayinput'),
+                    displayPrevious: this.$.data('displayprevious'),
+                    fgColor: this.$.data('fgcolor') || '#87CEEB',
                     inputColor: this.$.data('inputcolor'),
                     font: this.$.data('font') || 'Arial',
                     fontWeight: this.$.data('font-weight') || 'bold',
-                    inline : false,
-                    step : this.$.data('step') || 1,
+                    inline: false,
+                    step: this.$.data('step') || 1,
+                    unit: this.$.data('unit'),
+
+                    // fx
+                    glow: this.$.data('glow') || 0,
 
                     // Hooks
-                    draw : null, // function () {}
-                    change : null, // function (value) {}
-                    cancel : null, // function () {}
-                    release : null, // function (value) {}
-                    error : null // function () {}
+                    draw: null, // function () {}
+                    change: null, // function (value) {}
+                    cancel: null, // function () {}
+                    release: null, // function (value) {}
+                    error: null // function () {}
                 }, this.o
             );
 
@@ -200,11 +205,14 @@
 
             // wraps all elements in a div
             this.$div = $('<div style="'
-                        + (this.o.inline ? 'display:inline;' : '')
+                        + (this.o.inline ? 'display:inline;' : 'display:inline-block;')
                         + '"></div>');
 
-            this.$.wrap(this.$div).before(this.$c);
-            this.$div = this.$.parent();
+            this.$inputDiv = $('<div style="display:inline-block;"></div>');
+            this.$div.append(this.$inputDiv);
+            this.$.wrap(this.$inputDiv); this.$inputDiv = this.$.parent();
+            this.$inputDiv.wrap(this.$div); this.$div = this.$inputDiv.parent();
+            this.$div.prepend(this.$c);
 
             // computes size and carves the component
             this._carve();
@@ -257,15 +265,21 @@
 
             // finalize div
             this.$div.css({
-                'width': this.w + 'px',
-                'height': this.h + 'px'
+                width: this.w + 'px',
+                height: this.h + 'px',
+                position: 'relative'
             });
 
             // finalize canvas with computed width
-            this.$c.attr({
-                width: this.w,
-                height: this.h
-            });
+            this.$c
+                .css({
+                    position: 'absolute', //'z-index': -1,
+                    top: '0px', left: '0px'
+                })
+                .attr({
+                    width: this.w,
+                    height: this.h
+                });
 
             // scaling
             if (this.scale !== 1) {
@@ -309,7 +323,6 @@
                     s.cH
                     && (s.cH(v) === false)
                 ) return;
-
 
                 s.change(s._validate(v));
                 s._draw();
@@ -420,7 +433,6 @@
                             s._xy()._touch(e);
                          }
                     );
-
                 this.listen();
             } else {
                 this.$.attr('readonly', 'readonly');
@@ -429,11 +441,10 @@
             if(this.relative) {
                 $(window).resize(function() {
                     s._carve()
-                     .init();
+                        .init();
                     s._draw();
                 });
             }
-
             return this;
         };
 
@@ -506,10 +517,10 @@
         this.extend = function () {
             this.o = $.extend(
                 {
-                    bgColor : this.$.data('bgcolor') || '#EEEEEE',
-                    angleOffset : this.$.data('angleoffset') || 0,
-                    angleArc : this.$.data('anglearc') || 360,
-                    inline : true
+                    bgColor: this.$.data('bgcolor') || '#EEEEEE',
+                    angleOffset: this.$.data('angleoffset') || 0,
+                    angleArc: this.$.data('anglearc') || 360,
+                    inline: false
                 }, this.o
             );
         };
@@ -662,32 +673,78 @@
             this.startAngle = 1.5 * Math.PI + this.angleOffset;
             this.endAngle = 1.5 * Math.PI + this.angleOffset + this.angleArc;
 
-            var s = max(
+
+            if(this.o.displayInput) {
+
+                var fontSize, inputWidth
+                    , inputLen = max(
                             String(Math.abs(this.o.max)).length
                             , String(Math.abs(this.o.min)).length
-                            , 2
-                            ) + 2;
+                            , 2);
 
-            this.o.displayInput
-                && this.i.css({
-                        'width' : ((this.w / 2 + 4) >> 0) + 'px'
-                        ,'height' : ((this.w / 3) >> 0) + 'px'
-                        ,'position' : 'absolute'
-                        ,'vertical-align' : 'middle'
-                        ,'margin-top' : ((this.w / 3) >> 0) + 'px'
-                        ,'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px'
-                        ,'border' : 0
-                        ,'background' : 'none'
-                        ,'font' : this.o.fontWeight + ' ' + ((this.w / s) >> 0) + 'px ' + this.o.font
-                        ,'text-align' : 'center'
-                        ,'color' : this.o.inputColor || this.o.fgColor
-                        ,'padding' : '0px'
-                        ,'-webkit-appearance': 'none'
+                if(this.o.unit) {
+                    fontSize = (this.w / (inputLen * 1.6)) >> 0;
+                    inputWidth = (this.w / 2.3) >> 0;
+
+                    $("<span>" + this.o.unit + "</span>")
+                        .css({
+                            'font': this.o.fontWeight + ' ' + (fontSize / 2) + 'px ' + this.o.font
+                            ,'color': this.o.inputColor || this.o.fgColor
+                            ,'height': ((this.w / 3) >> 0) + 'px'
+                            ,'vertical-align': 'middle'
+                            ,'display': 'inline-block'
                         })
-                || this.i.css({
-                        'width' : '0px'
-                        ,'visibility' : 'hidden'
-                        });
+                        .appendTo(this.$inputDiv);
+
+                    this.$inputDiv.css({
+                        'top': (((this.w / 3.8) + .5) >> 0) + 'px'
+                    });
+
+                    this.i.css({
+                        'text-align': 'center'
+                        ,'padding-right': '0px'
+                    });
+                } else {
+                    fontSize = (this.w / (inputLen * 1.4)) >> 0;
+                    inputWidth = (this.w / 1.8) >> 0;
+
+                    this.$inputDiv.css({
+                        'top': (((this.w / 3) + .5) >> 0) + 'px'
+                    });
+
+                    this.i.css({
+                        'text-align': 'center'
+                        ,'padding': '0px'
+                    });
+                }
+
+                this.$inputDiv.css({
+                    'position': 'absolute'
+                    ,'left': '0px'
+                    ,'right': '0px'
+                    ,'display': 'block'
+                    ,'margin': 'auto'
+                    ,'width': inputWidth + 'px'
+                });
+
+                this.i.css({
+                    'font': this.o.fontWeight + ' ' + fontSize + 'px ' + this.o.font
+                    ,'color': this.o.inputColor || this.o.fgColor
+                    ,'width': inputWidth + 'px'
+                    ,'height': ((this.w / 3) >> 0) + 'px'
+                    ,'vertical-align': 'middle'
+                    ,'border': 0
+                    ,'background': 'none'
+                    ,'-webkit-appearance': 'none'
+                    ,'text-shadow': this.o.glow ? '0px 0px '+ ((this.o.glow / 6) >> 0) + 'px ' + this.o.fgColor : 'none'
+                    });
+
+            } else {
+                this.i.css({
+                    'width': '0px'
+                    ,'visibility': 'hidden'
+                    });
+            }
         };
 
         this.change = function (v) {
@@ -702,7 +759,7 @@
         this.draw = function () {
 
             var c = this.g,                 // context
-                a = this.angle(this.cv)    // Angle
+                a = this.angle(this.cv)     // Angle
                 , sat = this.startAngle     // Start angle
                 , eat = sat + a             // End angle
                 , sa, ea                    // Previous angles
@@ -718,7 +775,7 @@
 
             c.beginPath();
                 c.strokeStyle = this.o.bgColor;
-                c.arc(this.xy, this.xy, this.radius, this.endAngle, this.startAngle, true);
+                c.arc(this.xy, this.xy, this.radius - (this.o.glow / 2), this.endAngle, this.startAngle, true);
             c.stroke();
 
             if (this.o.displayPrevious) {
@@ -730,14 +787,15 @@
 
                 c.beginPath();
                     c.strokeStyle = this.pColor;
-                    c.arc(this.xy, this.xy, this.radius, sa, ea, false);
+                    c.arc(this.xy, this.xy, this.radius - (this.o.glow / 2), sa, ea, false);
                 c.stroke();
                 r = (this.cv == this.v);
             }
 
             c.beginPath();
                 c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
-                c.arc(this.xy, this.xy, this.radius, sat, eat, false);
+                c.arc(this.xy, this.xy, this.radius - (this.o.glow / 2), sat, eat, false);
+                c.shadowColor = this.o.fgColor; c.shadowBlur = this.o.glow;
             c.stroke();
         };
 
