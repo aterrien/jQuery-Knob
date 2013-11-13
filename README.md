@@ -133,3 +133,4 @@ Supported browser
 -------
 
 Tested on Chrome, Safari, Firefox, IE 9.0.
+
