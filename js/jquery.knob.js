@@ -93,6 +93,7 @@
                     max : this.$.data('max') || 100,
                     stopper : true,
                     readOnly : this.$.data('readonly') || (this.$.attr('readonly') == 'readonly'),
+                    scroll : this.$.data('scroll') || true,
 
                     // UI
                     cursor : (this.$.data('cursor') === true && 30)
@@ -629,8 +630,10 @@
                     }
                 );
 
-            this.$c.bind("mousewheel DOMMouseScroll", mw);
-            this.$.bind("mousewheel DOMMouseScroll", mw)
+            if (s.o.scroll) {
+              this.$c.bind("mousewheel DOMMouseScroll", mw);
+              this.$.bind("mousewheel DOMMouseScroll", mw);
+            }
         };
 
         this.init = function () {
