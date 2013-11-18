@@ -130,3 +130,5 @@ Supported browser
 -------
 
 Tested on Chrome, Safari, Firefox, IE 9.0.
+
+![secretplan](https://raw.github.com/aterrien/jQuery-Knob/master/secretplan.jpg)
