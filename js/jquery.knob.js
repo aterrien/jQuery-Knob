@@ -147,7 +147,7 @@
                     s.v[k] = $this.val();
 
                     $this.bind(
-                        'change'
+                        'change keyup'
                         , function () {
                             var val = {};
                             val[k] = $this.val();
@@ -165,7 +165,7 @@
                 (this.v == '') && (this.v = this.o.min);
 
                 this.$.bind(
-                    'change'
+                    'change keyup'
                     , function () {
                         s.val(s._validate(s.$.val()));
                     }
@@ -318,13 +318,6 @@
                             e.originalEvent.touches[s.t].pageY
                             );
 
-                if (v == s.cv) return;
-
-                if (
-                    s.cH
-                    && (s.cH(v) === false)
-                ) return;
-
                 s.change(s._validate(v));
                 s._draw();
             };
@@ -359,13 +352,6 @@
 
             var mouseMove = function (e) {
                 var v = s.xy2val(e.pageX, e.pageY);
-                if (v == s.cv) return;
-
-                if (
-                    s.cH
-                    && (s.cH(v) === false)
-                ) return;
-
                 s.change(s._validate(v));
                 s._draw();
             };
@@ -528,8 +514,13 @@
 
         this.val = function (v) {
             if (null != v) {
-                this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
-                this.v = this.cv;
+                var newValue = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
+                if (
+                    newValue != this.cv // avoid double callback for same value
+                    && this.cH
+                    && (this.cH(this.cv) === false)
+                ) return;
+                this.v = this.cv = newValue;
                 this.$.val(this.v);
                 this._draw();
             } else {
@@ -570,12 +561,6 @@
                                 ,deltaX = ori.detail || ori.wheelDeltaX
                                 ,deltaY = ori.detail || ori.wheelDeltaY
                                 ,v = parseInt(s.$.val()) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
-
-                            if (
-                                s.cH
-                                && (s.cH(v) === false)
-                            ) return;
-
                             s.val(v);
                         }
                 , kval, to, m = 1, kv = {37:-s.o.step, 38:s.o.step, 39:s.o.step, 40:-s.o.step};
@@ -749,8 +734,12 @@
         };
 
         this.change = function (v) {
+            if (v == this.cv) return;
             this.cv = v;
-            this.$.val(v);
+            if (
+                this.cH
+                && (this.cH(v) === false)
+            ) return;
         };
 
         this.angle = function (v) {
