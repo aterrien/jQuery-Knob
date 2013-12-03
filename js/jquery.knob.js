@@ -540,14 +540,36 @@
 
         this.listen = function () {
             // bind MouseWheel
-            var s = this,
+            var s = this, mwTimerStop, mwTimerRelease,
                 mw = function (e) {
                             e.preventDefault();
+
                             var ori = e.originalEvent
                                 ,deltaX = ori.detail || ori.wheelDeltaX
                                 ,deltaY = ori.detail || ori.wheelDeltaY
-                                ,v = parseInt(s.$.val()) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
+                                ,v = s._validate(s.$.val())
+                                    + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
+
+                            v = max(min(v, s.o.max), s.o.min);
+                            
                             s.val(v);
+
+                            if(s.rH) {
+                                // Handle mousewheel stop
+                                clearTimeout(mwTimerStop);
+                                mwTimerStop = setTimeout(function() {
+                                    s.rH(v);
+                                    mwTimerStop = null;
+                                }, 100);
+
+                                // Handle mousewheel releases
+                                if(!mwTimerRelease) {
+                                    mwTimerRelease = setTimeout(function() {
+                                        if(mwTimerStop) s.rH(v);
+                                        mwTimerRelease = null;
+                                    }, 200);
+                                }
+                            }
                         }
                 , kval, to, m = 1, kv = {37:-s.o.step, 38:s.o.step, 39:s.o.step, 40:-s.o.step};
 
