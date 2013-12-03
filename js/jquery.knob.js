@@ -739,14 +739,14 @@
 
                 c.beginPath();
                     c.strokeStyle = this.pColor;
-                    c.arc(this.xy, this.xy, this.radius, sa, ea, false);
+                    c.arc(this.xy, this.xy, this.radius, sa - 0.00001, ea + 0.00001, false);
                 c.stroke();
                 r = (this.cv == this.v);
             }
 
             c.beginPath();
                 c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
-                c.arc(this.xy, this.xy, this.radius, sat, eat, false);
+                c.arc(this.xy, this.xy, this.radius, sat - 0.00001, eat + 0.00001, false);
             c.stroke();
         };
 
