@@ -103,6 +103,8 @@
                                 && Math.max(Math.min(this.$.data('thickness'), 1), 0.01)
                                 )
                                 || 0.35,
+                    borderWidth: this.$.data('borderWidth') || 0,
+                    borderColor: this.$.data('bordercolor') || '#FFFFFF',
                     lineCap : this.$.data('linecap') || 'butt',
                     width : this.$.data('width') || 200,
                     height : this.$.data('height') || 200,
@@ -110,10 +112,13 @@
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
                     inputColor: this.$.data('inputcolor'),
+                    innerColor: this.$.data('innercolor') || 'transparent',
                     font: this.$.data('font') || 'Arial',
                     fontWeight: this.$.data('font-weight') || 'bold',
                     inline : false,
                     step : this.$.data('step') || 1,
+                    reversed: this.$.data('reversed') || false,
+                    countdown: this.$.data('countdown') || false,
 
                     // Hooks
                     draw : null, // function () {}
@@ -482,6 +487,7 @@
         this.startAngle = null;
         this.xy = null;
         this.radius = null;
+        this.borderWidth = null;
         this.lineWidth = null;
         this.cursorExt = null;
         this.w2 = null;
@@ -650,8 +656,9 @@
             this.cursorExt = this.o.cursor / 100;
             this.xy = this.w2 * this.scale;
             this.lineWidth = this.xy * this.o.thickness;
+            this.borderWidth = this.o.borderWidth;
             this.lineCap = this.o.lineCap;
-            this.radius = this.xy - this.lineWidth / 2;
+            this.radius = this.xy - this.lineWidth / 2 - this.borderWidth;
 
             this.o.angleOffset
             && (this.o.angleOffset = isNaN(this.o.angleOffset) ? 0 : this.o.angleOffset);
@@ -705,7 +712,10 @@
         };
 
         this.angle = function (v) {
-            return (v - this.o.min) * this.angleArc / (this.o.max - this.o.min);
+            if (this.o.countdown)
+                return (this.o.max - v) * this.angleArc / (this.o.max - this.o.min);
+            else
+                return (v - this.o.min) * this.angleArc / (this.o.max - this.o.min);
         };
 
         this.draw = function () {
@@ -717,6 +727,11 @@
                 , sa, ea                    // Previous angles
                 , r = 1;
 
+            if (this.o.reversed) {
+                eat = this.startAngle;
+                sat = eat - a;
+            }
+
             c.lineWidth = this.lineWidth;
 
             c.lineCap = this.lineCap;
@@ -726,9 +741,23 @@
                 && (eat = eat + this.cursorExt);
 
             c.beginPath();
-                c.strokeStyle = this.o.bgColor;
-                c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
+                c.lineWidth = this.radius - this.lineWidth/2 + 1;
+                c.strokeStyle = this.o.innerColor;
+                c.arc(this.xy, this.xy, (this.radius - this.lineWidth/2)/2, this.endAngle + 0.01, this.startAngle - 0.01, true);
             c.stroke();
+            c.lineWidth = this.lineWidth;
+
+            c.beginPath();
+                c.strokeStyle = this.o.bgColor;
+                c.arc(this.xy, this.xy, this.radius, this.endAngle + 0.001, this.startAngle - 0.001, true);
+            c.stroke();
+
+            c.beginPath();
+                c.lineWidth = this.borderWidth;
+                c.strokeStyle = this.o.borderColor;
+                c.arc(this.xy, this.xy, this.radius + this.lineWidth/2 + this.borderWidth/2, this.endAngle + 0.001, this.startAngle - 0.001, true);
+            c.stroke();
+            c.lineWidth = this.lineWidth;
 
             if (this.o.displayPrevious) {
                 ea = this.startAngle + this.angle(this.v);
