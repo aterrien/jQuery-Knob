@@ -500,13 +500,8 @@
 
         this.val = function (v) {
             if (null != v) {
-                var newValue = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
-                if (
-                    newValue != this.cv // avoid double callback for same value
-                    && this.cH
-                    && (this.cH(this.cv) === false)
-                ) return;
-                this.v = this.cv = newValue;
+                this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
+		this.v = this.cv;
                 this.$.val(this.v);
                 this._draw();
             } else {
