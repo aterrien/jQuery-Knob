@@ -141,7 +141,7 @@
                     s.v[k] = $this.val();
 
                     $this.bind(
-                        'change keyup'
+                        'change'
                         , function () {
                             var val = {};
                             val[k] = $this.val();
@@ -159,9 +159,18 @@
                 (this.v == '') && (this.v = this.o.min);
 
                 this.$.bind(
-                    'change keyup'
+                    'change'
                     , function () {
+                        //s.val(s.$.val());
                         s.val(s._validate(s.$.val()));
+                    }
+                );
+
+                // MOD - also trigger change event when input looses focus
+                this.i.bind(
+                    'blur'
+                    , function () {
+                        s.cH(s.$.val());
                     }
                 );
 
@@ -170,11 +179,27 @@
             (!this.o.displayInput) && this.$.hide();
 
             // adds needed DOM elements (canvas, div)
-            this.$c = $(document.createElement('canvas'));
+            //this.$c = $(document.createElement('canvas'));
+            this.$c = $(document.createElement('canvas')).attr({
+                width: this.o.width,
+                height: this.o.height
+            });
+
+            // wraps all elements in a div
+            // MOD - add to DOM before Canvas init is triggered
+            this.$div = $('<div style="'
+                        + (this.o.inline ? 'display:inline;' : '')
+                        + 'width:' + this.o.width + 'px;height:' + this.o.height + 'px;'
+                        + '"></div>');
+
+            this.$.wrap(this.$div).before(this.$c);
+            this.$div = this.$.parent();
+
             if (typeof G_vmlCanvasManager !== 'undefined') {
               G_vmlCanvasManager.initElement(this.$c[0]);
             }
             this.c = this.$c[0].getContext ? this.$c[0].getContext('2d') : null;
+            
             if (!this.c) {
                 this.o.error && this.o.error();
                 return;
@@ -197,14 +222,6 @@
                                     && this.o.height.indexOf('%'));
 
             this.relative = (this.relativeWidth || this.relativeHeight);
-
-            // wraps all elements in a div
-            this.$div = $('<div style="'
-                        + (this.o.inline ? 'display:inline;' : '')
-                        + '"></div>');
-
-            this.$.wrap(this.$div).before(this.$c);
-            this.$div = this.$.parent();
 
             // computes size and carves the component
             this._carve();
@@ -337,7 +354,9 @@
             var mouseMove = function (e) {
                 var v = s.xy2val(e.pageX, e.pageY);
                 s.change(s._validate(v));
-                s._draw();
+                // MOD - redrawing and change event on every step
+                s.val(s._validate(v));
+                //s._draw();
             };
 
             // First click
@@ -501,7 +520,7 @@
         this.val = function (v) {
             if (null != v) {
                 this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
-		this.v = this.cv;
+		        this.v = this.cv;
                 this.$.val(this.v);
                 this._draw();
             } else {
@@ -546,6 +565,12 @@
                                     + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
 
                             v = max(min(v, s.o.max), s.o.min);
+
+                            // MOD - trigger change event
+                            if (
+                                s.cH
+                                && (s.cH(v) === false)
+                            ) return;
                             
                             s.val(v);
 
@@ -583,6 +608,13 @@
 
                         if (isNaN(kval)) {
 
+                            // MOD - trigger change on enter and limit to min/max
+                            if(kc === 13) {
+                                var v = parseInt(s.$.val());
+                                v = max(min(v, s.o.max), s.o.min)
+                                s.cH(v);
+                            }
+
                             (kc !== 13)         // enter
                             && (kc !== 8)       // bs
                             && (kc !== 9)       // tab
@@ -597,8 +629,10 @@
 
                                 s.o.stopper
                                 && (v = max(min(v, s.o.max), s.o.min));
+                                console.log(v);
 
                                 s.change(v);
+                                //s.cH(v);    // Zitrus Mod - also trigger change Hook on arrow keys
                                 s._draw();
 
                                 // long time keydown speed-up
@@ -621,9 +655,10 @@
                                 s.val(s.$.val());
                             }
                         } else {
+                            // MOD - disable this part - don't do extra checks to improve keyboard input usability
                             // kval postcond
-                            (s.$.val() > s.o.max && s.$.val(s.o.max))
-                            || (s.$.val() < s.o.min && s.$.val(s.o.min));
+                            //(s.$.val() > s.o.max && s.$.val(s.o.max))
+                            //|| (s.$.val() < s.o.min && s.$.val(s.o.min));
                         }
 
                     }
@@ -693,6 +728,7 @@
         this.change = function (v) {
             if (v == this.cv) return;
             this.cv = v;
+            this.$.val(v);  // MOD - use this to change current value on keyboard arrows 
             if (
                 this.cH
                 && (this.cH(v) === false)
