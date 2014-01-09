@@ -90,17 +90,15 @@
                     min : this.$.data('min') || 0,
                     max : this.$.data('max') || 100,
                     stopper : true,
-                    readOnly : this.$.data('readonly') || (this.$.attr('readonly') == 'readonly'),
+                    readOnly : this.$.data('readonly') || (this.$.attr('readonly') === 'readonly'),
 
                     // UI
-                    cursor : (this.$.data('cursor') === true && 30)
-                                || this.$.data('cursor')
-                                || 0,
+                    cursor : (this.$.data('cursor') === true && 30) ||
+                                this.$.data('cursor') || 0,
                     thickness : (
-                                this.$.data('thickness')
-                                && Math.max(Math.min(this.$.data('thickness'), 1), 0.01)
-                                )
-                                || 0.35,
+                                    this.$.data('thickness') &&
+                                    Math.max(Math.min(this.$.data('thickness'), 1), 0.01)
+                                ) || 0.35,
                     lineCap : this.$.data('linecap') || 'butt',
                     width : this.$.data('width') || 200,
                     height : this.$.data('height') || 200,
@@ -132,7 +130,7 @@
 
                 // fieldset = array of integer
                 this.v = {};
-                this.i = this.$.find('input')
+                this.i = this.$.find('input');
                 this.i.each(function(k) {
                     var $this = $(this);
                     s.i[k] = $this;
@@ -154,7 +152,7 @@
                 // input = integer
                 this.i = this.$;
                 this.v = this.$.val();
-                (this.v == '') && (this.v = this.o.min);
+                (this.v === '') && (this.v = this.o.min);
 
                 this.$.bind(
                     'change blur'
@@ -205,10 +203,10 @@
                         );
 
             // detects relative width / height
-            this.relativeWidth = ((this.o.width % 1 !== 0)
-                                    && this.o.width.indexOf('%'));
-            this.relativeHeight = ((this.o.height % 1 !== 0)
-                                    && this.o.height.indexOf('%'));
+            this.relativeWidth = ((this.o.width % 1 !== 0) &&
+                this.o.width.indexOf('%'));
+            this.relativeHeight = ((this.o.height % 1 !== 0) &&
+                this.o.height.indexOf('%'));
             this.relative = (this.relativeWidth || this.relativeHeight);
 
             // computes size and carves the component
@@ -244,14 +242,14 @@
 
         this._carve = function() {
             if(this.relative) {
-                var w = this.relativeWidth
-                            ? this.$div.parent().width()
-                                * parseInt(this.o.width) / 100
-                            : this.$div.parent().width(),
-                    h = this.relativeHeight
-                            ? this.$div.parent().height()
-                                * parseInt(this.o.height) / 100
-                            : this.$div.parent().height();
+                var w = this.relativeWidth ?
+                            this.$div.parent().width() *
+                            parseInt(this.o.width) / 100 :
+                            this.$div.parent().width(),
+                    h = this.relativeHeight ?
+                            this.$div.parent().height() *
+                            parseInt(this.o.height) / 100 :
+                            this.$div.parent().height();
 
                 // apply relative
                 this.w = this.h = Math.min(w, h);
@@ -310,10 +308,7 @@
 
                 if (v == s.cv) return;
 
-                if (
-                    s.cH
-                    && (s.cH(v) === false)
-                ) return;
+                if (s.cH && (s.cH(v) === false)) return;
 
                 s.change(s._validate(v));
                 s._draw();
@@ -343,13 +338,10 @@
 
             var mouseMove = function (e) {
                 var v = s.xy2val(e.pageX, e.pageY);
-                
+
                 if (v == s.cv) return;
 
-                if (
-                    s.cH
-                    && (s.cH(v) === false)
-                ) return;
+                if (s.cH && (s.cH(v) === false)) return;
 
                 s.change(s._validate(v));
                 s._draw();
@@ -511,10 +503,8 @@
             if (null != v) {
 
                 if (
-                    triggerRelease !== false
-                    && (v != this.v)
-                    && this.rH
-                    && (this.rH(v) === false)
+                    triggerRelease !== false && (v != this.v) && this.rH &&
+                        (this.rH(v) === false)
                 ) return;
 
                 this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
@@ -544,8 +534,7 @@
             ret = ~~ (0.5 + (a * (this.o.max - this.o.min) / this.angleArc))
                     + this.o.min;
 
-            this.o.stopper
-            && (ret = max(min(ret, this.o.max), this.o.min));
+            this.o.stopper && (ret = max(min(ret, this.o.max), this.o.min));
 
             return ret;
         };
@@ -612,8 +601,7 @@
 
                                 var v = parseInt(s.$.val()) + kv[kc] * m;
 
-                                s.o.stopper
-                                && (v = max(min(v, s.o.max), s.o.min));
+                                s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
 
                                 s.change(v);
                                 s._draw();
