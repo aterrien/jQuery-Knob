@@ -75,7 +75,7 @@
                 for (k in conf) {
                     s.o[k] = conf[k];
                 }
-                s.init();
+                s._carve().init();
                 s._configure()
                  ._draw();
             };
