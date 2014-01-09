@@ -6,9 +6,7 @@
  * Requires: jQuery v1.7+
  *
  * Copyright (c) 2012 Anthony Terrien
- * Under MIT and GPL licenses:
- *  http://www.opensource.org/licenses/mit-license.php
- *  http://www.gnu.org/licenses/gpl.html
+ * Under MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * Thanks to vor, eskimoblood, spiffistan, FabrizioC
  */
@@ -141,7 +139,7 @@
                     s.v[k] = $this.val();
 
                     $this.bind(
-                        'change keyup'
+                        'change blur'
                         , function () {
                             var val = {};
                             val[k] = $this.val();
@@ -159,7 +157,7 @@
                 (this.v == '') && (this.v = this.o.min);
 
                 this.$.bind(
-                    'change keyup'
+                    'change blur'
                     , function () {
                         s.val(s._validate(s.$.val()));
                     }
@@ -170,11 +168,27 @@
             (!this.o.displayInput) && this.$.hide();
 
             // adds needed DOM elements (canvas, div)
-            this.$c = $(document.createElement('canvas'));
+            this.$c = $(document.createElement('canvas')).attr({
+                width: this.o.width,
+                height: this.o.height
+            });
+
+            // wraps all elements in a div
+            // add to DOM before Canvas init is triggered
+            this.$div = $('<div style="'
+                + (this.o.inline ? 'display:inline;' : '')
+                + 'width:' + this.o.width + 'px;height:' + this.o.height + 'px;'
+                + '"></div>');
+
+            this.$.wrap(this.$div).before(this.$c);
+            this.$div = this.$.parent();
+
             if (typeof G_vmlCanvasManager !== 'undefined') {
               G_vmlCanvasManager.initElement(this.$c[0]);
             }
+
             this.c = this.$c[0].getContext ? this.$c[0].getContext('2d') : null;
+
             if (!this.c) {
                 this.o.error && this.o.error();
                 return;
@@ -195,16 +209,7 @@
                                     && this.o.width.indexOf('%'));
             this.relativeHeight = ((this.o.height % 1 !== 0)
                                     && this.o.height.indexOf('%'));
-
             this.relative = (this.relativeWidth || this.relativeHeight);
-
-            // wraps all elements in a div
-            this.$div = $('<div style="'
-                        + (this.o.inline ? 'display:inline;' : '')
-                        + '"></div>');
-
-            this.$.wrap(this.$div).before(this.$c);
-            this.$div = this.$.parent();
 
             // computes size and carves the component
             this._carve();
@@ -302,6 +307,14 @@
                             e.originalEvent.touches[s.t].pageX,
                             e.originalEvent.touches[s.t].pageY
                             );
+
+                if (v == s.cv) return;
+
+                if (
+                    s.cH
+                    && (s.cH(v) === false)
+                ) return;
+
                 s.change(s._validate(v));
                 s._draw();
             };
@@ -319,12 +332,6 @@
                     "touchend.k"
                     , function () {
                         k.c.d.unbind('touchmove.k touchend.k');
-
-                        if (
-                            s.rH
-                            && (s.rH(s.cv) === false)
-                        ) return;
-
                         s.val(s.cv);
                     }
                 );
@@ -336,6 +343,14 @@
 
             var mouseMove = function (e) {
                 var v = s.xy2val(e.pageX, e.pageY);
+                
+                if (v == s.cv) return;
+
+                if (
+                    s.cH
+                    && (s.cH(v) === false)
+                ) return;
+
                 s.change(s._validate(v));
                 s._draw();
             };
@@ -366,12 +381,6 @@
                     "mouseup.k"
                     , function (e) {
                         k.c.d.unbind('mousemove.k mouseup.k keyup.k');
-
-                        if (
-                            s.rH
-                            && (s.rH(s.cv) === false)
-                        ) return;
-
                         s.val(s.cv);
                     }
                 );
@@ -498,10 +507,18 @@
             );
         };
 
-        this.val = function (v) {
+        this.val = function (v, triggerRelease) {
             if (null != v) {
+
+                if (
+                    triggerRelease !== false
+                    && (v != this.v)
+                    && this.rH
+                    && (this.rH(v) === false)
+                ) return;
+
                 this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
-		this.v = this.cv;
+                this.v = this.cv;
                 this.$.val(this.v);
                 this._draw();
             } else {
@@ -537,35 +554,35 @@
             // bind MouseWheel
             var s = this, mwTimerStop, mwTimerRelease,
                 mw = function (e) {
-                            e.preventDefault();
+                    e.preventDefault();
 
-                            var ori = e.originalEvent
-                                ,deltaX = ori.detail || ori.wheelDeltaX
-                                ,deltaY = ori.detail || ori.wheelDeltaY
-                                ,v = s._validate(s.$.val())
-                                    + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
+                    var ori = e.originalEvent
+                        ,deltaX = ori.detail || ori.wheelDeltaX
+                        ,deltaY = ori.detail || ori.wheelDeltaY
+                        ,v = s._validate(s.$.val())
+                            + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
 
-                            v = max(min(v, s.o.max), s.o.min);
-                            
-                            s.val(v);
+                    v = max(min(v, s.o.max), s.o.min);
 
-                            if(s.rH) {
-                                // Handle mousewheel stop
-                                clearTimeout(mwTimerStop);
-                                mwTimerStop = setTimeout(function() {
-                                    s.rH(v);
-                                    mwTimerStop = null;
-                                }, 100);
+                    s.val(v, false);
 
-                                // Handle mousewheel releases
-                                if(!mwTimerRelease) {
-                                    mwTimerRelease = setTimeout(function() {
-                                        if(mwTimerStop) s.rH(v);
-                                        mwTimerRelease = null;
-                                    }, 200);
-                                }
-                            }
+                    if(s.rH) {
+                        // Handle mousewheel stop
+                        clearTimeout(mwTimerStop);
+                        mwTimerStop = setTimeout(function() {
+                            s.rH(v);
+                            mwTimerStop = null;
+                        }, 100);
+
+                        // Handle mousewheel releases
+                        if(!mwTimerRelease) {
+                            mwTimerRelease = setTimeout(function() {
+                                if(mwTimerStop) s.rH(v);
+                                mwTimerRelease = null;
+                            }, 200);
                         }
+                    }
+                }
                 , kval, to, m = 1, kv = {37:-s.o.step, 38:s.o.step, 39:s.o.step, 40:-s.o.step};
 
             this.$
@@ -603,8 +620,7 @@
 
                                 // long time keydown speed-up
                                 to = window.setTimeout(
-                                    function () { m*=2; }
-                                    ,30
+                                    function () { m *= 2; }, 30
                                 );
                             }
                         }
@@ -691,12 +707,8 @@
         };
 
         this.change = function (v) {
-            if (v == this.cv) return;
             this.cv = v;
-            if (
-                this.cH
-                && (this.cH(v) === false)
-            ) return;
+            this.$.val(v);
         };
 
         this.angle = function (v) {
