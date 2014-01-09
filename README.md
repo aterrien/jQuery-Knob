@@ -129,6 +129,6 @@ Set the value
 Supported browser
 -------
 
-Tested on Chrome, Safari, Firefox, IE 9.0.
+Tested on Chrome, Safari, Firefox, IE 8.0.
 
 ![secretplan](https://raw.github.com/aterrien/jQuery-Knob/master/secretplan.jpg)
