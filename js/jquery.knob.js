@@ -115,7 +115,7 @@
                     draw : null, // function () {}
                     change : null, // function (value) {}
                     cancel : null, // function () {}
-                    release : null, // function (value) {}
+                    release : null // function (value) {}
                 }, this.o
             );
 
