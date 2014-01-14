@@ -116,7 +116,6 @@
                     change : null, // function (value) {}
                     cancel : null, // function () {}
                     release : null, // function (value) {}
-                    error : null // function () {}
                 }, this.o
             );
 
@@ -188,8 +187,11 @@
             this.c = this.$c[0].getContext ? this.$c[0].getContext('2d') : null;
 
             if (!this.c) {
-                this.o.error && this.o.error();
-                return;
+                throw {
+                    name:        "CanvasNotSupportedException",
+                    message:     "Canvas not supported. Please use excanvas on IE8.0.",
+                    toString:    function(){return this.name + ": " + this.message}
+                }
             }
 
             // hdpi support
