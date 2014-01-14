@@ -19,7 +19,11 @@
                         console.log("cancel : ", this);
                     },
                     draw : function () {
-
+                        //append unit if it exists                        
+                        if(this.unit != undefined)
+                        {
+                          this.i.val(this.i.val()+this.unit);
+                        }
                         // "tron" case
                         if(this.$.data('skin') == 'tron') {
 
@@ -121,6 +125,14 @@ data-width="100"
 data-displayInput=false
             </pre>
             <input class="knob" data-width="100" data-displayInput=false value="35">
+        </div>
+        <div class="demo">
+            <p>&#215; display input with unit</p>
+            <pre>
+data-width="100"
+data-unit="%"
+            </pre>
+            <input class="knob" data-width="100" data-unit="%"  value="35">
         </div>
         <div class="demo">
             <p>&#215; 'cursor' mode</p>
