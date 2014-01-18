@@ -295,6 +295,11 @@
             && (d = s.dH());
 
             (d !== false) && s.draw();
+                           
+            if(this.unit != undefined)
+            {
+              this.i.val(parseFloat(this.i.val())+this.unit);
+            }
 
         };
 
