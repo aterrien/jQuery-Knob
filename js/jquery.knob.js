@@ -110,6 +110,7 @@
                     fontWeight: this.$.data('font-weight') || 'bold',
                     inline : false,
                     step : this.$.data('step') || 1,
+                    knobId : this.$.data('id') || 'knob'
 
                     // Hooks
                     draw : null, // function () {}
@@ -167,7 +168,8 @@
             // adds needed DOM elements (canvas, div)
             this.$c = $(document.createElement('canvas')).attr({
                 width: this.o.width,
-                height: this.o.height
+                height: this.o.height,
+                id: this.o.knobId
             });
 
             // wraps all elements in a div
