@@ -595,11 +595,11 @@
                         kval = parseInt(String.fromCharCode(kc));
 
                         if (isNaN(kval)) {
-
                             (kc !== 13)         // enter
                             && (kc !== 8)       // bs
                             && (kc !== 9)       // tab
                             && (kc !== 189)     // -
+                            && (kc !== 190 || s.$.val().match(/\./))     // . only allowed once
                             && e.preventDefault();
 
                             // arrows
