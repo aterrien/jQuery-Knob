@@ -2,7 +2,7 @@
 /**
  * Downward compatible, touchable dial
  *
- * Version: 1.2.0 (15/07/2012)
+ * Version: 1.2.5 (23/01/2014)
  * Requires: jQuery v1.7+
  *
  * Copyright (c) 2012 Anthony Terrien
@@ -87,8 +87,8 @@
             this.o = $.extend(
                 {
                     // Config
-                    min : this.$.data('min') || 0,
-                    max : this.$.data('max') || 100,
+                    min : this.$.data('min') !== undefined ? this.$.data('min') : 0,
+                    max : this.$.data('max') !== undefined ? this.$.data('max') : 100,
                     stopper : true,
                     readOnly : this.$.data('readonly') || (this.$.attr('readonly') === 'readonly'),
 
@@ -595,14 +595,14 @@
                             && (kc !== 8)       // bs
                             && (kc !== 9)       // tab
                             && (kc !== 189)     // -
+                            && (kc !== 190 || s.$.val().match(/\./))     // . only allowed once
                             && e.preventDefault();
 
                             // arrows
                             if ($.inArray(kc,[37,38,39,40]) > -1) {
                                 e.preventDefault();
 
-                                var v = parseInt(s.$.val()) + kv[kc] * m;
-
+                                var v = parseFloat(s.$.val()) + kv[kc] * m;
                                 s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
 
                                 s.change(v);
