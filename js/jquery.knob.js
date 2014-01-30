@@ -153,6 +153,8 @@
                 this.v = this.$.val();
                 (this.v === '') && (this.v = this.o.min);
 
+                this.v = this.v.replace(/[^0-9.\-]/g, '');
+
                 this.$.bind(
                     'change blur'
                     , function () {
