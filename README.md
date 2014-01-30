@@ -53,6 +53,7 @@ UI :
 * font : font family.
 * fontWeight : font weight.
 * bgColor : background color.
+* unit: unit option for value inside knob e.g. '%', 'px', 'pt' etc.
 
 Hooks
 -------

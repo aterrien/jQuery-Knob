@@ -110,6 +110,7 @@
                     fontWeight: this.$.data('font-weight') || 'bold',
                     inline : false,
                     step : this.$.data('step') || 1,
+                    unit: this.$.data('unit'),
 
                     // Hooks
                     draw : null, // function () {}
@@ -296,6 +297,11 @@
             && (d = s.dH());
 
             (d !== false) && s.draw();
+                           
+            if(this.unit != undefined)
+            {
+              this.i.val(parseFloat(this.i.val())+this.unit);
+            }
 
         };
 
@@ -550,7 +556,7 @@
                     var ori = e.originalEvent
                         ,deltaX = ori.detail || ori.wheelDeltaX
                         ,deltaY = ori.detail || ori.wheelDeltaY
-                        ,v = s._validate(s.$.val())
+                        ,v = s._validate(parseFloat(s.$.val()))
                             + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
 
                     v = max(min(v, s.o.max), s.o.min);
@@ -653,6 +659,7 @@
             this.lineWidth = this.xy * this.o.thickness;
             this.lineCap = this.o.lineCap;
             this.radius = this.xy - this.lineWidth / 2;
+            this.unit = this.o.unit;
 
             this.o.angleOffset
             && (this.o.angleOffset = isNaN(this.o.angleOffset) ? 0 : this.o.angleOffset);

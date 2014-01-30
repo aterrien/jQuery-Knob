@@ -5,7 +5,7 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
         <script src="js/jquery.knob.js"></script>
-        <script>
+        <script type="text/javascript">
             $(function($) {
 
                 $(".knob").knob({
@@ -20,7 +20,7 @@
                         console.log("cancel : ", this);
                     },
                     draw : function () {
-
+                        //append unit if it exists     
                         // "tron" case
                         if(this.$.data('skin') == 'tron') {
 
@@ -122,6 +122,14 @@ data-width="100"
 data-displayInput=false
             </pre>
             <input class="knob" data-width="100" data-displayInput=false value="35">
+        </div>
+        <div class="demo">
+            <p>&#215; display input with unit</p>
+            <pre>
+data-width="100"
+data-unit="%"
+            </pre>
+            <input class="knob" data-width="100" data-unit="%"  value="35">
         </div>
         <div class="demo">
             <p>&#215; 'cursor' mode</p>
