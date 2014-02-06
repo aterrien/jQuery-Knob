@@ -80,7 +80,9 @@
                  ._draw();
             };
 
-            if(this.$.data('kontroled')) return;
+            if(this.$.data('kontroled')){
+                return;
+            }
             this.$.data('kontroled', true);
 
             this.extend();
@@ -135,9 +137,7 @@
                     s.i[k] = $this;
                     s.v[k] = $this.val();
 
-                    $this.bind(
-                        'change blur'
-                        , function () {
+                    $this.bind('change blur', function () {
                             var val = {};
                             val[k] = $this.val();
                             s.val(val);
@@ -147,22 +147,18 @@
                 this.$.find('legend').remove();
 
             } else {
-
                 // input = integer
                 this.i = this.$;
                 this.v = this.$.val();
-                (this.v === '') && (this.v = this.o.min);
+                if((this.v === '') && (this.v = this.o.min)){}
 
-                this.$.bind(
-                    'change blur'
-                    , function () {
+                this.$.bind('change blur', function () {
                         s.val(s._validate(s.$.val()));
                     }
                 );
-
             }
 
-            (!this.o.displayInput) && this.$.hide();
+            if((!this.o.displayInput) && this.$.hide()){}
 
             // adds needed DOM elements (canvas, div)
             this.$c = $(document.createElement('canvas')).attr({
@@ -172,10 +168,7 @@
 
             // wraps all elements in a div
             // add to DOM before Canvas init is triggered
-            this.$div = $('<div style="'
-                + (this.o.inline ? 'display:inline;' : '')
-                + 'width:' + this.o.width + 'px;height:' + this.o.height + 'px;'
-                + '"></div>');
+            this.$div = $('<div style="'+ (this.o.inline ? 'display:inline;' : '')+ 'width:' + this.o.width + 'px;height:' + this.o.height + 'px;'+ '"></div>');
 
             this.$.wrap(this.$div).before(this.$c);
             this.$div = this.$.parent();
@@ -190,8 +183,8 @@
                 throw {
                     name:        "CanvasNotSupportedException",
                     message:     "Canvas not supported. Please use excanvas on IE8.0.",
-                    toString:    function(){return this.name + ": " + this.message}
-                }
+                    toString:    function(){return this.name + ": " + this.message;}
+                };
             }
 
             // hdpi support
@@ -281,7 +274,7 @@
             }
 
             return this;
-        }
+        };
 
         this._draw = function () {
 
@@ -292,10 +285,9 @@
 
             s.clear();
 
-            s.dH
-            && (d = s.dH());
+            if(s.dH && (d = s.dH())){}
 
-            (d !== false) && s.draw();
+            if((d !== false) && s.draw()){}
 
         };
 
@@ -308,9 +300,9 @@
                             e.originalEvent.touches[s.t].pageY
                             );
 
-                if (v == s.cv) return;
+                if (v == s.cv){ return; }
 
-                if (s.cH && (s.cH(v) === false)) return;
+                if (s.cH && (s.cH(v) === false)) {return;}
 
                 s.change(s._validate(v));
                 s._draw();
@@ -325,9 +317,7 @@
             // Touch events listeners
             k.c.d
                 .bind("touchmove.k", touchMove)
-                .bind(
-                    "touchend.k"
-                    , function () {
+                .bind("touchend.k", function () {
                         k.c.d.unbind('touchmove.k touchend.k');
                         s.val(s.cv);
                     }
@@ -341,9 +331,9 @@
             var mouseMove = function (e) {
                 var v = s.xy2val(e.pageX, e.pageY);
 
-                if (v == s.cv) return;
+                if (v == s.cv) {return;}
 
-                if (s.cH && (s.cH(v) === false)) return;
+                if (s.cH && (s.cH(v) === false)){return;}
 
                 s.change(s._validate(v));
                 s._draw();
@@ -355,25 +345,17 @@
             // Mouse events listeners
             k.c.d
                 .bind("mousemove.k", mouseMove)
-                .bind(
-                    // Escape key cancel current change
-                    "keyup.k"
-                    , function (e) {
+                .bind("keyup.k", function (e) {
                         if (e.keyCode === 27) {
                             k.c.d.unbind("mouseup.k mousemove.k keyup.k");
 
-                            if (
-                                s.eH
-                                && (s.eH() === false)
-                            ) return;
+                            if (s.eH && (s.eH() === false)) {return;}
 
                             s.cancel();
                         }
                     }
                 )
-                .bind(
-                    "mouseup.k"
-                    , function (e) {
+                .bind("mouseup.k", function (e) {
                         k.c.d.unbind('mousemove.k mouseup.k keyup.k');
                         s.val(s.cv);
                     }
@@ -393,16 +375,12 @@
 
             if (!this.o.readOnly) {
                 this.$c
-                    .bind(
-                        "mousedown"
-                        , function (e) {
+                    .bind("mousedown", function (e) {
                             e.preventDefault();
                             s._xy()._mouse(e);
                          }
                     )
-                    .bind(
-                        "touchstart"
-                        , function (e) {
+                    .bind("touchstart", function (e) {
                             e.preventDefault();
                             s._xy()._touch(e);
                          }
@@ -427,10 +405,10 @@
         this._configure = function () {
 
             // Hooks
-            if (this.o.draw) this.dH = this.o.draw;
-            if (this.o.change) this.cH = this.o.change;
-            if (this.o.cancel) this.eH = this.o.cancel;
-            if (this.o.release) this.rH = this.o.release;
+            if (this.o.draw) {this.dH = this.o.draw;}
+            if (this.o.change) {this.cH = this.o.change;}
+            if (this.o.cancel) {this.eH = this.o.cancel;}
+            if (this.o.release) {this.rH = this.o.release;}
 
             if (this.o.displayPrevious) {
                 this.pColor = this.h2rgba(this.o.fgColor, "0.4");
@@ -463,10 +441,8 @@
         // Utils
         this.h2rgba = function (h, a) {
             var rgb;
-            h = h.substring(1,7)
-            rgb = [parseInt(h.substring(0,2),16)
-                   ,parseInt(h.substring(2,4),16)
-                   ,parseInt(h.substring(4,6),16)];
+            h = h.substring(1,7);
+            rgb = [parseInt(h.substring(0,2),16),parseInt(h.substring(2,4),16),parseInt(h.substring(4,6),16)];
             return "rgba(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + a + ")";
         };
 
@@ -507,7 +483,7 @@
                 if (
                     triggerRelease !== false && (v != this.v) && this.rH &&
                         (this.rH(v) === false)
-                ) return;
+                ) {return;}
 
                 this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
                 this.v = this.cv;
@@ -521,10 +497,7 @@
         this.xy2val = function (x, y) {
             var a, ret;
 
-            a = Math.atan2(
-                        x - (this.x + this.w2)
-                        , - (y - this.y - this.w2)
-                    ) - this.angleOffset;
+            a = Math.atan2(x - (this.x + this.w2), - (y - this.y - this.w2)) - this.angleOffset;
 
             if(this.angleArc != this.PI2 && (a < 0) && (a > -0.5)) {
                 // if isset angleArc option, set to min if .5 under min
@@ -533,10 +506,9 @@
                 a += this.PI2;
             }
 
-            ret = ~~ (0.5 + (a * (this.o.max - this.o.min) / this.angleArc))
-                    + this.o.min;
+            ret = ~~ (0.5 + (a * (this.o.max - this.o.min) / this.angleArc))+ this.o.min;
 
-            this.o.stopper && (ret = max(min(ret, this.o.max), this.o.min));
+            if(this.o.stopper && (ret = max(min(ret, this.o.max), this.o.min))){}
 
             return ret;
         };
@@ -547,11 +519,7 @@
                 mw = function (e) {
                     e.preventDefault();
 
-                    var ori = e.originalEvent
-                        ,deltaX = ori.detail || ori.wheelDeltaX
-                        ,deltaY = ori.detail || ori.wheelDeltaY
-                        ,v = s._validate(s.$.val())
-                            + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
+                    var ori = e.originalEvent,deltaX = ori.detail || ori.wheelDeltaX,deltaY = ori.detail || ori.wheelDeltaY,v = s._validate(s.$.val()) + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
 
                     v = max(min(v, s.o.max), s.o.min);
 
@@ -568,18 +536,15 @@
                         // Handle mousewheel releases
                         if(!mwTimerRelease) {
                             mwTimerRelease = setTimeout(function() {
-                                if(mwTimerStop) s.rH(v);
+                                if(mwTimerStop){ s.rH(v);}
                                 mwTimerRelease = null;
                             }, 200);
                         }
                     }
-                }
-                , kval, to, m = 1, kv = {37:-s.o.step, 38:s.o.step, 39:s.o.step, 40:-s.o.step};
+                }, kval, to, m = 1, kv = {37:-s.o.step, 38:s.o.step, 39:s.o.step, 40:-s.o.step};
 
             this.$
-                .bind(
-                    "keydown"
-                    ,function (e) {
+                .bind("keydown",function (e) {
                         var kc = e.keyCode;
 
                         // numpad support
@@ -591,19 +556,14 @@
 
                         if (isNaN(kval)) {
 
-                            (kc !== 13)         // enter
-                            && (kc !== 8)       // bs
-                            && (kc !== 9)       // tab
-                            && (kc !== 189)     // -
-                            && (kc !== 190 || s.$.val().match(/\./))     // . only allowed once
-                            && e.preventDefault();
+                            if((kc !== 13)&& (kc !== 8)&& (kc !== 9)&& (kc !== 189)&& (kc !== 190 || s.$.val().match(/\./))&& e.preventDefault()){}
 
                             // arrows
                             if ($.inArray(kc,[37,38,39,40]) > -1) {
                                 e.preventDefault();
 
                                 var v = parseFloat(s.$.val()) + kv[kc] * m;
-                                s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
+                                if(s.o.stopper && (v = max(min(v, s.o.max), s.o.min))){}
 
                                 s.change(v);
                                 s._draw();
@@ -616,9 +576,7 @@
                         }
                     }
                 )
-                .bind(
-                    "keyup"
-                    ,function (e) {
+                .bind("keyup",function (e) {
                         if (isNaN(kval)) {
                             if (to) {
                                 window.clearTimeout(to);
@@ -628,23 +586,19 @@
                             }
                         } else {
                             // kval postcond
-                            (s.$.val() > s.o.max && s.$.val(s.o.max))
-                            || (s.$.val() < s.o.min && s.$.val(s.o.min));
+                            if((s.$.val() > s.o.max && s.$.val(s.o.max)) || (s.$.val() < s.o.min && s.$.val(s.o.min))){}
                         }
 
                     }
                 );
 
             this.$c.bind("mousewheel DOMMouseScroll", mw);
-            this.$.bind("mousewheel DOMMouseScroll", mw)
+            this.$.bind("mousewheel DOMMouseScroll", mw);
         };
 
         this.init = function () {
 
-            if (
-                this.v < this.o.min
-                || this.v > this.o.max
-            ) this.v = this.o.min;
+            if (this.v < this.o.min|| this.v > this.o.max){this.v = this.o.min;}
 
             this.$.val(this.v);
             this.w2 = this.w / 2;
@@ -654,11 +608,13 @@
             this.lineCap = this.o.lineCap;
             this.radius = this.xy - this.lineWidth / 2;
 
-            this.o.angleOffset
-            && (this.o.angleOffset = isNaN(this.o.angleOffset) ? 0 : this.o.angleOffset);
 
-            this.o.angleArc
-            && (this.o.angleArc = isNaN(this.o.angleArc) ? this.PI2 : this.o.angleArc);
+            if( this.o.angleOffset ){
+                (this.o.angleOffset = isNaN(this.o.angleOffset) ? 0 : this.o.angleOffset);
+            }
+            if( this.o.angleOffset ){
+                (this.o.angleArc = isNaN(this.o.angleArc) ? this.PI2 : this.o.angleArc);
+            }
 
             // deg to rad
             this.angleOffset = this.o.angleOffset * Math.PI / 180;
@@ -668,32 +624,10 @@
             this.startAngle = 1.5 * Math.PI + this.angleOffset;
             this.endAngle = 1.5 * Math.PI + this.angleOffset + this.angleArc;
 
-            var s = max(
-                            String(Math.abs(this.o.max)).length
-                            , String(Math.abs(this.o.min)).length
-                            , 2
-                            ) + 2;
+            var s = max( String(Math.abs(this.o.max)).length, String(Math.abs(this.o.min)).length, 2 ) + 2;
 
-            this.o.displayInput
-                && this.i.css({
-                        'width' : ((this.w / 2 + 4) >> 0) + 'px'
-                        ,'height' : ((this.w / 3) >> 0) + 'px'
-                        ,'position' : 'absolute'
-                        ,'vertical-align' : 'middle'
-                        ,'margin-top' : ((this.w / 3) >> 0) + 'px'
-                        ,'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px'
-                        ,'border' : 0
-                        ,'background' : 'none'
-                        ,'font' : this.o.fontWeight + ' ' + ((this.w / s) >> 0) + 'px ' + this.o.font
-                        ,'text-align' : 'center'
-                        ,'color' : this.o.inputColor || this.o.fgColor
-                        ,'padding' : '0px'
-                        ,'-webkit-appearance': 'none'
-                        })
-                || this.i.css({
-                        'width' : '0px'
-                        ,'visibility' : 'hidden'
-                        });
+            if(this.o.displayInput && this.i.css({ 'width' : ((this.w / 2 + 4) >> 0) + 'px','height' : ((this.w / 3) >> 0) + 'px','position' : 'absolute','vertical-align' : 'middle','margin-top' : ((this.w / 3) >> 0) + 'px','margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px','border' : 0,'background' : 'none','font' : this.o.fontWeight + ' ' + ((this.w / s) >> 0) + 'px ' + this.o.font,'text-align' : 'center','color' : this.o.inputColor || this.o.fgColor,'padding' : '0px','-webkit-appearance': 'none'
+                        })|| this.i.css({'width' : '0px','visibility' : 'hidden'})){}
         };
 
         this.change = function (v) {
@@ -707,20 +641,13 @@
 
         this.draw = function () {
 
-            var c = this.g,                 // context
-                a = this.angle(this.cv)    // Angle
-                , sat = this.startAngle     // Start angle
-                , eat = sat + a             // End angle
-                , sa, ea                    // Previous angles
-                , r = 1;
+            var c = this.g, a = this.angle(this.cv), sat = this.startAngle, eat = sat + a, sa, ea, r = 1;
 
             c.lineWidth = this.lineWidth;
 
             c.lineCap = this.lineCap;
 
-            this.o.cursor
-                && (sat = eat - this.cursorExt)
-                && (eat = eat + this.cursorExt);
+            if( this.o.cursor && (sat = eat - this.cursorExt) && (eat = eat + this.cursorExt)){}
 
             c.beginPath();
                 c.strokeStyle = this.o.bgColor;
@@ -730,9 +657,7 @@
             if (this.o.displayPrevious) {
                 ea = this.startAngle + this.angle(this.v);
                 sa = this.startAngle;
-                this.o.cursor
-                    && (sa = ea - this.cursorExt)
-                    && (ea = ea + this.cursorExt);
+                if( this.o.cursor && (sa = ea - this.cursorExt) && (ea = ea + this.cursorExt)){}
 
                 c.beginPath();
                     c.strokeStyle = this.pColor;
