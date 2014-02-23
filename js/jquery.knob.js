@@ -2,7 +2,7 @@
 /**
  * Downward compatible, touchable dial
  *
- * Version: 1.2.5 (23/01/2014)
+ * Version: 1.2.6 (23/02/2014)
  * Requires: jQuery v1.7+
  *
  * Copyright (c) 2012 Anthony Terrien
@@ -115,7 +115,15 @@
                     draw : null, // function () {}
                     change : null, // function (value) {}
                     cancel : null, // function () {}
-                    release : null // function (value) {}
+                    release : null, // function (value) {}
+
+                    // Output formatting, allows to add unit: %, ms ...
+                    format: function(v) {
+                        return v;
+                    },
+                    parse: function (v) {
+                        return parseFloat(v);
+                    }
                 }, this.o
             );
 
@@ -156,7 +164,7 @@
                 this.$.bind(
                     'change blur'
                     , function () {
-                        s.val(s._validate(s.$.val()));
+                        s.val(s._validate(s.o.parse(s.$.val())));
                     }
                 );
 
@@ -236,7 +244,7 @@
 
             this.isInit = true;
 
-            // the most important !
+            this.$.val(this.o.format(this.v));
             this._draw();
 
             return this;
@@ -504,6 +512,9 @@
         this.val = function (v, triggerRelease) {
             if (null != v) {
 
+                // reverse format
+                v = this.o.parse(v);
+
                 if (
                     triggerRelease !== false && (v != this.v) && this.rH &&
                         (this.rH(v) === false)
@@ -511,7 +522,7 @@
 
                 this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
                 this.v = this.cv;
-                this.$.val(this.v);
+                this.$.val(this.o.format(this.v));
                 this._draw();
             } else {
                 return this.v;
@@ -550,7 +561,7 @@
                     var ori = e.originalEvent
                         ,deltaX = ori.detail || ori.wheelDeltaX
                         ,deltaY = ori.detail || ori.wheelDeltaY
-                        ,v = s._validate(s.$.val())
+                        ,v = s._validate(s.o.parse(s.$.val()))
                             + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
 
                     v = max(min(v, s.o.max), s.o.min);
@@ -602,7 +613,7 @@
                             if ($.inArray(kc,[37,38,39,40]) > -1) {
                                 e.preventDefault();
 
-                                var v = parseFloat(s.$.val()) + kv[kc] * m;
+                                var v = s.o.parse(s.$.val()) + kv[kc] * m;
                                 s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
 
                                 s.change(v);
@@ -698,7 +709,7 @@
 
         this.change = function (v) {
             this.cv = v;
-            this.$.val(v);
+            this.$.val(this.o.format(v));
         };
 
         this.angle = function (v) {
