@@ -771,7 +771,7 @@
                 d.$ = $(this);
                 d.run();
             }
-        ).parent();
+        );
     };
 
 })(jQuery);
