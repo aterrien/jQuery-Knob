@@ -2,7 +2,7 @@
 /**
  * Downward compatible, touchable dial
  *
- * Version: 1.2.6 (23/02/2014)
+ * Version: 1.2.7 (23/02/2014)
  * Requires: jQuery v1.7+
  *
  * Copyright (c) 2012 Anthony Terrien
@@ -141,7 +141,7 @@
                 this.i.each(function(k) {
                     var $this = $(this);
                     s.i[k] = $this;
-                    s.v[k] = $this.val();
+                    s.v[k] = s.o.parse($this.val());
 
                     $this.bind(
                         'change blur'
@@ -158,7 +158,7 @@
 
                 // input = integer
                 this.i = this.$;
-                this.v = this.$.val();
+                this.v = this.o.parse(this.$.val());
                 (this.v === '') && (this.v = this.o.min);
 
                 this.$.bind(
