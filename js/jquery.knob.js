@@ -2,7 +2,7 @@
 /**
  * Downward compatible, touchable dial
  *
- * Version: 1.2.7 (23/02/2014)
+ * Version: 1.2.8
  * Requires: jQuery v1.7+
  *
  * Copyright (c) 2012 Anthony Terrien
@@ -750,12 +750,9 @@
                 , r = 1;
 
             c.lineWidth = this.lineWidth;
-
             c.lineCap = this.lineCap;
-
-            c.beginPath();
-                c.strokeStyle = this.o.bgColor;
-                c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
+            c.strokeStyle = this.o.bgColor;
+            c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
             c.stroke();
 
             if (this.o.displayPrevious) {
