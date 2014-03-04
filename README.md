@@ -40,6 +40,7 @@ Behaviors :
 * angleArc : arc size in degrees | default=360.
 * stopper : stop at min & max on keydown/mousewheel | default=true.
 * readOnly : disable input and events | default=false.
+* rotation : direction of progression | default=clockwise.
 
 UI :
 * cursor : display mode "cursor", cursor size could be changed passing a numeric value to the option, default width is used when passing boolean value "true" | default=gauge.

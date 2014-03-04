@@ -110,6 +110,7 @@
                     fontWeight: this.$.data('font-weight') || 'bold',
                     inline : false,
                     step : this.$.data('step') || 1,
+                    rotation: this.$.data('rotation'),
 
                     // Hooks
                     draw : null, // function () {}
@@ -128,6 +129,7 @@
             );
 
             // finalize options
+            this.o.flip = this.o.rotation === 'anticlockwise' || this.o.rotation === 'acw';
             if(!this.o.inputColor) {
                 this.o.inputColor = this.o.fgColor;
             }
@@ -537,6 +539,10 @@
                         , - (y - this.y - this.w2)
                     ) - this.angleOffset;
 
+            if (this.o.flip) {
+                a = this.angleArc - a - this.PI2;
+            }
+
             if(this.angleArc != this.PI2 && (a < 0) && (a > -0.5)) {
                 // if isset angleArc option, set to min if .5 under min
                 a = 0;
@@ -716,22 +722,36 @@
             return (v - this.o.min) * this.angleArc / (this.o.max - this.o.min);
         };
 
+        this.arc = function (v) {
+          var sa, ea;
+          v = this.angle(v);
+          if (this.o.flip) {
+              sa = this.endAngle + 0.00001;
+              ea = sa - v - 0.00001;
+          } else {
+              sa = this.startAngle - 0.00001;
+              ea = sa + v + 0.00001;
+          }
+          this.o.cursor
+              && (sa = ea - this.cursorExt)
+              && (ea = ea + this.cursorExt);
+          return {
+              s: sa,
+              e: ea,
+              d: this.o.flip && !this.o.cursor
+          };
+        };
+
         this.draw = function () {
 
             var c = this.g,                 // context
-                a = this.angle(this.cv)    // Angle
-                , sat = this.startAngle     // Start angle
-                , eat = sat + a             // End angle
-                , sa, ea                    // Previous angles
+                a = this.arc(this.cv)       // Arc
+                , pa                        // Previous arc
                 , r = 1;
 
             c.lineWidth = this.lineWidth;
 
             c.lineCap = this.lineCap;
-
-            this.o.cursor
-                && (sat = eat - this.cursorExt)
-                && (eat = eat + this.cursorExt);
 
             c.beginPath();
                 c.strokeStyle = this.o.bgColor;
@@ -739,22 +759,17 @@
             c.stroke();
 
             if (this.o.displayPrevious) {
-                ea = this.startAngle + this.angle(this.v);
-                sa = this.startAngle;
-                this.o.cursor
-                    && (sa = ea - this.cursorExt)
-                    && (ea = ea + this.cursorExt);
-
+                pa = this.arc(this.v);
                 c.beginPath();
                     c.strokeStyle = this.pColor;
-                    c.arc(this.xy, this.xy, this.radius, sa - 0.00001, ea + 0.00001, false);
+                    c.arc(this.xy, this.xy, this.radius, pa.s, pa.e, pa.d);
                 c.stroke();
                 r = (this.cv == this.v);
             }
 
             c.beginPath();
                 c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
-                c.arc(this.xy, this.xy, this.radius, sat - 0.00001, eat + 0.00001, false);
+                c.arc(this.xy, this.xy, this.radius, a.s, a.e, a.d);
             c.stroke();
         };
 
