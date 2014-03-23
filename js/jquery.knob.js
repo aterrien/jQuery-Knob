@@ -59,6 +59,7 @@
         this.isInit = false;
         this.fgColor = null; // main color
         this.pColor = null; // previous color
+        this.knobId = null; // knob id
         this.dH = null; // draw hook
         this.cH = null; // change hook
         this.eH = null; // cancel hook
@@ -105,6 +106,7 @@
                     displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
+                    knobId : this.$.data('knobid'),
                     inputColor: this.$.data('inputcolor'),
                     font: this.$.data('font') || 'Arial',
                     fontWeight: this.$.data('font-weight') || 'bold',
@@ -441,13 +443,15 @@
             if (this.o.change) this.cH = this.o.change;
             if (this.o.cancel) this.eH = this.o.cancel;
             if (this.o.release) this.rH = this.o.release;
-
+            
             if (this.o.displayPrevious) {
                 this.pColor = this.h2rgba(this.o.fgColor, "0.4");
                 this.fgColor = this.h2rgba(this.o.fgColor, "0.6");
             } else {
                 this.fgColor = this.o.fgColor;
             }
+
+            if (this.o.knobId) this.knobId = this.o.knobId;
 
             return this;
         };
