@@ -104,6 +104,7 @@
                     height : this.$.data('height') || 200,
                     displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious : this.$.data('displayprevious'),
+                    displayKnob: this.$.data('displayknob') || false,
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
                     inputColor: this.$.data('inputcolor'),
                     font: this.$.data('font') || 'Arial',
@@ -111,6 +112,8 @@
                     inline : false,
                     step : this.$.data('step') || 1,
                     rotation: this.$.data('rotation'),
+                    knobColor: this.$.data('knobcolor'),
+                    knobRadius: this.$.data('knobradius') || 0,
 
                     // Hooks
                     draw : null, // function () {}
@@ -132,6 +135,10 @@
             this.o.flip = this.o.rotation === 'anticlockwise' || this.o.rotation === 'acw';
             if(!this.o.inputColor) {
                 this.o.inputColor = this.o.fgColor;
+            }
+
+            if(!this.o.knobColor) {
+                this.o.knobColor = this.o.fgColor;
             }
 
             // routing value
@@ -669,7 +676,7 @@
             this.xy = this.w2 * this.scale;
             this.lineWidth = this.xy * this.o.thickness;
             this.lineCap = this.o.lineCap;
-            this.radius = this.xy - this.lineWidth / 2;
+            this.radius = this.xy - this.lineWidth / 2 - this.o.knobRadius * this.lineWidth / 2;
 
             this.o.angleOffset
             && (this.o.angleOffset = isNaN(this.o.angleOffset) ? 0 : this.o.angleOffset);
@@ -697,7 +704,7 @@
                         ,'height' : ((this.w / 3) >> 0) + 'px'
                         ,'position' : 'absolute'
                         ,'vertical-align' : 'middle'
-                        ,'margin-top' : ((this.w / 3) >> 0) + 'px'
+                        ,'margin-top' : (this.w / 3 + this.o.knobRadius * this.lineWidth / 3  >> 0) + 'px'
                         ,'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px'
                         ,'border' : 0
                         ,'background' : 'none'
@@ -768,6 +775,16 @@
                 c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
                 c.arc(this.xy, this.xy, this.radius, a.s, a.e, a.d);
             c.stroke();
+
+            if(this.o.displayKnob) {
+                var dx = Math.sin(a.e - a.s) * this.radius;
+                var dy = - Math.cos(a.e - a.s) * this.radius;
+
+                c.beginPath();
+                    c.arc(this.xy + dx, this.xy + dy, this.o.knobRadius * this.lineWidth, 0, 2 * Math.PI, false);
+                    c.fillStyle = this.o.knobColor;
+                c.fill();
+            }
         };
 
         this.cancel = function () {
