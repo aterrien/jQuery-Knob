@@ -105,6 +105,8 @@
                     displayInput : this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious : this.$.data('displayprevious'),
                     fgColor : this.$.data('fgcolor') || '#87CEEB',
+                    fgColorMid : this.$.data('fgcolormid') || this.$.data('fgcolor') || '#87CEEB',
+                    fgColorEnd : this.$.data('fgcolorend') || this.$.data('fgcolor') || '#87CEEB',
                     inputColor: this.$.data('inputcolor'),
                     font: this.$.data('font') || 'Arial',
                     fontWeight: this.$.data('font-weight') || 'bold',
@@ -504,6 +506,8 @@
             this.o = $.extend(
                 {
                     bgColor : this.$.data('bgcolor') || '#EEEEEE',
+                    bgColorMid : this.$.data('bgcolormid') || this.$.data('bgcolor') || '#EEEEEE',
+                    bgColorEnd : this.$.data('bgcolorend') || this.$.data('bgcolor') || '#EEEEEE',
                     angleOffset : this.$.data('angleoffset') || 0,
                     angleArc : this.$.data('anglearc') || 360,
                     inline : true
@@ -749,10 +753,27 @@
                 , pa                        // Previous arc
                 , r = 1;
 
+
+
+
+            
+
+
             c.lineWidth = this.lineWidth;
             c.lineCap = this.lineCap;
-            c.strokeStyle = this.o.bgColor;
-            c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
+            var gradient=c.createLinearGradient(this.w2,0,this.w2,this.h-this.lineWidth);
+			gradient.addColorStop("0",this.o.bgColor);
+			gradient.addColorStop("1.0",this.o.bgColorMid);
+            c.strokeStyle = gradient;
+            c.arc(this.xy, this.xy, this.radius, (this.PI2/4) - 0.00001, this.startAngle + 0.00001, true);
+            c.stroke();
+
+            c.beginPath();
+            var gradient=c.createLinearGradient(this.w2,0,this.w2,this.h-this.lineWidth);
+			gradient.addColorStop("0",this.o.bgColorEnd);
+			gradient.addColorStop("1.0",this.o.bgColorMid);
+            c.strokeStyle = gradient;
+            c.arc(this.xy, this.xy, this.radius, this.startAngle - 0.00001, (this.PI2/4) + 0.00010, true);
             c.stroke();
 
             if (this.o.displayPrevious) {
@@ -763,11 +784,31 @@
                 c.stroke();
                 r = (this.cv == this.v);
             }
+            if(this.cv > (this.o.min + this.o.max)/2){
+            	c.beginPath();
+            	var gradient=c.createLinearGradient(this.w2,0,this.w2,this.h-this.lineWidth);
+					gradient.addColorStop("0",this.o.fgColor);
+					gradient.addColorStop("1.0",this.o.fgColorMid);
+                c.strokeStyle = r ? gradient : this.fgColor ;
+                c.arc(this.xy, this.xy, this.radius,  a.s, (this.PI2/4) - 0.00001, a.d);
+	            c.stroke();
+	            c.beginPath();
+            	var gradient=c.createLinearGradient(this.w2,0,this.w2,this.h-this.lineWidth);
+					gradient.addColorStop("0",this.o.fgColorEnd);
+					gradient.addColorStop("1.0",this.o.fgColorMid);
+                c.strokeStyle = r ? gradient : this.fgColor ;
+                c.arc(this.xy, this.xy, this.radius, this.PI2 * 1.25, a.e, a.d);
+	            c.stroke();
 
-            c.beginPath();
-                c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
+            } else {
+	            c.beginPath();
+            	var gradient=c.createLinearGradient(this.w2,0,this.w2,this.h-this.lineWidth);
+					gradient.addColorStop("0",this.o.fgColor);
+					gradient.addColorStop("1.0",this.o.fgColorMid);
+                c.strokeStyle = r ? gradient : this.fgColor ;
                 c.arc(this.xy, this.xy, this.radius, a.s, a.e, a.d);
-            c.stroke();
+	            c.stroke();
+	        }
         };
 
         this.cancel = function () {
