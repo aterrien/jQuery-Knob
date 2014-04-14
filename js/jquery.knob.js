@@ -113,7 +113,7 @@
                     step : this.$.data('step') || 1,
                     rotation: this.$.data('rotation'),
                     knobColor: this.$.data('knobcolor'),
-                    knobRadius: this.$.data('knobradius') || 0,
+                    knobRadius: this.$.data('knobradius') || 0.7,
 
                     // Hooks
                     draw : null, // function () {}
