@@ -704,7 +704,7 @@
                         ,'height' : ((this.w / 3) >> 0) + 'px'
                         ,'position' : 'absolute'
                         ,'vertical-align' : 'middle'
-                        ,'margin-top' : (this.w / 3 + this.o.knobRadius * this.lineWidth / 3  >> 0) + 'px'
+                        ,'margin-top' : (this.w / 3  >> 0) + 'px'
                         ,'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px'
                         ,'border' : 0
                         ,'background' : 'none'
