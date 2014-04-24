@@ -751,8 +751,10 @@
 
             c.lineWidth = this.lineWidth;
             c.lineCap = this.lineCap;
-            c.strokeStyle = this.o.bgColor;
-            c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
+
+            c.beginPath();
+                c.strokeStyle = this.o.bgColor;
+                c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
             c.stroke();
 
             if (this.o.displayPrevious) {
