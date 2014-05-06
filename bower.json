@@ -6,7 +6,8 @@
   "license": "MIT",
   "ignore": [],
   "dependencies": {
-    "jquery": "1.7.0"
+    "jquery": ">=1.7.0"
   },
   "devDependencies": {}
 }
+
