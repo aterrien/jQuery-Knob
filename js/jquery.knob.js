@@ -119,6 +119,7 @@
                     inline : false,
                     step : this.$.data('step') || 1,
                     rotation: this.$.data('rotation'),
+                    rtl: false,
 
                     // Hooks
                     draw : null, // function () {}
@@ -700,13 +701,12 @@
                             ) + 2;
 
             this.o.displayInput
-                && this.i.css({
+                && (this.i.css({
                         'width' : ((this.w / 2 + 4) >> 0) + 'px'
                         ,'height' : ((this.w / 3) >> 0) + 'px'
                         ,'position' : 'absolute'
                         ,'vertical-align' : 'middle'
                         ,'margin-top' : ((this.w / 3) >> 0) + 'px'
-                        ,'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px'
                         ,'border' : 0
                         ,'background' : 'none'
                         ,'font' : this.o.fontWeight + ' ' + ((this.w / s) >> 0) + 'px ' + this.o.font
@@ -715,6 +715,11 @@
                         ,'padding' : '0px'
                         ,'-webkit-appearance': 'none'
                         })
+                    && (this.o.rtl
+                            ? this.i.css({ 'margin-right' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px' })
+                            : this.i.css({ 'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px' })
+                            )
+                    )
                 || this.i.css({
                         'width' : '0px'
                         ,'visibility' : 'hidden'
