@@ -715,10 +715,10 @@
                         ,'padding' : '0px'
                         ,'-webkit-appearance': 'none'
                         })
-                    && (this.o.rtl
-                            ? this.i.css({ 'margin-right' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px' })
-                            : this.i.css({ 'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px' })
-                            )
+                    && this.i.css(
+                            this.o.rtl ? 'margin-right' : 'margin-left'
+                            , '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px'
+                        )
                     )
                 || this.i.css({
                         'width' : '0px'
