@@ -54,6 +54,7 @@ UI :
 * font : font family.
 * fontWeight : font weight.
 * bgColor : background color.
+* rtl : default=false | true=displays the input properly for right-to-left languages (Arabic, Hebrew, etc.). Requires displayInput=true.
 
 Hooks
 -------
