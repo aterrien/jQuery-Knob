@@ -578,7 +578,11 @@
                         ,v = s._validate(s.o.parse(s.$.val()))
                             + (deltaX>0 || deltaY>0 ? s.o.step : deltaX<0 || deltaY<0 ? -s.o.step : 0);
 
-                    v = max(min(v, s.o.max), s.o.min);
+                    v = s.o.stopper ? max(min(v, s.o.max), s.o.min) : v;
+
+                    if (s.cH) {
+                        s.cH(v);
+                    }
 
                     s.val(v, false);
 
