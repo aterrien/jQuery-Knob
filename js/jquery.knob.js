@@ -2,7 +2,7 @@
 /**
  * Downward compatible, touchable dial
  *
- * Version: 1.2.8
+ * Version: 1.2.9
  * Requires: jQuery v1.7+
  *
  * Copyright (c) 2012 Anthony Terrien
