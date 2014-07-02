@@ -465,7 +465,7 @@
         };
 
         this._validate = function(v) {
-            return (~~ (((v < 0) ? -0.5 : 0.5) + (v/this.o.step))) * this.o.step;
+            return (Math.floor(((v < 0) ? -0.5 : 0.5) + (v/this.o.step))) * this.o.step;
         };
 
         // Abstract methods
@@ -558,8 +558,13 @@
                 a += this.PI2;
             }
 
-            ret = ~~ (0.5 + (a * (this.o.max - this.o.min) / this.angleArc))
-                    + this.o.min;
+            ret = (a * (this.o.max - this.o.min) / this.angleArc) + this.o.min;
+            
+            if(ret > 1) {
+              ret = ~~ (0.5 + ret);
+            } else {
+              ret = Math.floor(ret * 100) / 100;
+            }
 
             this.o.stopper && (ret = max(min(ret, this.o.max), this.o.min));
 
@@ -580,7 +585,7 @@
 
                     v = max(min(v, s.o.max), s.o.min);
 
-                    s.val(v, false);
+                    s.val(s._validate(v), false);
 
                     if(s.rH) {
                         // Handle mousewheel stop
@@ -615,7 +620,6 @@
                         kval = parseInt(String.fromCharCode(kc));
 
                         if (isNaN(kval)) {
-
                             (kc !== 13)         // enter
                             && (kc !== 8)       // bs
                             && (kc !== 9)       // tab
@@ -630,7 +634,7 @@
                                 var v = s.o.parse(s.$.val()) + kv[kc] * m;
                                 s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
 
-                                s.change(v);
+                                s.change(s._validate(v));
                                 s._draw();
 
                                 // long time keydown speed-up
