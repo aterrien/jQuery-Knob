@@ -2,7 +2,7 @@
 /**
  * Downward compatible, touchable dial
  *
- * Version: 1.2.9
+ * Version: 1.2.10
  * Requires: jQuery v1.7+
  *
  * Copyright (c) 2012 Anthony Terrien
@@ -797,5 +797,5 @@
             }
         ).parent();
     };
-    
+
 }));
