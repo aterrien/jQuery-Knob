@@ -156,7 +156,7 @@
                         function () {
                             var val = {};
                             val[k] = $this.val();
-                            s.val(val);
+                            s.val(s._validate(val));
                         }
                     );
                 });
@@ -452,7 +452,8 @@
         };
 
         this._validate = function (v) {
-            return (~~ (((v < 0) ? -0.5 : 0.5) + (v/this.o.step))) * this.o.step;
+            var val = (~~ (((v < 0) ? -0.5 : 0.5) + (v/this.o.step))) * this.o.step;
+            return Math.round(val * 100) / 100;
         };
 
         // Abstract methods
@@ -549,7 +550,7 @@
                 a += this.PI2;
             }
 
-            ret = ~~ (0.5 + (a * (this.o.max - this.o.min) / this.angleArc)) + this.o.min;
+            ret = (a * (this.o.max - this.o.min) / this.angleArc) + this.o.min;
 
             this.o.stopper && (ret = max(min(ret, this.o.max), this.o.min));
 
@@ -635,7 +636,7 @@
                                 var v = s.o.parse(s.$.val()) + kv[kc] * m;
                                 s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
 
-                                s.change(v);
+                                s.change(s._validate(v));
                                 s._draw();
 
                                 // long time keydown speed-up
