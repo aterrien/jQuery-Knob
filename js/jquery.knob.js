@@ -670,8 +670,8 @@
         };
 
         this.init = function () {
-            if (this.v < this.o.min
-                || this.v > this.o.max) { this.v = this.o.min; }
+            if (this.v < this.o.min) {this.v = this.o.min}
+            if (this.v > this.o.max) {this.v = this.o.max}
 
             this.$.val(this.v);
             this.w2 = this.w / 2;
