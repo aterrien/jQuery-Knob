@@ -189,7 +189,7 @@
             this.$div = $('<div style="'
                 + (this.o.inline ? 'display:inline;' : '')
                 + 'width:' + this.o.width + 'px;height:' + this.o.height + 'px;'
-                + '"></div>');
+                + '" dir="ltr"></div>');
 
             this.$.wrap(this.$div).before(this.$c);
             this.$div = this.$.parent();
