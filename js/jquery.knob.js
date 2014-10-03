@@ -11,7 +11,10 @@
  * Thanks to vor, eskimoblood, spiffistan, FabrizioC
  */
 (function (factory) {
-    if (typeof define === 'function' && define.amd) {
+    if (typeof exports === 'object') {
+        // CommonJS
+        module.exports = factory(require('jquery'));
+    } else if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['jquery'], factory);
     } else {
