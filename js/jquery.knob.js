@@ -79,6 +79,7 @@
         this.relativeWidth = false;
         this.relativeHeight = false;
         this.$div = null; // component div
+        this.scrubbing = false; // the user is currently scrubbing the dial
 
         this.run = function () {
             var cf = function (e, conf) {
@@ -339,7 +340,9 @@
 
             // First touch
             touchMove(e);
-
+            // scrubbing has started
+            s.scrubbing = true;
+            
             // Touch events listeners
             k.c.d
                 .bind("touchmove.k", touchMove)
@@ -347,6 +350,8 @@
                     "touchend.k",
                     function () {
                         k.c.d.unbind('touchmove.k touchend.k');
+                        // scrubbing has ended
+                        s.scrubbing = false;
                         s.val(s.cv);
                     }
                 );
@@ -368,6 +373,8 @@
 
             // First click
             mouseMove(e);
+            // scrubbing has started
+            s.scrubbing = true;
 
             // Mouse events listeners
             k.c.d
@@ -383,12 +390,17 @@
                                 return;
 
                             s.cancel();
+                            
+                            // scrubbing has ended
+                            s.scrubbing = false;
                         }
                     }
                 )
                 .bind(
                     "mouseup.k",
                     function (e) {
+                        // scrubbing has ended
+                        s.scrubbing = false;
                         k.c.d.unbind('mousemove.k mouseup.k keyup.k');
                         s.val(s.cv);
                     }
