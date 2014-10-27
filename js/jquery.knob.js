@@ -176,7 +176,13 @@
                         s.val(s._validate(s.o.parse(s.$.val())));
                     }
                 );
-
+                
+                this.$.bind(
+                    'update',
+                    function () {
+                        s.val(s._validate(s.o.parse(s.$.val())), false);
+                    }
+                );
             }
 
             !this.o.displayInput && this.$.hide();
