@@ -598,6 +598,9 @@
 
                     v = max(min(v, s.o.max), s.o.min);
 
+                    // trigger change handler
+                    if (s.cH && (s.cH(v) === false)) return;
+                    
                     s.val(v, false);
 
                     if (s.rH) {
