@@ -541,9 +541,17 @@
                     && v != this.v
                     && this.rH
                     && this.rH(v) === false) { return; }
+                    
+                if(!this.scrubbing)
+				{
+					this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
+					this.v = this.cv;
+				}
+				else if(triggerRelease === false)
+				{
+					this.v = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
+				}
 
-                this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
-                this.v = this.cv;
                 this.$.val(this.o.format(this.v));
                 this._draw();
             } else {
