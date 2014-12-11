@@ -2,167 +2,267 @@
 <html>
     <head>
         <title>jQuery Knob demo</title>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-        <script src="js/jquery.knob.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
+        <script src="dist/jquery.knob.min.js"></script>
         <script>
-            $(function() {
-                $(".knob").knob();
+            $(function($) {
+
+                $(".knob").knob({
+                    change : function (value) {
+                        //console.log("change : " + value);
+                    },
+                    release : function (value) {
+                        //console.log(this.$.attr('value'));
+                        console.log("release : " + value);
+                    },
+                    cancel : function () {
+                        console.log("cancel : ", this);
+                    },
+                    /*format : function (value) {
+                        return value + '%';
+                    },*/
+                    draw : function () {
+
+                        // "tron" case
+                        if(this.$.data('skin') == 'tron') {
+
+                            this.cursorExt = 0.3;
+
+                            var a = this.arc(this.cv)  // Arc
+                                , pa                   // Previous arc
+                                , r = 1;
+
+                            this.g.lineWidth = this.lineWidth;
+
+                            if (this.o.displayPrevious) {
+                                pa = this.arc(this.v);
+                                this.g.beginPath();
+                                this.g.strokeStyle = this.pColor;
+                                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, pa.s, pa.e, pa.d);
+                                this.g.stroke();
+                            }
+
+                            this.g.beginPath();
+                            this.g.strokeStyle = r ? this.o.fgColor : this.fgColor ;
+                            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, a.s, a.e, a.d);
+                            this.g.stroke();
+
+                            this.g.lineWidth = 2;
+                            this.g.beginPath();
+                            this.g.strokeStyle = this.o.fgColor;
+                            this.g.arc( this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                            this.g.stroke();
+
+                            return false;
+                        }
+                    }
+                });
 
                 // Example of infinite knob, iPod click wheel
-                var val,up=0,down=0,i=0
+                var v, up=0,down=0,i=0
                     ,$idir = $("div.idir")
                     ,$ival = $("div.ival")
                     ,incr = function() { i++; $idir.show().html("+").fadeOut(); $ival.html(i); }
                     ,decr = function() { i--; $idir.show().html("-").fadeOut(); $ival.html(i); };
                 $("input.infinite").knob(
                                     {
-                                    'min':0
-                                    ,'max':20
-                                    ,'stopper':false
-                                    ,'change':function(v){
-                                                if(val>v){
-                                                    if(up){
-                                                        decr();
-                                                        up=0;
-                                                    }else{up=1;down=0;}
-                                                }else{
-                                                    if(down){
-                                                        incr();
-                                                        down=0;
-                                                    }else{down=1;up=0;}
+                                    min : 0
+                                    , max : 20
+                                    , stopper : false
+                                    , change : function () {
+                                                    if(v > this.cv){
+                                                        if(up){
+                                                            decr();
+                                                            up=0;
+                                                        }else{up=1;down=0;}
+                                                    } else {
+                                                        if(v < this.cv){
+                                                            if(down){
+                                                                incr();
+                                                                down=0;
+                                                            }else{down=1;up=0;}
+                                                        }
+                                                    }
+                                                    v = this.cv;
                                                 }
-                                                val=v;
-                                            }
-                                    }
-                                    );
-
-
-                // Automatic mode
-                /*var autoVal = 0
-                    ,timer = setInterval(function() {
-                        $(".knob").each(
-                                function(){
-                                    $(this)
-                                        .val(Math.round(Math.sin(autoVal)*100))
-                                        .trigger('change');
-                                }
-                            );
-                        autoVal++;
-                    }, 100);*/
-
-                 // Configure
-                 /*$(".knob").val(25).trigger(
-                            "configure",
-                            {"min":10, "max":40, "fgColor":"#FF0000", "skin":"tron", "cursor":true}
-                            );*/
-
-                 // Change example
-                 /*$(".knob").knob(
-                                {
-                                'change':function(e){
-                                        console.log(e);
-                                    }
-                                }
-                            )
-                           .val(79)
-                           ;*/
+                                    });
             });
         </script>
         <style>
-            h2{color:#87CEEB;font-family:'Georgia';}
+            body{
+              padding: 0;
+              margin: 0px 50px;
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-weight: 300;
+              text-rendering: optimizelegibility;
+            }
+            p{font-size: 30px; line-height: 30px}
+            div.demo{text-align: center; width: 280px; float: left}
+            div.demo > p{font-size: 20px}
         </style>
     </head>
     <body>
-        <div style="float:left;width:100%;font-family:'Georgia';font-size:70px;font-weight:bold;color:#87CEEB;letter-spacing:-5px">
-            Knob demo <a href="http://flattr.com/thing/674900/jQuery-Knob" target="_blank">
-            <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
+        <div style="width:100%;font-size:40px;letter-spacing:-8px;line-height:40px;">
+            <h1>jQuery Knob</h1>
         </div>
-        <div style="float:left;width:300px;height:300px;background-color:#222;color:#FFF;padding:20px">
-            <pre>
-data-width="75"
-data-fgColor="#fff"
-data-skin="tron"
-data-displayPrevious=true
-            </pre>
-            <input class="knob" data-width="75" data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" data-cursor=true value="75">
+        <div>
+            <p>Nice, downward compatible, touchable, jQuery dial. <a href="http://flattr.com/thing/674900/jQuery-Knob" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></p>
+            <p style="font-size: 20px">* implemented interactions : mouse click and wheel mouse, keyboard (on focus) and fingers (touch events)</p>
         </div>
-        <div style="float:left;width:300px;height:300px;background-color:#222;color:#FFF;padding:20px">
-            <pre>
-data-width="150"
-data-fgColor="#fff"
-data-skin="tron"
-data-thickness=".2"
-data-displayPrevious=true
-            </pre>
-            <input class="knob" data-width="150" data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" data-thickness=".2" value="75">
-        </div>
-        <div style="float:left;width:300px;height:300px;background-color:#222;color:#FFF;padding:20px">
-            <pre>
-data-width="150"
-data-fgColor="#fff"
-data-skin="tron"
-data-thickness=".1"
-            </pre>
-            <input class="knob" data-width="150" data-fgColor="#C0ffff" data-skin="tron" data-thickness=".1" value="35">
-        </div>
-        <div style="clear:both"></div>
-        <div style="float:left;width:300px;height:300px;padding:20px">
+        <div class="demo">
+            <p>&#215; Disable display input</p>
             <pre>
 data-width="100"
 data-displayInput=false
             </pre>
             <input class="knob" data-width="100" data-displayInput=false value="35">
         </div>
-        <div style="float:left;width:300px;height:300px;padding:20px">
+        <div class="demo">
+            <p>&#215; 'cursor' mode</p>
             <pre>
-data-width="200"
+data-width="150"
 data-cursor=true
+data-thickness=.3
+data-fgColor="#222222"
             </pre>
-            <input class="knob" data-width="200" data-cursor=true value="29">
+            <input class="knob" data-width="150" data-cursor=true data-fgColor="#222222" data-thickness=.3 value="29">
         </div>
-        <div style="float:left;width:300px;height:300px;padding:20px">
+        <div class="demo" >
+            <p>&#215; Display previous value</p>
             <pre>
-data-width="200"
+data-displayPrevious=true
 data-min="-100"
-data-cgColor="#A9EFFD"
-data-displayPrevious=true
-data-angleOffset="90"
             </pre>
-            <input class="knob"data-width="200" data-min="-100" data-angleOffset="90" data-displayPrevious=true value="44">
-        </div>
-        <div style="float:left;width:300px;height:300px;padding:20px">
-            <pre>
-data-width="200"
-data-min="0"
-data-max="100"
-data-cgColor="#A9EFFD"
-data-displayPrevious=true
-data-angleOffset="-135"
-data-angleArc="270"
-            </pre>
-            <input class="knob"data-width="200" data-min="0" data-max="100" data-angleOffset="-135" data-angleArc="270" data-displayPrevious=true value="44">
+            <input class="knob" data-width="200" data-min="-100" data-displayPrevious=true value="44">
         </div>
         <div style="clear:both"></div>
-        <div style="float:left;width:300px;height:320px;padding:20px">
-            <h2>Ticks</h2>
+        <div class="demo">
+            <p>&#215; Angle offset</p>
             <pre>
-data-cursor=true
-data-skin="tron"
-data-ticks="8"
+data-angleOffset=90
+data-linecap=round
             </pre>
-            <input class="knob" data-cursor=true data-skin="tron" data-ticks="8" value="35">
+            <input class="knob" data-angleOffset=90 data-linecap=round value="35">
         </div>
-        <div style="float:left;width:300px;height:320px;padding:20px">
-            <h2>Readonly</h2>
+        <div class="demo">
+            <p>&#215; Angle offset and arc</p>
             <pre>
+data-fgColor="#66CC66"
+data-angleOffset=-125
+data-angleArc=250
+data-rotation=anticlockwise
+            </pre>
+            <input class="knob" data-angleOffset=-125 data-angleArc=250 data-fgColor="#66EE66" data-rotation="anticlockwise" value="35">
+        </div>
+        <div class="demo" >
+            <p>&#215; 4-digit, step 0.1</p>
+            <pre>
+data-step=".1"
+data-min="-10000"
+data-max="10000"
+value="0"
+data-displayPrevious=true
+            </pre>
+            <input class="knob" data-min="-10000" data-displayPrevious=true data-max="10000" data-step=".1" value="0">
+        </div>
+        <div style="clear:both"></div>
+        <div style="text-align: center">
+            <p style="font-size: 20px">&#215; Overloaded 'draw' method</p>
+        </div>
+        <div style="background-color: #222; height: 340px">
+            <div class="demo" style="background-color:#222; color:#FFF;">
+                <pre>
+    data-width="75"
+    data-fgColor="#ffec03"
+    data-skin="tron"
+    data-thickness=".2"
+    data-displayPrevious=true
+                </pre>
+                <input class="knob" data-width="75" data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" data-cursor=true value="75" data-thickness=".2">
+            </div>
+            <div class="demo" style="background-color:#222; color:#FFF;">
+                <pre>
+    data-width="150"
+    data-fgColor="#ffec03"
+    data-skin="tron"
+    data-thickness=".2"
+    data-displayPrevious=true
+                </pre>
+                <input class="knob" data-width="150" data-displayPrevious=true data-fgColor="#ffec03" data-skin="tron" data-thickness=".2" value="75">
+            </div>
+            <div class="demo" style="background-color:#222; color:#FFF;">
+                <pre>
+    data-width="150"
+    data-fgColor="#C0ffff"
+    data-skin="tron"
+    data-thickness=".1"
+    data-angleOffset="180"
+                </pre>
+                <input class="knob" data-width="150" data-angleOffset="180" data-fgColor="#C0ffff" data-skin="tron" data-thickness=".1" value="35">
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <div class="demo" style="width:100%">
+            <p>&#215; Responsive</p>
+            <pre>
+data-width="80%"
+            </pre>
+            <div style="width: 30%; border: 3px dashed; margin-bottom: 20px">
+                <i>
+                    Current div width is 30% of window width.<br>
+                    Knob width is 80% of current div.<br>
+                    Knob width is 80% of 30% of window width.<br>
+                    Test resizing window.
+                </i>
+                <br>
+                <br>
+                <input class="knob" data-width="80%" value="35">
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <script>
+        function clock() {
+            var $s = $(".second"),
+                $m = $(".minute"),
+                $h = $(".hour");
+                d = new Date(),
+                s = d.getSeconds(),
+                m = d.getMinutes(),
+                h = d.getHours();
+            $s.val(s).trigger("change");
+            $m.val(m).trigger("change");
+            $h.val(h).trigger("change");
+            setTimeout("clock()", 1000);
+        }
+        clock();
+        </script>
+        <div class="demo" style="color:#EEE;background:#222;height:420px;width:100%">
+            <p>&#215; Superpose (clock)</p>
+            <div style="position:relative;width:350px;margin:auto">
+                <div style="position:absolute;left:10px;top:10px">
+                    <input class="knob hour" data-min="0" data-max="24" data-bgColor="#333" data-fgColor="#ffec03" data-displayInput=false data-width="300" data-height="300" data-thickness=".3">
+                </div>
+                <div style="position:absolute;left:60px;top:60px">
+                    <input class="knob minute" data-min="0" data-max="60" data-bgColor="#333" data-displayInput=false data-width="200" data-height="200" data-thickness=".45">
+                </div>
+                <div style="position:absolute;left:110px;top:110px">
+                    <input class="knob second" data-min="0" data-max="60" data-bgColor="#333" data-fgColor="rgb(127, 255, 0)" data-displayInput=false data-width="100" data-height="100" data-thickness=".3">
+                </div>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <div class="demo">
+            <p>&#215; Readonly</p>
+            <pre>
+readonly (or data-readOnly=true)
 data-thickness=".4"
 data-fgColor="chartreuse"
-data-readOnly=true
             </pre>
-            <input class="knob" data-fgColor="chartreuse" data-thickness=".4" data-readOnly=true value="22">
+            <input class="knob" data-fgColor="chartreuse" data-thickness=".4" readonly value="22">
         </div>
-        <div style="float:left;width:300px;height:320px;padding:20px">
-            <h2>Knobify!</h2>
+        <div class="demo">
+            <p>&#215; Dynamic</p>
             <pre>
 data-width="200"
             </pre>
@@ -175,10 +275,9 @@ data-cursor=true
             <input type="button" onclick="$('.knob-dyn2').knob();" value="knobify!">
             <input type="text" class="knob-dyn2" data-width="50" data-thickness=".4" value="56">
         </div>
-        <div style="clear:both"></div>
-        <div style="float:left;height:440px;width:420px;padding:20px">
-            <h2>Infinite / iPod click wheel</h2>
-            <div style="float:left;width:200px;height:300px;padding:20px;background-color:#EEEEEE;text-align:center;">
+        <div class="demo" style="height:440px;width:300px">
+            <p>&#215; Infinite || iPod click wheel</p>
+            <div style="float:left;width:180px;height:320px;padding:20px;background-color:#EEEEEE;text-align:center;">
                 <pre>
 data-width="150"
 data-cursor=true
@@ -188,27 +287,17 @@ data-bgColor="#FFFFFF"
 data-displayInput="false"
 + some code
                 </pre>
-                <input class="infinite" data-width="150" data-thickness=".5" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF" data-displayInput="false" data-cursor=true>
+                <input class="infinite" value="0" data-width="150" data-thickness=".5" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF" data-displayInput="false" data-cursor=true>
             </div>
             <div style="float:left;margin-top:200px;">
-                <div class="ival" style="width:100px;text-align:center;font-size:50px;color:#AAA">0</div>
-                <div class="idir" style="width:100px;text-align:center;font-size:50px;"></div>
+                <div class="ival" style="width:80px;text-align:center;font-size:50px;color:#AAA">0</div>
+                <div class="idir" style="width:80px;text-align:center;font-size:50px;"></div>
             </div>
         </div>
-        <div style="border: 0 none; position: absolute; right: 0; top: 0;"><a href="https://github.com/aterrien" target="_blank"><img src="../i/github-ribbon.png" style="border: 0 none;"></a></div>
-        <script type="text/javascript">
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-3008949-6']);
-            _gaq.push(['_trackPageview']);
-        </script>
-        <script type="text/javascript">
-            (function() {
-                    var ga = document.createElement('script');
-                    ga.type = 'text/javascript';
-                    ga.async = true;
-                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
-            })();
-        </script>
+        <div style="clear:both"></div>
+        <div style="margin-top:30px;text-align:center">
+            <img src="https://raw.github.com/aterrien/jQuery-Knob/master/secretplan.jpg">
+            <p style="font-size:20px;">jQuery Knob is &copy; 2012 Anthony Terrien - MIT License</p>
+        </div>
     </body>
 </html>
