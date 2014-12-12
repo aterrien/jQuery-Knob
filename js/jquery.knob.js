@@ -184,12 +184,13 @@
             // adds needed DOM elements (canvas, div)
             this.$c = $(document.createElement('canvas')).attr({
                 width: this.o.width,
-                height: this.o.height
+                height: this.o.height,
+                class: "knobCanvas"
             });
 
             // wraps all elements in a div
             // add to DOM before Canvas init is triggered
-            this.$div = $('<div style="'
+            this.$div = $('<div class="knobContainer" style="'
                 + (this.o.inline ? 'display:inline;' : '')
                 + 'width:' + this.o.width + 'px;height:' + this.o.height + 'px;'
                 + '"></div>');
