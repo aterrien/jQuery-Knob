@@ -581,6 +581,8 @@
 
                     v = max(min(v, s.o.max), s.o.min);
 
+					if (s.cH && s.cH(v) === false) return;
+
                     s.val(v, false);
 
                     if (s.rH) {
@@ -640,6 +642,8 @@
                                 var v = s.o.parse(s.$.val()) + kv[kc] * m;
                                 s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
 
+								if (s.cH && s.cH(v) === false) return;
+
                                 s.change(s._validate(v));
                                 s._draw();
 
@@ -647,6 +651,11 @@
                                 to = window.setTimeout(function () {
                                     m *= 2;
                                 }, 30);
+                            }
+                            else if (kc == 13) {
+                                var v = s.o.parse(s.$.val());
+                                s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
+								if (s.cH && s.cH(v) === false) return;
                             }
                         }
                     }
