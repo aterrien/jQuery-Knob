@@ -709,10 +709,10 @@
             this.endAngle = 1.5 * Math.PI + this.angleOffset + this.angleArc;
 
             var s = max(
-                String(Math.abs(this.o.max)).length,
-                String(Math.abs(this.o.min)).length,
-                2
-            ) + 2;
+                this.o.format(this.o.max).length || String(Math.abs(this.o.max)).length + 2,
+                this.o.format(this.o.min).length || String(Math.abs(this.o.min)).length + 2,
+                4
+            );
 
             this.o.displayInput
                 && this.i.css({
