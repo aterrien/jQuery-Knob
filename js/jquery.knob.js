@@ -60,6 +60,7 @@
         this.g = null; // deprecated 2D graphics context for 'pre-rendering'
         this.v = null; // value ; mixed array or integer
         this.cv = null; // change value ; not commited value
+        this.tv = null; // tick value ; integer
         this.x = 0; // canvas x position
         this.y = 0; // canvas y position
         this.w = 0; // canvas width
@@ -126,6 +127,7 @@
                     change: null, // function (value) {}
                     cancel: null, // function () {}
                     release: null, // function (value) {}
+                    tick: null, // function (value) {}
 
                     // Output formatting, allows to add unit: %, ms ...
                     format: function(v) {
@@ -159,13 +161,12 @@
                         function () {
                             var val = {};
                             val[k] = $this.val();
-                            s.val(s._validate(val));
+                            s.change(s._validate(val));
                         }
                     );
                 });
                 this.$.find('legend').remove();
             } else {
-
                 // input = integer
                 this.i = this.$;
                 this.v = this.o.parse(this.$.val());
@@ -173,7 +174,7 @@
                 this.$.bind(
                     'change blur',
                     function () {
-                        s.val(s._validate(s.o.parse(s.$.val())));
+                        s.change(s._validate(s.o.parse(s.$.val())));
                     }
                 );
 
@@ -467,6 +468,7 @@
         this.val = function (v) {}; // on release
         this.xy2val = function (x, y) {}; //
         this.draw = function () {}; // on change / on release
+        this.tick = function () {}; // on value change
         this.clear = function () { this._clear(); };
 
         // Utils
@@ -525,6 +527,7 @@
                     && this.rH(v) === false) { return; }
 
                 this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
+                
                 this.v = this.cv;
                 this.$.val(this.o.format(this.v));
                 this._draw();
@@ -726,10 +729,19 @@
         };
 
         this.change = function (v) {
-            this.cv = v;
+            this.cv = v; 
+            this.tick(v);
             this.$.val(this.o.format(v));
         };
-
+        this.tick = function (v) {
+            var fv = this.o.format(v);     
+            if (this.tv != fv) {
+              this.tv = fv;   
+              if (typeof(this.o.tick) === typeof(Function)){
+                this.o.tick(fv);
+              }
+            }   
+        }
         this.angle = function (v) {
             return (v - this.o.min) * this.angleArc / (this.o.max - this.o.min);
         };
