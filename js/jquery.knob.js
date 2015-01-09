@@ -191,8 +191,8 @@
             // add to DOM before Canvas init is triggered
             this.$div = $('<div style="'
                 + (this.o.inline ? 'display:inline;' : '')
-                + 'width:' + this.o.width + 'px;height:' + this.o.height + 'px;'
-                + '"></div>');
+                + 'width: 100%; height: 100%'
+                + '"><div style="direction:ltr;margin:auto"></div></div>');
 
             this.$.wrap(this.$div).before(this.$c);
             this.$div = this.$.parent();
