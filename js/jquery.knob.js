@@ -160,6 +160,9 @@
                             var val = {};
                             val[k] = $this.val();
                             s.val(s._validate(val));
+                            var v = s._validate(val);
+                            if (s.cH && s.cH(v) === false) return;
+                            s.val(v);
                         }
                     );
                 });
@@ -173,7 +176,9 @@
                 this.$.bind(
                     'change blur',
                     function () {
-                        s.val(s._validate(s.o.parse(s.$.val())));
+                        var v = s._validate(s.o.parse(s.$.val()));
+                        if (s.cH && s.cH(v) === false) return;
+                        s.val(v);
                     }
                 );
 
