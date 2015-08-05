@@ -640,6 +640,7 @@
                                 s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
 
                                 s.change(s._validate(v));
+                                s.cH(v);
                                 s._draw();
 
                                 // long time keydown speed-up
