@@ -335,12 +335,12 @@
             touchMove(e);
 
             // Touch events listeners
-            k.c.d
+            $(this.c.canvas)
                 .bind("touchmove.k", touchMove)
                 .bind(
                     "touchend.k",
                     function () {
-                        k.c.d.unbind('touchmove.k touchend.k');
+                        $(this).unbind('touchmove.k touchend.k');
                         s.val(s.cv);
                     }
                 );
@@ -364,14 +364,14 @@
             mouseMove(e);
 
             // Mouse events listeners
-            k.c.d
+            $(this.c.canvas)
                 .bind("mousemove.k", mouseMove)
                 .bind(
                     // Escape key cancel current change
                     "keyup.k",
                     function (e) {
                         if (e.keyCode === 27) {
-                            k.c.d.unbind("mouseup.k mousemove.k keyup.k");
+                            $(this).unbind("mouseup.k mousemove.k keyup.k");
 
                             if (s.eH && s.eH() === false)
                                 return;
@@ -383,7 +383,7 @@
                 .bind(
                     "mouseup.k",
                     function (e) {
-                        k.c.d.unbind('mousemove.k mouseup.k keyup.k');
+                        $(this).unbind('mousemove.k mouseup.k keyup.k');
                         s.val(s.cv);
                     }
                 );
