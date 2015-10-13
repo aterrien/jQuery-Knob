@@ -506,7 +506,7 @@
 
         this.extend = function () {
             this.o = $.extend({
-				inactiveColor: this.$.data('inactiveColor') || "none",
+                inactiveColor: this.$.data('inactiveColor') || "none",
                 bgColor: this.$.data('bgcolor') || '#EEEEEE',
                 angleOffset: this.$.data('angleoffset') || 0,
                 angleArc: this.$.data('anglearc') || 360,
@@ -765,8 +765,7 @@
             c.lineWidth = this.lineWidth;
             c.lineCap = this.lineCap;
 
-			/* draw inactive background */
-			if( this.o.inactiveColor !== "none" ) {
+            if( this.o.inactiveColor !== "none" ) {    // draw inactive background
                 c.beginPath();
                     c.strokeStyle = this.o.inactiveColor;
                     c.arc(this.xy, this.xy, this.radius, 0, 2*Math.PI, true);
