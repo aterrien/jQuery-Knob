@@ -770,7 +770,7 @@
                     c.strokeStyle = this.o.inactiveColor;
                     c.arc(this.xy, this.xy, this.radius, 0, 2*Math.PI, true);
                 c.stroke();
-			}
+            }
 
             if (this.o.bgColor !== "none") {
                 c.beginPath();
