@@ -297,7 +297,7 @@
             }
 
             return this;
-        }
+        };
 
         this._draw = function () {
 
