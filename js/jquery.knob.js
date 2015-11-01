@@ -574,7 +574,7 @@
                         v = s._validate(s.o.parse(s.$.val()))
                             + (
                                 deltaX > 0 || deltaY > 0
-                                ? s.o.step
+                                ? +s.o.step
                                 : deltaX < 0 || deltaY < 0 ? -s.o.step : 0
                               );
 
