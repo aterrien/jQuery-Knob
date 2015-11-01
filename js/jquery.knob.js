@@ -571,12 +571,12 @@
                     var ori = e.originalEvent,
                         deltaX = ori.detail || ori.wheelDeltaX,
                         deltaY = ori.detail || ori.wheelDeltaY,
-                        v = s._validate(s.o.parse(s.$.val()))
+                        v = s._validate(s.o.parse(s.$.val())
                             + (
                                 deltaX > 0 || deltaY > 0
                                 ? +s.o.step
                                 : deltaX < 0 || deltaY < 0 ? -s.o.step : 0
-                              );
+                              ));
 
                     v = max(min(v, s.o.max), s.o.min);
 
