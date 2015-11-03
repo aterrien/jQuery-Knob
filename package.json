@@ -1,6 +1,6 @@
 {
   "name": "jquery-knob",
-  "version": "1.2.11",
+  "version": "1.2.12",
   "description": "Nice, downward compatible, touchable, jQuery dial",
   "main": "dist/jquery.knob.min.js",
   "scripts": {
