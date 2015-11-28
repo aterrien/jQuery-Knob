@@ -580,6 +580,8 @@
 
                     v = max(min(v, s.o.max), s.o.min);
 
+                    s.cH(v);
+
                     s.val(v, false);
 
                     if (s.rH) {
@@ -639,6 +641,7 @@
                                 var v = s.o.parse(s.$.val()) + kv[kc] * m;
                                 s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
 
+                                s.cH(v);
                                 s.change(s._validate(v));
                                 s._draw();
 
