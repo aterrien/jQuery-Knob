@@ -79,6 +79,7 @@
         this.relativeWidth = false;
         this.relativeHeight = false;
         this.$div = null; // component div
+        this.scrubbing = false; // the user is currently scrubbing the dial
 
         this.run = function () {
             var cf = function (e, conf) {
@@ -176,7 +177,13 @@
                         s.val(s._validate(s.o.parse(s.$.val())));
                     }
                 );
-
+                
+                this.$.bind(
+                    'update',
+                    function () {
+                        s.val(s._validate(s.o.parse(s.$.val())), false);
+                    }
+                );
             }
 
             !this.o.displayInput && this.$.hide();
@@ -333,7 +340,9 @@
 
             // First touch
             touchMove(e);
-
+            // scrubbing has started
+            s.scrubbing = true;
+            
             // Touch events listeners
             k.c.d
                 .bind("touchmove.k", touchMove)
@@ -341,6 +350,8 @@
                     "touchend.k",
                     function () {
                         k.c.d.unbind('touchmove.k touchend.k');
+                        // scrubbing has ended
+                        s.scrubbing = false;
                         s.val(s.cv);
                     }
                 );
@@ -362,6 +373,8 @@
 
             // First click
             mouseMove(e);
+            // scrubbing has started
+            s.scrubbing = true;
 
             // Mouse events listeners
             k.c.d
@@ -377,12 +390,17 @@
                                 return;
 
                             s.cancel();
+                            
+                            // scrubbing has ended
+                            s.scrubbing = false;
                         }
                     }
                 )
                 .bind(
                     "mouseup.k",
                     function (e) {
+                        // scrubbing has ended
+                        s.scrubbing = false;
                         k.c.d.unbind('mousemove.k mouseup.k keyup.k');
                         s.val(s.cv);
                     }
@@ -523,9 +541,17 @@
                     && v != this.v
                     && this.rH
                     && this.rH(v) === false) { return; }
+                    
+                if(!this.scrubbing)
+				{
+					this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
+					this.v = this.cv;
+				}
+				else if(triggerRelease === false)
+				{
+					this.v = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
+				}
 
-                this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
-                this.v = this.cv;
                 this.$.val(this.o.format(this.v));
                 this._draw();
             } else {
@@ -580,6 +606,9 @@
 
                     v = max(min(v, s.o.max), s.o.min);
 
+                    // trigger change handler
+                    if (s.cH && (s.cH(v) === false)) return;
+                    
                     s.val(v, false);
 
                     if (s.rH) {
