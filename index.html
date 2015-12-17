@@ -4,7 +4,7 @@
         <title>jQuery Knob demo</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
-        <script src="dist/jquery.knob.min.js"></script>
+        <script src="js/jquery.knob.js"></script>
         <script>
             $(function($) {
 
@@ -15,6 +15,9 @@
                     release : function (value) {
                         //console.log(this.$.attr('value'));
                         console.log("release : " + value);
+                    },
+                    tick : function (value) {
+                        console.log("tick : " + value);
                     },
                     cancel : function () {
                         console.log("cancel : ", this);
