@@ -701,6 +701,7 @@
             var s = max(
                 String(Math.abs(this.o.max)).length,
                 String(Math.abs(this.o.min)).length,
+                String(Math.abs(this.o.step)).length,
                 2
             ) + 2;
 
