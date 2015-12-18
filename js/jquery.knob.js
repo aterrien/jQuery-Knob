@@ -79,6 +79,7 @@
         this.relativeWidth = false;
         this.relativeHeight = false;
         this.$div = null; // component div
+        this.scrubbing = false; // the user is currently scrubbing the dial
 
         this.run = function () {
             var cf = function (e, conf) {
@@ -176,7 +177,13 @@
                         s.val(s._validate(s.o.parse(s.$.val())));
                     }
                 );
-
+                
+                this.$.bind(
+                    'update',
+                    function () {
+                        s.val(s._validate(s.o.parse(s.$.val())), false);
+                    }
+                );
             }
 
             !this.o.displayInput && this.$.hide();
@@ -327,13 +334,21 @@
                 s.change(s._validate(v));
                 s._draw();
             };
+			
+			if(!s.bounds(e))
+        	{
+        		s._propagate(e);
+        		return;
+        	}
 
             // get touches index
             this.t = k.c.t(e);
 
             // First touch
             touchMove(e);
-
+            // scrubbing has started
+            s.scrubbing = true;
+            
             // Touch events listeners
             k.c.d
                 .bind("touchmove.k", touchMove)
@@ -341,6 +356,8 @@
                     "touchend.k",
                     function () {
                         k.c.d.unbind('touchmove.k touchend.k');
+                        // scrubbing has ended
+                        s.scrubbing = false;
                         s.val(s.cv);
                     }
                 );
@@ -359,9 +376,16 @@
                 s.change(s._validate(v));
                 s._draw();
             };
-
+			
+			if(!s.bounds(e))
+        	{
+        		s._propagate(e);
+        		return;
+        	}
             // First click
             mouseMove(e);
+            // scrubbing has started
+            s.scrubbing = true;
 
             // Mouse events listeners
             k.c.d
@@ -377,12 +401,17 @@
                                 return;
 
                             s.cancel();
+                            
+                            // scrubbing has ended
+                            s.scrubbing = false;
                         }
                     }
                 )
                 .bind(
                     "mouseup.k",
                     function (e) {
+                        // scrubbing has ended
+                        s.scrubbing = false;
                         k.c.d.unbind('mousemove.k mouseup.k keyup.k');
                         s.val(s.cv);
                     }
@@ -458,6 +487,31 @@
             var val = (~~ (((v < 0) ? -0.5 : 0.5) + (v/this.o.step))) * this.o.step;
             return Math.round(val * 100) / 100;
         };
+		
+		// propagate event to element underneath
+        this._propagate = function(e)
+		{
+			s.$div.css("pointer-events", "none");
+			if(e.type == "mousedown")
+			{
+				var ne = jQuery.Event( e.type, { which:1, pageX: e.pageX, pageY: e.pageY } );
+				var nt = document.elementFromPoint(e.pageX, e.pageY);
+			}
+			else
+			{
+				var point =
+				{
+					x:e.originalEvent.touches[0].pageX,
+					y:e.originalEvent.touches[0].pageY
+				}
+				
+				var ne = jQuery.Event( e.type, { originalEvent:e.originalEvent, which:1, pageX: point.x, pageY: point.y } );
+				var nt = document.elementFromPoint(point.x, point.y);
+			}
+			
+			$(nt).trigger(ne);
+			s.$div.css("pointer-events", "auto");
+		}
 
         // Abstract methods
         this.listen = function () {}; // on start, one time
@@ -523,9 +577,17 @@
                     && v != this.v
                     && this.rH
                     && this.rH(v) === false) { return; }
+                    
+                if(!this.scrubbing)
+				{
+					this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
+					this.v = this.cv;
+				}
+				else if(triggerRelease === false)
+				{
+					this.v = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
+				}
 
-                this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
-                this.v = this.cv;
                 this.$.val(this.o.format(this.v));
                 this._draw();
             } else {
@@ -580,6 +642,9 @@
 
                     v = max(min(v, s.o.max), s.o.min);
 
+                    // trigger change handler
+                    if (s.cH && (s.cH(v) === false)) return;
+                    
                     s.val(v, false);
 
                     if (s.rH) {
@@ -785,6 +850,50 @@
             c.arc(this.xy, this.xy, this.radius, a.s, a.e, a.d);
             c.stroke();
         };
+		
+		
+		// checks it the event was within the bounds of the knob
+		this.bounds = function(e)
+		{
+			if(e.type == "mousedown")
+			{
+				var x = e.pageX;
+				var y = e.pageY;
+				
+				var r = this.xy;
+				
+				var ox = x - this.x - r;
+				var oy = y - this.y - r;
+			}
+			if(e.type == "touchstart")
+			{
+				if(e.originalEvent)
+				{
+					var touch = e.originalEvent.touches[0];
+				}
+				else
+				{
+					var touch = e;
+				}
+				
+				var x = touch.pageX;
+				var y = touch.pageY;
+				
+				var r = this.xy / 2;
+				
+				var ox = x - this.x - r;
+				var oy = y - this.y - r;
+			}
+			
+			if(Math.sqrt((ox*ox) + (oy*oy)) < r)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
         this.cancel = function () {
             this.val(this.v);
