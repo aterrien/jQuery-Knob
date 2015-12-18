@@ -111,7 +111,7 @@
                     lineCap: this.$.data('linecap') || 'butt',
                     width: this.$.data('width') || 200,
                     height: this.$.data('height') || 200,
-                    displayInput: this.$.data('displayinput') == null || this.$.data('displayinput'),
+                    displayInput: this.$.data('displayinput') === undefined || this.$.data('displayinput'),
                     displayPrevious: this.$.data('displayprevious'),
                     fgColor: this.$.data('fgcolor') || '#87CEEB',
                     inputColor: this.$.data('inputcolor'),
@@ -189,10 +189,10 @@
 
             // wraps all elements in a div
             // add to DOM before Canvas init is triggered
-            this.$div = $('<div style="'
-                + (this.o.inline ? 'display:inline;' : '')
-                + 'width:' + this.o.width + 'px;height:' + this.o.height + 'px;'
-                + '"></div>');
+            this.$div = $(['<div style="',
+                 (this.o.inline ? 'display:inline;' : ''),
+                  'width:', this.o.width, 'px;height:', this.o.height, 'px;',
+                  '"></div>'].join(''));
 
             this.$.wrap(this.$div).before(this.$c);
             this.$div = this.$.parent();
@@ -205,9 +205,9 @@
 
             if (!this.c) {
                 throw {
-                    name:        "CanvasNotSupportedException",
-                    message:     "Canvas not supported. Please use excanvas on IE8.0.",
-                    toString:    function(){return this.name + ": " + this.message}
+                    name:        'CanvasNotSupportedException',
+                    message:     'Canvas not supported. Please use excanvas on IE8.0.',
+                    toString:    function(){return [this.name, ': ', this.message].join('');}
                 }
             }
 
@@ -320,7 +320,7 @@
                             e.originalEvent.touches[s.t].pageY
                         );
 
-                if (v == s.cv) return;
+                if (v === s.cv) return;
 
                 if (s.cH && s.cH(v) === false) return;
 
@@ -352,7 +352,7 @@
             var mouseMove = function (e) {
                 var v = s.xy2val(e.pageX, e.pageY);
 
-                if (v == s.cv) return;
+                if (v === s.cv) return;
 
                 if (s.cH && (s.cH(v) === false)) return;
 
@@ -441,8 +441,8 @@
             if (this.o.release) this.rH = this.o.release;
 
             if (this.o.displayPrevious) {
-                this.pColor = this.h2rgba(this.o.fgColor, "0.4");
-                this.fgColor = this.h2rgba(this.o.fgColor, "0.6");
+                this.pColor = this.h2rgba(this.o.fgColor, '0.4');
+                this.fgColor = this.h2rgba(this.o.fgColor, '0.6');
             } else {
                 this.fgColor = this.o.fgColor;
             }
@@ -479,7 +479,7 @@
                 parseInt(h.substring(4,6), 16)
             ];
 
-            return "rgba(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + a + ")";
+            return ['rgba(', rgb[0], ',', rgb[1], ',', rgb[2], ',', a, ')'].join('');
         };
 
         this.copy = function (f, t) {
@@ -502,7 +502,7 @@
         this.lineWidth = null;
         this.cursorExt = null;
         this.w2 = null;
-        this.PI2 = 2*Math.PI;
+        this.PI2 = 2 * Math.PI;
 
         this.extend = function () {
             this.o = $.extend({
@@ -514,13 +514,13 @@
         };
 
         this.val = function (v, triggerRelease) {
-            if (null != v) {
+            if (null !== v) {
 
                 // reverse format
                 v = this.o.parse(v);
 
                 if (triggerRelease !== false
-                    && v != this.v
+                    && v !== this.v
                     && this.rH
                     && this.rH(v) === false) { return; }
 
@@ -545,7 +545,7 @@
                 a = this.angleArc - a - this.PI2;
             }
 
-            if (this.angleArc != this.PI2 && (a < 0) && (a > -0.5)) {
+            if (this.angleArc !== this.PI2 && (a < 0) && (a > -0.5)) {
 
                 // if isset angleArc option, set to min if .5 under min
                 a = 0;
@@ -764,7 +764,7 @@
             c.lineWidth = this.lineWidth;
             c.lineCap = this.lineCap;
 
-            if (this.o.bgColor !== "none") {
+            if (this.o.bgColor !== 'none') {
                 c.beginPath();
                     c.strokeStyle = this.o.bgColor;
                     c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
@@ -777,7 +777,7 @@
                 c.strokeStyle = this.pColor;
                 c.arc(this.xy, this.xy, this.radius, pa.s, pa.e, pa.d);
                 c.stroke();
-                r = this.cv == this.v;
+                r = this.cv === this.v;
             }
 
             c.beginPath();
