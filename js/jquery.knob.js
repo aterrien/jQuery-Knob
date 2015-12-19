@@ -322,7 +322,7 @@
 
                 if (v == s.cv) return;
 
-                if (s.cH && s.cH(v) === false) return;
+                if (s.cH && s.cH(s._validate(v)) === false) return;
 
                 s.change(s._validate(v));
                 s._draw();
