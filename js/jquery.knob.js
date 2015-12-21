@@ -88,6 +88,7 @@
                 }
                 s._carve().init();
                 s._configure()
+                 ._listen()
                  ._draw();
             };
 
@@ -419,6 +420,8 @@
 
                 this.listen();
             } else {
+                this.$c.unbind("mousedown");
+                this.$c.unbind("touchstart");
                 this.$.attr('readonly', 'readonly');
             }
 
