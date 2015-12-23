@@ -45,7 +45,7 @@ Behaviors :
 * angleOffset : starting angle in degrees | default=0.
 * angleArc : arc size in degrees | default=360.
 * stopper : stop at min & max on keydown/mousewheel | default=true.
-* readOnly : disable input and events | default=false.
+* readonly : disable input and events | default=false.
 * rotation : direction of progression | default=clockwise.
 
 UI :
