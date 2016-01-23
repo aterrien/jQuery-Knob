@@ -113,6 +113,7 @@
                     height: this.$.data('height') || 200,
                     displayInput: this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious: this.$.data('displayprevious'),
+                    displayMax: this.$.data('displaymax'),
                     fgColor: this.$.data('fgcolor') || '#87CEEB',
                     inputColor: this.$.data('inputcolor'),
                     font: this.$.data('font') || 'Arial',
@@ -723,6 +724,21 @@
                             'width': '0px',
                             'visibility': 'hidden'
                         });
+
+            if (this.o.displayInput && this.o.displayMax) {
+              this.i.after('<span class="max-display">of ' + this.o.max + '</span');
+              this.maxSpan = $('span.max-display');
+              this.maxSpan.css({
+                'width' : ((this.o.width / 2 + 4) >> 0) + 'px'
+                ,'height' : ((this.o.width / 12) >> 0) + 'px'
+                ,'position' : 'absolute'
+                ,'font-size': '16px;'
+                ,'margin-top' : ((this.o.width / 3) >> 0) + ((this.o.width / s) >> 0) + 5 + 'px'
+                ,'margin-left' : '-' + ((this.o.width * 3 / 4 + 2) >> 0) + 'px'
+                ,'text-align': 'center'
+                ,'color': '#ccc'
+              });
+            }
         };
 
         this.change = function (v) {
@@ -803,3 +819,5 @@
     };
 
 }));
+
+

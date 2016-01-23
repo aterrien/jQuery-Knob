@@ -56,6 +56,8 @@ UI :
 * height : dial height.
 * displayInput : default=true | false=hide input.
 * displayPrevious : default=false | true=displays the previous value with transparency.
+* displayMax: default=false | true=displays a line under this input with
+  the max value.
 * fgColor : foreground color.
 * inputColor : input value (number) color.
 * font : font family.
