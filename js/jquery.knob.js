@@ -133,10 +133,10 @@
                     },
                     parse: function (v) {
                         
-                        //if string, remove commas, so parseFloat will get the right value
-                        if (typeof v === 'string') {
-    						v = v.replace(",", "");
-    					}
+                	//if string, remove commas, so parseFloat will get the right value
+                	if (typeof v === 'string') {
+    			   v = v.replace(",", "");
+    			}
 					
                         return parseFloat(v);
                     }
