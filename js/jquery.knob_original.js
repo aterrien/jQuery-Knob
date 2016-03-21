@@ -99,7 +99,6 @@
                     // Config
                     min: this.$.data('min') !== undefined ? this.$.data('min') : 0,
                     max: this.$.data('max') !== undefined ? this.$.data('max') : 100,
-                    startPos: 0,
                     stopper: true,
                     readOnly: this.$.data('readonly') || (this.$.attr('readonly') === 'readonly'),
 
@@ -130,10 +129,10 @@
 
                     // Output formatting, allows to add unit: %, ms ...
                     format: function(v) {
-                        return v + (this.initialAngle || 0);
+                        return v;
                     },
                     parse: function (v) {
-                        return parseFloat(v);// - (this.initialAngle || 0);
+                        return parseFloat(v);
                     }
                 }, this.o
             );
@@ -357,10 +356,8 @@
 
                 if (s.cH && (s.cH(v) === false)) return;
 
-                if (v + (s.o.initialAngle || 0) <= s.o.max) {
-                    s.change(s._validate(v));
-                    s._draw();
-                }
+                s.change(s._validate(v));
+                s._draw();
             };
 
             // First click
@@ -518,22 +515,17 @@
 
         this.val = function (v, triggerRelease) {
             if (null != v) {
+
                 // reverse format
                 v = this.o.parse(v);
-                this.firstClickSetStart = this.o.firstClickSetStart || false;
 
                 if (triggerRelease !== false
                     && v != this.v
                     && this.rH
                     && this.rH(v) === false) { return; }
 
-                if(!this.firstClickSetStart) {
-                    this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
-                    this.v = this.cv;
-                } else {
-                    this.cv = 0;
-                    this.v = 0;
-                }
+                this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
+                this.v = this.cv;
                 this.$.val(this.o.format(this.v));
                 this._draw();
             } else {
@@ -699,14 +691,12 @@
             && (this.o.angleArc = isNaN(this.o.angleArc) ? this.PI2 : this.o.angleArc);
 
             // deg to rad
-            // this.angleOffset = this.o.angleOffset * Math.PI / 180;
-            this.angleOffset = (this.o.angleOffset + (this.o.initialAngle || 0)) * Math.PI / 180;
+            this.angleOffset = this.o.angleOffset * Math.PI / 180;
             this.angleArc = this.o.angleArc * Math.PI / 180;
 
             // compute start and end angles
             this.startAngle = 1.5 * Math.PI + this.angleOffset;
-            // this.endAngle = 1.5 * Math.PI + this.angleOffset + this.angleArc;
-            this.endAngle = 1.5 * Math.PI + this.angleArc;
+            this.endAngle = 1.5 * Math.PI + this.angleOffset + this.angleArc;
 
             var s = max(
                 String(Math.abs(this.o.max)).length,
