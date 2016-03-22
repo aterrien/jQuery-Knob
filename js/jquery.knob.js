@@ -531,8 +531,11 @@
                     this.cv = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
                     this.v = this.cv;
                 } else {
+                    this.o.initialAngle = this.o.stopper ? max(min(v, this.o.max), this.o.min) : v;
                     this.cv = 0;
                     this.v = 0;
+                    this.o.firstClickSetStart = false;
+                    this.init();
                 }
                 this.$.val(this.o.format(this.v));
                 this._draw();
@@ -705,8 +708,8 @@
 
             // compute start and end angles
             this.startAngle = 1.5 * Math.PI + this.angleOffset;
-            // this.endAngle = 1.5 * Math.PI + this.angleOffset + this.angleArc;
-            this.endAngle = 1.5 * Math.PI + this.angleArc;
+            this.endAngle = 1.5 * Math.PI + this.angleOffset + this.angleArc;
+            // this.endAngle = 1.5 * Math.PI + this.angleArc;
 
             var s = max(
                 String(Math.abs(this.o.max)).length,
