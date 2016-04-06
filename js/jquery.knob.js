@@ -114,6 +114,8 @@
                     displayInput: this.$.data('displayinput') == null || this.$.data('displayinput'),
                     displayPrevious: this.$.data('displayprevious'),
                     fgColor: this.$.data('fgcolor') || '#87CEEB',
+                    fgGradientStart: this.$.data('fggradientstart') || this.$.data('fgcolor') || '#87CEEB',
+                    fgGradientEnd: this.$.data('fggradientend') || this.$.data('fgcolor') || '#87CEEB',
                     inputColor: this.$.data('inputcolor'),
                     font: this.$.data('font') || 'Arial',
                     fontWeight: this.$.data('font-weight') || 'bold',
@@ -779,9 +781,19 @@
                 c.stroke();
                 r = this.cv == this.v;
             }
+            var perc = (isNaN(this.v) ? 100 : this.v) / 100;
+            var gwidth = perc === 100 ? this.w : (this.w * perc);
+            var grad = c.createLinearGradient(0, this.h, gwidth, this.h);
+            grad.addColorStop(0, this.o.fgGradientStart);
+            grad.addColorStop(1, this.o.fgGradientEnd);
 
             c.beginPath();
-            c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
+            
+            if (this.o.fgGradientStart === this.o.fgGradientEnd)
+                c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
+            else
+                c.strokeStyle = grad;
+                
             c.arc(this.xy, this.xy, this.radius, a.s, a.e, a.d);
             c.stroke();
         };
