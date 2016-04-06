@@ -1,6 +1,6 @@
 {
-  "name": "jquery-knob",
-  "version": "1.2.13",
+  "name": "edlogics-jquery-knob",
+  "version": "1.13.0",
   "main": "js/jquery.knob.js",
   "description": "Nice, downward compatible, touchable, jQuery dial.",
   "license": "MIT",
