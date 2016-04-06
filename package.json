@@ -8,17 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aterrien/jQuery-Knob.git"
+    "url": "git+https://github.com/banjahman/jQuery-Knob.git"
   },
   "keywords": [
     "jquery",
     "knob",
     "dial"
   ],
-  "author": "Anthony Terrien",
+  "author": "Ben Quirk",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aterrien/jQuery-Knob/issues"
+    "url": "https://github.com/banjahman/jQuery-Knob/issues"
   },
-  "homepage": "https://github.com/aterrien/jQuery-Knob#readme"
+  "homepage": "https://github.com/banjahman/jQuery-Knob#readme"
 }
