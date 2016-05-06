@@ -139,6 +139,9 @@ Set the value
         .trigger('change');
 </script>
 ```
+Basic Tutorial
+-------
+[jQuery Knob - Tutorial and Example (Video)](https://youtu.be/xr0wGjZ6Ckc)
 
 Supported browser
 -------
