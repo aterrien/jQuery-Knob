@@ -620,7 +620,13 @@
                         if (kc >= 96 && kc <= 105) {
                             kc = e.keyCode = kc - 48;
                         }
-
+                        
+                        //decimal point from numpad support -
+                        //replace key code of decimal numpad with normal "period
+                        if (kc == 110) {
+                            kc = e.keyCode = 190;
+                        }
+                        
                         kval = parseInt(String.fromCharCode(kc));
 
                         if (isNaN(kval)) {
