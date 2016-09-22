@@ -762,6 +762,8 @@
                 c.lineTo(this.xy,this.xy)
                 c.fill();
             }
+			
+			if (this.o.innerBg) { c.fillStyle = this.o.innerBg; c.fill(); }. Then, you can call $('.knob').knob({ innerBg: '#fff' })
 
             c.lineWidth = this.lineWidth;
 
