@@ -184,12 +184,13 @@
             // adds needed DOM elements (canvas, div)
             this.$c = $(document.createElement('canvas')).attr({
                 width: this.o.width,
-                height: this.o.height
+                height: this.o.height,
+                class: "knobCanvas"
             });
 
             // wraps all elements in a div
             // add to DOM before Canvas init is triggered
-            this.$div = $('<div style="'
+            this.$div = $('<div class="knobContainer" style="'
                 + (this.o.inline ? 'display:inline;' : '')
                 + 'width:' + this.o.width + 'px;height:' + this.o.height + 'px;'
                 + '"></div>');
@@ -580,6 +581,8 @@
 
                     v = max(min(v, s.o.max), s.o.min);
 
+					if (s.cH && s.cH(v) === false) return;
+
                     s.val(v, false);
 
                     if (s.rH) {
@@ -639,6 +642,8 @@
                                 var v = s.o.parse(s.$.val()) + kv[kc] * m;
                                 s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
 
+								if (s.cH && s.cH(v) === false) return;
+
                                 s.change(s._validate(v));
                                 s._draw();
 
@@ -646,6 +651,11 @@
                                 to = window.setTimeout(function () {
                                     m *= 2;
                                 }, 30);
+                            }
+                            else if (kc == 13) {
+                                var v = s.o.parse(s.$.val());
+                                s.o.stopper && (v = max(min(v, s.o.max), s.o.min));
+								if (s.cH && s.cH(v) === false) return;
                             }
                         }
                     }
@@ -699,10 +709,10 @@
             this.endAngle = 1.5 * Math.PI + this.angleOffset + this.angleArc;
 
             var s = max(
-                String(Math.abs(this.o.max)).length,
-                String(Math.abs(this.o.min)).length,
-                2
-            ) + 2;
+                this.o.format(this.o.max).length || String(Math.abs(this.o.max)).length + 2,
+                this.o.format(this.o.min).length || String(Math.abs(this.o.min)).length + 2,
+                4
+            );
 
             this.o.displayInput
                 && this.i.css({
