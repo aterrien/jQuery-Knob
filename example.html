@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./js/jquery-1.12.2.js"></script>
+    <script src="./js/jquery.knob.js"></script>
+  </head>
+  <body>
+    <input type="text" value="0" class="dial">
+
+    <span id="initAngle"></span>
+    <span id="realVal"></span>
+    <button id="test1">Test reset</button>
+    <button id="test2">Test value</button>
+    <button id="test3">Show values</button>
+    <script>
+        $(function() {
+          var dialAngle = 0;
+          var dialVal = 0;
+          $(".dial").knob({
+              'min': 0,
+              'max': 360,
+              'firstClickSetStart': true,
+              'release' : function (v) {
+                console.log(v);
+                if(this.o.firstClickSetStart) {
+                  $('#initAngle').text(v);
+                  $('#realVal').text(0);
+                  dialAngle = v;
+                  dialVal = 0;
+                } else {
+                  $('#initAngle').text((this.o.initialAngle || 0));
+                  $('#realVal').text(v);
+                  dialAngle = this.o.initialAngle || 0;
+                  dialVal = v;
+                }
+              },
+          });
+          $('#test1').click(function() {
+            $('.dial').trigger(
+              'configure',
+              {
+                "fgColor":"#FF0000",
+                "skin":"tron",
+                "initialAngle": 45,
+                "firstClickSetStart": false,
+              }
+            );
+          });
+          $('#test2').click(function() {
+            $('.dial').val(90).trigger('change');
+          });
+          $('#test3').click(function() {
+            alert(dialAngle);
+            alert(dialVal);
+          });
+        });
+    </script>
+  </body>
+</html>
