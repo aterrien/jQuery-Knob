@@ -5,6 +5,15 @@ jQuery Knob
 - touch, mouse and mousewheel, keyboard events implemented.
 - downward compatible ; overloads an input element.
 
+Instalation:
+------------
+
+    yarn add jquery-knob
+
+or
+
+    npm install --save jquery-knob
+
 Example
 -------
 
