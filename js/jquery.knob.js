@@ -101,6 +101,7 @@
                     max: this.$.data('max') !== undefined ? this.$.data('max') : 100,
                     stopper: true,
                     readOnly: this.$.data('readonly') || (this.$.attr('readonly') === 'readonly'),
+                    bindMousewheel: true,
 
                     // UI
                     cursor: this.$.data('cursor') === true && 30
@@ -566,6 +567,9 @@
             var s = this, mwTimerStop,
                 mwTimerRelease,
                 mw = function (e) {
+
+                    if (!s.o.bindMousewheel) return; //disable mousewheel
+
                     e.preventDefault();
 
                     var ori = e.originalEvent,
