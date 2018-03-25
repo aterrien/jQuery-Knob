@@ -6,6 +6,7 @@
  * Requires: jQuery v1.7+
  *
  * Copyright (c) 2012 Anthony Terrien
+ * Modified 2017 by Andre Plötze
  * Under MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * Thanks to vor, eskimoblood, spiffistan, FabrizioC
@@ -132,7 +133,15 @@
                         return v;
                     },
                     parse: function (v) {
-                        return parseFloat(v);
+                        // ---
+                        // This doesn't work nicely with empty input.
+                        // ---
+                        //
+                        // return parseFloat(v);
+
+                        // Handle empty input more gracefully.
+                        var val = parseFloat(v);
+                        return isFinite(val) ? val : 0;
                     }
                 }, this.o
             );
@@ -315,6 +324,9 @@
 
         this._touch = function (e) {
             var touchMove = function (e) {
+		// Prevent page from scrolling on touchpad/-screen input.
+		e.preventDefault();
+		
                 var v = s.xy2val(
                             e.originalEvent.touches[s.t].pageX,
                             e.originalEvent.touches[s.t].pageY
@@ -455,8 +467,20 @@
         };
 
         this._validate = function (v) {
-            var val = (~~ (((v < 0) ? -0.5 : 0.5) + (v/this.o.step))) * this.o.step;
-            return Math.round(val * 100) / 100;
+
+            // ---
+            // With this, the input cannot be empty, not even temporarily.
+            // ---
+            //
+            // var val = (~~ (((v < 0) ? -0.5 : 0.5) + (v/this.o.step))) * this.o.step;
+            // return Math.round(val * 100) / 100;
+
+            // Alternate validation method allowing for empty input.
+            if (isFinite(v))
+               return Math.round(v);
+            else
+               return v;
+
         };
 
         // Abstract methods
@@ -502,7 +526,7 @@
         this.lineWidth = null;
         this.cursorExt = null;
         this.w2 = null;
-        this.PI2 = 2*Math.PI;
+        this.PI2 = 2 * Math.PI;
 
         this.extend = function () {
             this.o = $.extend({
@@ -569,8 +593,11 @@
                     e.preventDefault();
 
                     var ori = e.originalEvent,
-                        deltaX = ori.detail || ori.wheelDeltaX,
-                        deltaY = ori.detail || ori.wheelDeltaY,
+			// ---
+			// Handle "wheel" events as well.
+			// ---
+                        deltaX = ori.deltaX || ori.detail || ori.wheelDeltaX,
+                        deltaY = ori.deltaY || ori.detail || ori.wheelDeltaY,
                         v = s._validate(s.o.parse(s.$.val()))
                             + (
                                 deltaX > 0 || deltaY > 0
@@ -588,17 +615,24 @@
                         mwTimerStop = setTimeout(function () {
                             s.rH(v);
                             mwTimerStop = null;
-                        }, 100);
+                        }, 250); // Increased the timeout from 100 to 250 ms.
 
-                        // Handle mousewheel releases
-                        if (!mwTimerRelease) {
-                            mwTimerRelease = setTimeout(function () {
-                                if (mwTimerStop)
-                                    s.rH(v);
-                                mwTimerRelease = null;
-                            }, 200);
-                        }
+                        // ---
+                        // The second timeout messes things up.
+                        // Don't know why it's here.
+                        // Works better without, so don't do this.
+                        // ---
+                        //
+                        // // Handle mousewheel releases
+                        // if (!mwTimerRelease) {
+                        //     mwTimerRelease = setTimeout(function () {
+                        //         if (mwTimerStop)
+                        //             s.rH(v);
+                        //         mwTimerRelease = null;
+                        //     }, 200);
+                        // }
                     }
+		    
                 },
                 kval,
                 to,
@@ -624,13 +658,10 @@
                         kval = parseInt(String.fromCharCode(kc));
 
                         if (isNaN(kval)) {
-                            (kc !== 13)                     // enter
-                            && kc !== 8                     // bs
-                            && kc !== 9                     // tab
-                            && kc !== 189                   // -
-                            && (kc !== 190
-                                || s.$.val().match(/\./))   // . allowed once
-                            && e.preventDefault();
+
+                            //    Enter     -  Backspace  -     Tab - Minus Numblock FF - Minus FireFox -    Minus      -    Dot
+                            if ((kc !== 13) && (kc !== 8) && (kc !== 9) && (kc !== 109) && (kc !== 173) && (kc !== 189) && (kc !== 190))
+                                e.preventDefault();
 
                             // arrows
                             if ($.inArray(kc,[37,38,39,40]) > -1) {
@@ -642,10 +673,16 @@
                                 s.change(s._validate(v));
                                 s._draw();
 
-                                // long time keydown speed-up
-                                to = window.setTimeout(function () {
-                                    m *= 2;
-                                }, 30);
+                                // ---
+                                // This causes the value to almost instantly skip to the min/max on a long key press.
+                                // It doesn't speed up, it just skips to the end.
+                                // Works better without, so don't do this.
+                                // ---
+                                //
+                                // // long time keydown speed-up
+                                // to = window.setTimeout(function () {
+                                //     m *= 2;
+                                // }, 30);
                             }
                         }
                     }
@@ -654,12 +691,18 @@
                     "keyup",
                     function (e) {
                         if (isNaN(kval)) {
-                            if (to) {
-                                window.clearTimeout(to);
-                                to = null;
-                                m = 1;
-                                s.val(s.$.val());
-                            }
+                            // ---
+                            // No longer needed, since we removed the corresponding code from the 'keydown' event.
+                            // ---
+                            //
+                            // if (to) {
+                            //     window.clearTimeout(to);
+                            //     to = null;
+                            //     m = 1;
+                            //     s.val(s.$.val());
+                            // }
+
+                            s.val(s.$.val()); // Better just validate.
                         } else {
                             // kval postcond
                             (s.$.val() > s.o.max && s.$.val(s.o.max))
@@ -668,8 +711,12 @@
                     }
                 );
 
-            this.$c.bind("mousewheel DOMMouseScroll", mw);
-            this.$.bind("mousewheel DOMMouseScroll", mw);
+	    // ---
+	    // Handle "wheel" events as well.
+	    // This prevents the site from scrolling when knob is actuated using mouse wheel in Firefox.
+	    // ---
+            this.$c.bind("wheel mousewheel DOMMouseScroll", mw);
+            this.$.bind("wheel mousewheel DOMMouseScroll", mw);
         };
 
         this.init = function () {
