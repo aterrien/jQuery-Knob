@@ -119,6 +119,7 @@
                     fontWeight: this.$.data('font-weight') || 'bold',
                     inline: false,
                     step: this.$.data('step') || 1,
+                    decimalpoints: this.$.data('decimalpoints') || 2,
                     rotation: this.$.data('rotation'),
 
                     // Hooks
@@ -455,8 +456,10 @@
         };
 
         this._validate = function (v) {
-            var val = (~~ (((v < 0) ? -0.5 : 0.5) + (v/this.o.step))) * this.o.step;
-            return Math.round(val * 100) / 100;
+            var val           = (~~ (((v < 0) ? -0.5 : 0.5) + (v/this.o.step))) * this.o.step;
+            var decimalpoints = 0 <= this.o.decimalpoints ? Math.pow(10, this.o.decimalpoints) : 100;
+
+            return Math.round(val * decimalpoints) / decimalpoints;
         };
 
         // Abstract methods
