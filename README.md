@@ -1,4 +1,4 @@
-Ca$h Knob (A jQuery-free fork of jQuery Knob by A. Terrien)
+Ca$h Knob -- A jQuery-free fork of [jQuery Knob](https://github.com/aterrien/jQuery-Knob)
 =============
 - No jQuery.  Instead use the lightweight [Cash](https://github.com/fabiospampinato/cash) library.
 - canvas based ; no png or jpg sprites.
