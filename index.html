@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>jQuery Knob demo</title>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-        <!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
-        <script src="dist/jquery.knob.min.js"></script>
+        <title>Cash Knob demo</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/8.0.0/cash.min.js"></script>
+        <script src="js/cash.knob.js"></script>
         <script>
             $(function($) {
 
@@ -104,11 +103,12 @@
     </head>
     <body>
         <div style="width:100%;font-size:40px;letter-spacing:-8px;line-height:40px;">
-            <h1>jQuery Knob</h1>
+            <h1>💰 Ca$h Knob 🤑</h1>
         </div>
         <div>
-            <p>Nice, downward compatible, touchable, jQuery dial. <a href="http://flattr.com/thing/674900/jQuery-Knob" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></p>
+            <p>Nice, downward compatible, touchable, <span style="text-decoration:line-through;">jQuery</span>  Cash dial.</p>
             <p style="font-size: 20px">* implemented interactions : mouse click and wheel mouse, keyboard (on focus) and fingers (touch events)</p>
+            <p> This is a fork of jQuery knob  that uses <a href="https://github.com/fabiospampinato/cash" target="_blank">Cash</a> instead of jQuery. </p>
         </div>
         <div class="demo">
             <p>&#215; Disable display input</p>
@@ -208,6 +208,7 @@ data-displayPrevious=true
             <pre>
 data-width="80%"
             </pre>
+            <h3> (Not 100% functional 😒)  </h3>
             <div style="width: 30%; border: 3px dashed; margin-bottom: 20px">
                 <i>
                     Current div width is 30% of window width.<br>

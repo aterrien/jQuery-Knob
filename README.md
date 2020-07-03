@@ -1,9 +1,10 @@
-jQuery Knob
+Ca$h Knob (A jQuery-free fork of jQuery Knob by A. Terrien)
 =============
-
+- No jQuery.  Instead use the lightweight [Cash](https://github.com/fabiospampinato/cash) library.
 - canvas based ; no png or jpg sprites.
 - touch, mouse and mousewheel, keyboard events implemented.
 - downward compatible ; overloads an input element.
+- Not 100% functional.  See the
 
 Example
 -------
@@ -140,9 +141,5 @@ Set the value
 </script>
 ```
 
-Supported browser
--------
-
-Tested on Chrome, Safari, Firefox, IE>=8.0 (IE8.0 with excanvas).
 
 ![secretplan](https://raw.github.com/aterrien/jQuery-Knob/master/secretplan.jpg)

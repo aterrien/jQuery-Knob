@@ -1,14 +1,14 @@
 {
-  "name": "jquery-knob",
+  "name": "cash-knob",
   "version": "1.2.13",
   "description": "Nice, downward compatible, touchable, jQuery dial",
-  "main": "dist/jquery.knob.min.js",
+  "main": "js/cash.knob.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aterrien/jQuery-Knob.git"
+    "url": "git+https://github.com/ebrensi/Cash-Knob.git"
   },
   "keywords": [
     "jquery",
@@ -18,7 +18,7 @@
   "author": "Anthony Terrien",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aterrien/jQuery-Knob/issues"
+    "url": "https://github.com/ebrensi/Cash-Knob/issues"
   },
-  "homepage": "https://github.com/aterrien/jQuery-Knob#readme"
+  "homepage": "https://github.com/ebrensi/Cash-Knob#readme"
 }
